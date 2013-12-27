@@ -101,7 +101,7 @@ AnalysisStack::addList(const std::string &to, const picojson::value& ids, const 
 	{
 		for (auto fi = fromFull.begin(); fi != fromFull.end(); ++fi)
 		{
-			L->contents.push_back(*ii + *fi);
+			L->contents.push_back(*fi + *ii);
 		}
 	}
 	mStack[to] = L;
