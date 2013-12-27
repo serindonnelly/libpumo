@@ -2,11 +2,16 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <vector>
 #include "Node.h"
 #include "Segment.h"
 #include "ONBasis.h"
-#include <vector>
+#include "Axis.h"
 
+class Axis;
+class PFAxis; 
+class LongAxis;
+class SideAxis;
 class Node;
 class NodeSpec;
 class Segment;
@@ -48,9 +53,14 @@ public:
 	void write(std::string filename);
 	void samplePoints(std::vector<Point>& sample, int n);
 private:
+	void initAxes();
 	//std::map<int,std::pair<Node*,Segment*>> mGraph;
 	std::map<int, Node*> mGraph;
 	std::vector<std::string> header;
 	bool error;
+	PFAxis* mPF;
+	LongAxis* mLong;
+	SideAxis* mSide;
+	
 };
 

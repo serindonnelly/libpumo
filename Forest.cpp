@@ -11,7 +11,7 @@
 
 
 
-Forest::Forest()
+Forest::Forest() : error(false)
 {
 
 }
@@ -47,7 +47,8 @@ Forest::Forest(const Forest &f) : error(false)
 Forest::Forest(std::string filename) : error(false)
 {
 	std::ifstream file(filename);
-
+	if (!file)
+		throw;
 	std::string line;
 	while (std::getline(file, line))
 	{

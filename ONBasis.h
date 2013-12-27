@@ -4,6 +4,8 @@
 class ONBasis
 {
 public:
+	ONBasis() : a(1.f, 0.f, 0.f), b(0.f, 1.f, 0.f), c(0.f, 0.f, 1.f) {};
+
 	bool setA(const vec& v);
 
 	bool setB(const vec& v);
@@ -14,6 +16,7 @@ public:
 
 	vec rebase(const vec& v) const;
 
+	bool valid() { return (aSet && bSet && cSet) || (!aSet && !bSet && !cSet); }
 
 private:
 	vecN a; bool aSet;
