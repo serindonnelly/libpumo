@@ -6,12 +6,21 @@
 //#include "AnalysisStack.h"
 //static AnalysisStack* analysisStack;
 
-picojson::value loadJSON(const std::string& filename)
+void parseFile(picojson::value& out, const std::string& filename)
 {
 	std::ifstream f(filename);
-	picojson::value v;
-	picojson::parse(v, f);
-	return v;
+	picojson::parse(out, f);
 }
 
-void saveJSON(const std::string& filename)
+picojson::value loadJSON(const std::string& filename)
+{
+	picojson::value v;
+	parseFile(v, filename);
+	return v; // inefficient copy; use parseFile if this is used in a bottleneck
+}
+
+void saveJSON(const std::string& filename, const picojson::value& document)
+{
+	std::ofstream f(filename);
+	f << document;
+}
