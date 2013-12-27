@@ -17,9 +17,9 @@ public:
 	void setIdentity(std::string id);
 protected:
 	std::string getFilename() { return filename; }
-private:
 	std::vector<Analysis*> inputs;
 	std::vector<Analysis*> allInputs;
+private:
 	time_t updated;
 	std::string filename;
 	std::string identity;

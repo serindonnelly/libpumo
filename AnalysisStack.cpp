@@ -5,6 +5,8 @@
 #include "AnalysisStack.h"
 #include "ListAnalysis.h"
 #include "SWCAnalysis.h"
+#include "ForestLoadAnalysis.h"
+#include "ForestReduceAnalysis.h"
 
 
 AnalysisStack::~AnalysisStack()
@@ -151,43 +153,47 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 	for (auto ii : idsFull)
 	{
 		Analysis* a;
+		a = new ForestLoadAnalysis(); // kill this line with fire
 		if (routine == "parseswc")
 		{
-			// instantiate a as derived class
+			a = new ForestLoadAnalysis();
 		}
-		else if (routine == "axes")
+		else if (routine == "reduce")
 		{
-			// etc.
+			a = new ForestReduceAnalysis();
 		}
-		else if (routine == "angledistribution")
-		{
+		//else if (routine == "axes")
+		//{
+		//	
+		//}
+		//else if (routine == "angledistribution")
+		//{
 
-		}
-		else if (routine == "anglemc")
-		{
+		//}
+		//else if (routine == "anglemc")
+		//{
 
-		}
-		else if (routine == "parentdistribution")
-		{
+		//}
+		//else if (routine == "parentdistribution")
+		//{
 
-		}
-		else if (routine == "parentmc")
-		{
+		//}
+		//else if (routine == "parentmc")
+		//{
 
-		}
-		else if (routine == "heightdistribution")
-		{
+		//}
+		//else if (routine == "heightdistribution")
+		//{
 
-		}
-		else if (routine == "distancedistribution")
-		{
+		//}
+		//else if (routine == "distancedistribution")
+		//{
 
-		}
-		else if (routine == "distancemc")
-		{
+		//}
+		//else if (routine == "distancemc")
+		//{
 
-		}
-		//a = new Analysis();
+		//}
 		for (auto fi : fromFull)
 		{
 			a->addInput(mStack.at(fi + ii));

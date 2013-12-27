@@ -9,8 +9,9 @@ public:
 	~ForestAnalysis();
 	virtual void load();
 	const Forest* getForest() { return f; };
-private:
+protected:
 	Forest* f;
+private:
 	virtual void save();
 };
 
