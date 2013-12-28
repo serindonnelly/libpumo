@@ -1,0 +1,45 @@
+analysis stack behaviour:
+
+simplest working version:
+replace analysis request with "everything".
+update all analyses in order of declaration and save.
+
+next simplest:
+replace analysis request with "everything".
+attempt to load all analyses in order of declaration and fail gracefully whenever a problem occurs
+update all analyses where loading failed or where any level of dependency had a failed load
+
+next simplest:
+replace analysis request with "everything".
+attempt to load all analyses in order of declaration and fail gracefully whenever a problem occurs
+update all analyses where loading failed, or where any level of dependency had a failed load or was out of date, or where any dependency is more recent than the analysis in question
+
+next simplest:
+acknowledge analysis request.
+analyse dependencies at all levels of requested analysis and ignore others.
+attempt to load analyses in order of declaration and fail gracefully whenever a problem occurs
+update all analyses where loading failed, or where any level of dependency had a failed load or was out of date, or where any dependency is more recent than the analysis in question
+
+next simplest:
+acknowledge more than one analysis request per execution.
+analyse dependencies at all levels of requested analysis and ignore others.
+attempt to load analyses in order of declaration and fail gracefully whenever a problem occurs
+update all analyses where loading failed, or where any level of dependency had a failed load or was out of date, or where any dependency is more recent than the analysis in question
+
+===============================
+
+analyses:
+
+extend AxesAnalysis to calculate long axis and side axis
+AxisVisualisationAnalysis (unimportant)
+AngleDistributionAnalysis
+JointDistributionAnalysis: base class
+ParentJointDistributionAnalysis
+HeightJointDistributionAnalysis
+TerminalDistanceJointDistributionAnalysis
+MonteCarloAnalysis: base class
+AngleMonteCarloAnalysis
+ParentMonteCarloAnalysis
+TerminalDistanceMonteCarloAnalysis
+HeightDependenceGroupAnalysis
+LikelihoodRatioAnalysis (replace)
