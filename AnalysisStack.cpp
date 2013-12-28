@@ -28,14 +28,13 @@ AnalysisStack::AnalysisStack(std::string filename)
 	for (const auto& it : document.get<picojson::array>())
 	{
 		addAnalysis(it);
-
 	}
 }
 
 
 /***********************************************************************
  *  Method: AnalysisStack::addAnalysis
- *  Params: rapidjson::Value a
+ *  Params: const picojson::value& a
  * Returns: bool
  * Effects: 
  ***********************************************************************/
@@ -80,7 +79,7 @@ bool
 AnalysisStack::addList(const std::string &to, const picojson::value& ids, const picojson::value& from)
 {
 	ListAnalysis* L = new ListAnalysis();
-	L->setIdentity(to);
+	//L->setIdentity(to);
 	std::list<std::string> idsFull;
 	std::list<std::string> fromFull;
 	expandList(ids, idsFull);
@@ -92,7 +91,8 @@ AnalysisStack::addList(const std::string &to, const picojson::value& ids, const 
 			L->contents.push_back(*fi + *ii);
 		}
 	}
-	mStack[to] = L;
+	//mStack[to] = L;
+	registerAnalysis(L, to);
 	return true;
 }
 
@@ -118,8 +118,9 @@ AnalysisStack::addFile(const std::string &to, const picojson::value& ids, const 
 		++ii, ++fi)
 	{
 		SWCAnalysis* f = new SWCAnalysis(*fi);
-		f->setIdentity(to + *ii);
-		mStack[to + *ii] = f;
+		registerAnalysis(f, to + *ii);
+		//f->setIdentity(to + *ii);
+		//mStack[to + *ii] = f;
 	}
 	return true;
 }
@@ -186,8 +187,9 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a->addInput(mStack.at(fi + ii));
 		}
-		a->setIdentity(to + ii);
-		mStack[to + ii] = a;
+		//a->setIdentity(to + ii);
+		//mStack[to + ii] = a;
+		registerAnalysis(a, to + ii);
 	}
 	
 	return true;
@@ -238,6 +240,28 @@ AnalysisStack::expandList(ListAnalysis &input, std::list<std::string> &output)
 {
 	for (auto ii : input.contents)
 		output.push_back(ii);
+	return true;
+}
+
+
+/***********************************************************************
+ *  Method: AnalysisStack::registerAnalysis
+ *  Params: Analysis *a, const std::string &name
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+AnalysisStack::registerAnalysis(Analysis *a, const std::string &name)
+{
+	mStack[name] = a;
+	mTopologicalOrder.push_back(name);
+	a->setIdentity(name, mTopologicalOrder.size() - 1);
+	a->update();
+	// TODO attempt to load before updating
+	// TODO make this line conditional on date of loaded analysis
+	// TODO split out this line
+	// TODO make this line conditional on analysis request
+	// TODO make multiple requests possible
 	return true;
 }
 

@@ -14,15 +14,17 @@ public:
 	time_t getUpdateTime();
 	void update();
 	virtual void load() = 0;
-	void setIdentity(std::string id);
+	void setIdentity(std::string id, int order);
+
 protected:
-	std::string getFilename() { return filename; }
+	std::string getFilename() { return mFilename; }
 	std::vector<Analysis*> inputs;
 	std::vector<Analysis*> allInputs;
 private:
-	time_t updated;
-	std::string filename;
-	std::string identity;
+	time_t mUpdated;
+	std::string mFilename;
+	std::string mIdentity;
+	int mOrder;
 	virtual void updateImpl() = 0;
 	virtual void save() = 0;
 };

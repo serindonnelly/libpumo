@@ -13,7 +13,9 @@ public:
 	~AnalysisStack();
 private:
 	std::map<std::string, Analysis*> mStack;
+	std::vector<std::string> mTopologicalOrder;
 	bool addAnalysis(const picojson::value& a);
+	bool registerAnalysis(Analysis* a, const std::string& name);
 	bool addList(const std::string& to, const picojson::value& ids, const picojson::value& from);
 	bool addFile(const std::string& to, const picojson::value& ids, const picojson::value& from);
 	bool addProcessing(const std::string& routine, const std::string& to, const picojson::value& ids, const picojson::value& from);

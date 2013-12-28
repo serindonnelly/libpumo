@@ -83,7 +83,7 @@ AxesAnalysis::updateImpl()
 	Eigen::MatrixXf centred = data.colwise() - data.rowwise().mean();
 	Eigen::MatrixXf cov = (centred * centred.transpose())/(data.cols()-1.f);
 	Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eig(cov);
-	printf("%f\n", cov.coeff(0, 0));
+	//printf("%f\n", cov.coeff(0, 0));
 	//return (int)cov.coeff(2, 2);
 	Eigen::Vector3f pf = eig.eigenvectors().col(0);
 	pfAxis = vecN(pf.x(), pf.y(), pf.z());

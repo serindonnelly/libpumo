@@ -4,7 +4,7 @@
 
 Analysis::Analysis()
 {
-	updated = (time_t)0;
+	mUpdated = (time_t)0;
 }
 
 
@@ -40,7 +40,7 @@ Analysis::addInput(Analysis* input)
 time_t
 Analysis::getUpdateTime()
 {
-	return updated;
+	return mUpdated;
 }
 
 
@@ -54,8 +54,8 @@ void
 Analysis::update()
 {
 	updateImpl();
-	updated = time(nullptr);
-	save();
+	mUpdated = time(nullptr);
+	//save();
 }
 
 
@@ -66,8 +66,9 @@ Analysis::update()
  * Effects: 
  ***********************************************************************/
 void
-Analysis::setIdentity(std::string id)
+Analysis::setIdentity(std::string id, int order)
 {
-	identity = id;
+	mIdentity = id;
+	mOrder = order;
 }
 
