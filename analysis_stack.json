@@ -3,13 +3,13 @@
 	"routine":"specifyfile",
 	"to":"",
 	"ids":"1",
-	"from":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\cell11_x40_scaled.swc"
+	"from":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\cell11_x40_scaled.swc"
 },
 {
 	"routine":"specifyfile",
 	"to":"",
 	"ids":"2",
-	"from":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\cell12_x40_scaled.swc"
+	"from":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\cell12_x40_scaled.swc"
 },
 {
 	"routine":"makelist",
@@ -34,5 +34,11 @@
 	"to":"all",
 	"ids":"@allu",
 	"from":["u","r"]
+},
+{
+	"routine":"axes",
+	"to":"a",
+	"ids":"@all",
+	"from":""
 }
 ]
