@@ -43,3 +43,11 @@ ParentMonteCarloAnalysis
 TerminalDistanceMonteCarloAnalysis
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
+
+======================================
+
+other:
+
+tag analysis update methods with dates
+tag analysis update methods with dates automagically?
+generate filenames and paths in a sensible way: specify directory in json, make all other paths relative to that
