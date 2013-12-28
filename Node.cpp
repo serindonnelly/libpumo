@@ -167,8 +167,11 @@ Node::addChild(int nodeID)
 void
 Node::setParentID(int parentID)
 {
-
 	NodeSpec::setParentID(parentID);
+	delete mSegment;
+	mSegment = nullptr;
+	createSegment();
+
 	if (mParentID == -1)
 	{
 		if (mForest)

@@ -94,11 +94,13 @@ Forest::reduce()
 		Node* child = getNode(*n->beginChildren());
 		Node* parent = n->getParent();
 		child->setParentID(n->getParentID());
-		for (auto ic = parent->beginChildren(); ic != parent->endChildren(); ++ic)
-		{
-			if (*ic == *it)
-				*ic = child->getID();
-		}
+		parent->removeChild(n->getID());
+		n->removeChild(child->getID());
+		//for (auto ic = parent->beginChildren(); ic != parent->endChildren(); ++ic)
+		//{
+		//	if (*ic == *it)
+		//		*ic = child->getID();
+		//}
 		delete n;
 		mGraph.erase(*it);
 	}
