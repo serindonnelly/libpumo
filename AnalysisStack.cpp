@@ -28,21 +28,8 @@ AnalysisStack::AnalysisStack(std::string filename)
 	for (const auto& it : document.get<picojson::array>())
 	{
 		addAnalysis(it);
-	}
 
-	//rapidjson::Document document;
-	////std::ifstream file(filename);
-	//FILE* f = fopen(filename.c_str(), "r");
-	//rapidjson::FileStream is(f);
-	//rapidjson::FileReadStream iss;
-	//document.ParseStream<0>(is);
-	//assert(document.IsArray());
-	//for (rapidjson::SizeType i = 0; i != document.Size(); i++)
-	//{
-	//	rapidjson::Value a;
-	//	a = document[i];
-	//	addAnalysis(a);
-	//}
+	}
 }
 
 
