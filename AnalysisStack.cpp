@@ -7,6 +7,7 @@
 #include "SWCAnalysis.h"
 #include "ForestLoadAnalysis.h"
 #include "ForestReduceAnalysis.h"
+#include "AxesAnalysis.h"
 
 
 AnalysisStack::~AnalysisStack()
@@ -162,10 +163,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new ForestReduceAnalysis();
 		}
-		//else if (routine == "axes")
-		//{
-		//	
-		//}
+		else if (routine == "axes")
+		{
+			a = new AxesAnalysis();
+		}
 		//else if (routine == "angledistribution")
 		//{
 

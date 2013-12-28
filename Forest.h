@@ -51,7 +51,7 @@ public:
 	void renumber();
 	bool validate();
 	void write(std::string filename);
-	void samplePoints(std::vector<Point>& sample, int n);
+	void samplePoints(std::vector<Point>& sample, int n) const;
 private:
 	void initAxes();
 	//std::map<int,std::pair<Node*,Segment*>> mGraph;

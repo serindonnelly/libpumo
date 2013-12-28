@@ -441,7 +441,7 @@ Forest::write(std::string filename)
  * Effects: 
  ***********************************************************************/
 void
-Forest::samplePoints(std::vector<Point> &sample, int n)
+Forest::samplePoints(std::vector<Point> &sample, int n) const
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -467,7 +467,7 @@ Forest::samplePoints(std::vector<Point> &sample, int n)
 	std::uniform_real_distribution<float> fractions(0.f, 1.f);
 	for (int i = 0; i < n; i++)
 	{
-		Segment* s = getSegment(segmentSelector(gen));
+		const Segment* s = getSegment(segmentSelector(gen));
 		sample.push_back(s->getPoint(fractions(gen)));
 	}
 }

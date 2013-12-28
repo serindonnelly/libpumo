@@ -1,5 +1,6 @@
 #pragma once
 #include "Analysis.h"
+#include "vecN.h"
 class AxesAnalysis : public Analysis
 {
 public:
@@ -9,5 +10,8 @@ public:
 private:
 	virtual void save();
 	virtual void updateImpl();
+	vecN pfAxis;
+	//vecN longAxis;
+	//vecN sideAxis;
 };
 
