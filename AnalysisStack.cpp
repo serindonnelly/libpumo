@@ -8,7 +8,8 @@
 #include "ForestLoadAnalysis.h"
 #include "ForestReduceAnalysis.h"
 #include "AxesAnalysis.h"
-
+#include "AngleDistributionAnalysis.h"
+#include "MonteCarloAnalysis.h"
 
 AnalysisStack::~AnalysisStack()
 {
@@ -155,10 +156,14 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new AxesAnalysis();
 		}
-		//else if (routine == "angledistribution")
-		//{
-
-		//}
+		else if (routine == "angledistribution")
+		{
+			a = new AngleDistributionAnalysis();
+		}
+		else if (routine == "montecarlo")
+		{
+			a = new MonteCarloAnalysis();
+		}
 		//else if (routine == "anglemc")
 		//{
 

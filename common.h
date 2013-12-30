@@ -3,7 +3,12 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <random>
+#include <cmath>
 #include <picojson.h>
+
+static std::random_device rd;
+static std::mt19937 gen(rd());
 
 //#include "AnalysisStack.h"
 //static AnalysisStack* analysisStack;
@@ -27,3 +32,6 @@ static void saveJSON(const std::string& filename, const picojson::value& documen
 	std::ofstream f(filename);
 	f << document;
 }
+
+const float PI = 3.14159265358979323846f;
+static const float RAD_TO_DEG = 180.f/PI;

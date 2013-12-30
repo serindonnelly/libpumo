@@ -7,6 +7,7 @@ public:
 	AxesAnalysis();
 	~AxesAnalysis();
 	virtual void load();
+	vecN getPF() { return pfAxis; }
 private:
 	virtual void save();
 	virtual void updateImpl();

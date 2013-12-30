@@ -4,6 +4,7 @@
 #include "ONBasis.h"
 
 
+
 const int Axis::numSamples = 500000;
 
 Axis::Axis(Forest* f) : mAxis(0, 0, 0), calculated(false), mForest(f)

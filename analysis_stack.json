@@ -40,5 +40,17 @@
 	"to":"a",
 	"ids":"@all",
 	"from":""
+},
+{
+	"routine":"angledistribution",
+	"to":"n",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"montecarlo",
+	"to":"N",
+	"ids":"@all",
+	"from":["","a","n"]
 }
 ]

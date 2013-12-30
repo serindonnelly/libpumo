@@ -1,6 +1,6 @@
 analysis stack behaviour:
 
-simplest working version:
+simplest working version (done):
 replace analysis request with "everything".
 update all analyses in order of declaration and save.
 
@@ -32,15 +32,10 @@ analyses:
 
 extend AxesAnalysis to calculate long axis and side axis
 AxisVisualisationAnalysis (unimportant)
-AngleDistributionAnalysis
 JointDistributionAnalysis: base class
 ParentJointDistributionAnalysis
 HeightJointDistributionAnalysis
 TerminalDistanceJointDistributionAnalysis
-MonteCarloAnalysis: base class
-AngleMonteCarloAnalysis
-ParentMonteCarloAnalysis
-TerminalDistanceMonteCarloAnalysis
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
 
@@ -54,3 +49,4 @@ generate filenames and paths in a sensible way: specify directory in json, make 
 date comparison
 date generation
 date verification
+log analyses registered, loaded, saved, updated

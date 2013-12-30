@@ -14,7 +14,7 @@ public:
 	{
 		return p - project(p);
 	}
-	float cosine(const vec& p) const
+	virtual float cosine(const vec& p) const
 	{
 		return dot(p) / p.norm();
 	}

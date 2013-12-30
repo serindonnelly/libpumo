@@ -3,6 +3,7 @@
 #include "Forest.h"
 class Forest;
 
+//delete these classes, move to AxesAnalysis
 class Axis
 {
 public:
