@@ -1,10 +1,13 @@
 #include <random>
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <set>
+#include <deque>
 #include <initializer_list>
+#include "common.h"
 
 
 #include "Forest.h"
@@ -18,7 +21,10 @@ Forest::Forest() : error(false)
 
 Forest::~Forest()
 {
-
+	for (auto it : mGraph)
+	{
+		delete it.second;
+	}
 }
 
 
@@ -106,10 +112,20 @@ Forest::reduce()
 	}
 }
 
-
 void Forest::treeWalk(int nodeID, std::function < void(int)> f)
 {
 	Node* currentNode = getNode(nodeID);
+	f(nodeID);
+	for (auto ic = currentNode->beginChildren(); ic != currentNode->endChildren(); ++ic)
+	{
+		treeWalk(*ic, f);
+	}
+}
+
+
+void Forest::treeWalk(int nodeID, std::function < void(int)> f) const
+{
+	const Node* currentNode = getNode(nodeID);
 	f(nodeID);
 	for (auto ic = currentNode->beginChildren(); ic != currentNode->endChildren(); ++ic)
 	{
@@ -203,7 +219,7 @@ Forest::getNodeAndSegment(int NSID) const
  * Effects: 
  ***********************************************************************/
 Forest*
-Forest::generateForest(std::function<bool(Node*,float& angle)> angleGenerator, vecN pf)
+Forest::generateForest(std::function<bool(const Node*,float& angle)> angleGenerator, vecN pf) const
 {
 	// TODO copy header
 	Forest* f = new Forest();
@@ -213,7 +229,7 @@ Forest::generateForest(std::function<bool(Node*,float& angle)> angleGenerator, v
 	{
 		treeWalk(*ir, [&](int nodeID)
 		{
-			Node* n = getNode(nodeID);
+			const Node* n = getNode(nodeID);
 			NodeSpec ns(*n);
 
 			f->addNode(nodeID, ns);
@@ -445,8 +461,7 @@ Forest::write(std::string filename)
 void
 Forest::samplePoints(std::vector<Point> &sample, int n) const
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
+
 
 	int maxNode = (*mGraph.rbegin()).first;
 	std::discrete_distribution<int> segmentSelector(maxNode, 0, maxNode, [&](int i)->float
@@ -472,6 +487,43 @@ Forest::samplePoints(std::vector<Point> &sample, int n) const
 		const Segment* s = getSegment(segmentSelector(gen));
 		sample.push_back(s->getPoint(fractions(gen)));
 	}
+}
+
+
+/***********************************************************************
+ *  Method: Forest::getWidth
+ *  Params: vecN pf
+ * Returns: float
+ * Effects: 
+ ***********************************************************************/
+float
+Forest::getWidth(vecN pf) const
+{
+	// magic number, factor out
+	int sampleCount = 200000;
+	std::vector<Point> sample;
+	samplePoints(sample, sampleCount);
+	std::vector<float> heights;
+	for (const auto& xyz : sample)
+	{
+		heights.push_back(pf.dot(xyz));
+	}
+	std::sort(heights.begin(), heights.end());
+	int lowerQuartile = (sampleCount - 1) / 4;  // check these!
+	int upperQuartile = ((3*sampleCount)-1 ) / 4;
+	return heights[upperQuartile] - heights[lowerQuartile];
+}
+
+
+/***********************************************************************
+ *  Method: Forest::initAxes
+ *  Params: 
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Forest::initAxes()
+{
 }
 
 

@@ -37,6 +37,7 @@ public:
 	template <class T>
 	void getRoots(T& NodeContainer) const;
 	void treeWalk(int nodeID, std::function < void(int)> f);
+	void treeWalk(int nodeID, std::function < void(int)> f) const;
 
 	std::map<int, Node*>::const_iterator graphBegin() const;
 	std::map<int, Node*>::const_iterator graphEnd() const;
@@ -45,14 +46,17 @@ public:
 	void getTrees(T treeContainer) const;
 
 	void reduce();
-	Forest* generateForest(std::function<bool(Node*, float&)> angleGenerator, vecN pf);
+	Forest* generateForest(std::function<bool(const Node*, float&)> angleGenerator, vecN pf) const;
 	void rebase(const ONBasis& B);
 	void rescale(const vec& scale);
 	void renumber();
 	bool validate();
 	void write(std::string filename);
 	void samplePoints(std::vector<Point>& sample, int n) const;
+	const std::map<int, Node*> getGraph() const { return mGraph; }
+	float getWidth(vecN pf) const;
 private:
+
 	void initAxes();
 	//std::map<int,std::pair<Node*,Segment*>> mGraph;
 	std::map<int, Node*> mGraph;
