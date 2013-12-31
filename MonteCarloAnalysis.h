@@ -11,6 +11,6 @@ public:
 private:
 	virtual void updateImpl();
 	virtual void save();
-	int mTreeCount = 300;
+	int mTreeCount = 3;
 };
 

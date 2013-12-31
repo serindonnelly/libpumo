@@ -6,7 +6,7 @@ class DistributionAnalysis : public Analysis
 public:
 	DistributionAnalysis();
 	~DistributionAnalysis();
-	virtual float generateAngle(const Node* n) const = 0;
+	virtual bool generateAngle(const Node* n, float& newAngle) const = 0;
 private:
 	virtual void zero() = 0;
 };

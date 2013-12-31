@@ -80,7 +80,8 @@ AngleDistributionAnalysis::zero()
 
 
 
-float AngleDistributionAnalysis::generateAngle(const Node* n) const
+bool AngleDistributionAnalysis::generateAngle(const Node* n, float& newAngle) const
 {
-	return mDistribution(gen);
+	newAngle = mDistribution(gen);
+	return true;
 }

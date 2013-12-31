@@ -39,11 +39,8 @@ MonteCarloAnalysis::updateImpl()
 	widths.clear();
 	for (int i = 0; i < mTreeCount; i++)
 	{
-		Forest* ff = f->generateForest([&](const Node* n, float& newAngle) -> bool
-		{
-			newAngle = dist->generateAngle(n);
-			return true;
-		}, pf);
+		auto angleGenerator = std::bind(&DistributionAnalysis::generateAngle, dist,std::placeholders::_1,std::placeholders::_2);
+		Forest* ff = f->generateForest(angleGenerator, pf);
 		widths.push_back(ff->getWidth(pf));
 		delete ff;
 	}

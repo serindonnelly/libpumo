@@ -13,7 +13,7 @@ public:
 	std::vector<float> binWeights;
 	virtual void load();
 	virtual void updateImpl();
-	virtual float generateAngle(const Node* n) const;
+	virtual bool generateAngle(const Node* n, float& newAngle) const;
 private:
 	virtual void save();
 	virtual void zero();
