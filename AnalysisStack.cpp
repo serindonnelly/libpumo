@@ -262,7 +262,7 @@ AnalysisStack::registerAnalysis(Analysis *a, const std::string &name)
 	mStack[name] = a;
 	mTopologicalOrder.push_back(name);
 	a->setIdentity(name, mTopologicalOrder.size() - 1);
-	*info << "Registered analysis " << name << std::endl;
+	std::cout << "Registered analysis " << name << std::endl;
 	a->update();
 	// TODO attempt to load before updating
 	// TODO make this line conditional on date of loaded analysis

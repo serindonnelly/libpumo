@@ -12,10 +12,11 @@ int main(int argc, char** argv)
 {
 	std::ofstream log("libpumo.log");
 	teestream tlog(std::cout, log);
-	err  = new CLogger("ERROR  ", tlog);
-	warn = new CLogger("WARNING", tlog);
-	info = new CLogger("INFO   ", tlog);
-	*info << "Beginning log" << std::endl;
+	logging::lerr  = new CLogger("ERROR  ", tlog);
+	logging::lwarn = new CLogger("WARNING", tlog);
+	logging::linfo = new CLogger("INFO   ", tlog);
+	std::cout << "Beginning log" << std::endl;
+	//*logging::linfo << "Testing" << std::endl;
 	//AnalysisStack* analysisStack = new AnalysisStack(argv[1]);
 	AnalysisStack* analysisStack = new AnalysisStack("analysis_stack.json");
 	return 0;

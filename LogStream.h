@@ -23,6 +23,9 @@ public:
     ~CLogger() { delete rdbuf(); }
 };
 
-static CLogger* err;
-static CLogger* warn;
-static CLogger* info;
+namespace logging
+{
+static CLogger* lerr;
+static CLogger* lwarn;
+static CLogger* linfo;
+}

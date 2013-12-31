@@ -56,7 +56,7 @@ Analysis::update()
 {
 	updateImpl();
 	mUpdated = time(nullptr);
-	*info << "Updated analysis " << mIdentity << std::endl;
+	std::cout << "Updated analysis " << mIdentity << std::endl;
 	//save();
 }
 
