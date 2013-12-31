@@ -1,5 +1,6 @@
 #include "Analysis.h"
 #include "common.h"
+#include "LogStream.h"
 
 
 Analysis::Analysis()
@@ -55,6 +56,7 @@ Analysis::update()
 {
 	updateImpl();
 	mUpdated = time(nullptr);
+	*info << "Updated analysis " << mIdentity << std::endl;
 	//save();
 }
 
