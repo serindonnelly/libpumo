@@ -20,6 +20,7 @@ Histogram2d::~Histogram2d()
 float
 Histogram2d::operator()(int x, int y) const
 {
+	return mHistogram(x, y);
 }
 
 
