@@ -32,21 +32,25 @@ analyses:
 
 extend AxesAnalysis to calculate long axis and side axis
 AxisVisualisationAnalysis (unimportant)
-JointDistributionAnalysis: base class
-ParentJointDistributionAnalysis
-HeightJointDistributionAnalysis
-TerminalDistanceJointDistributionAnalysis
+ParentDistributionAnalysis
+HeightDistributionAnalysis
+DistanceDistributionAnalysis
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
 
 ======================================
 
+analysis enhancements:
+load and save functions for all non-tree analyses
+
+======================================
+
 other:
 
+generate filenames and paths in a sensible way: specify directory in json, make all other paths relative to that
+log analyses registered, loaded, saved, updated
 tag analysis update methods with dates
 tag analysis update methods with dates automagically?
-generate filenames and paths in a sensible way: specify directory in json, make all other paths relative to that
 date comparison
 date generation
 date verification
-log analyses registered, loaded, saved, updated
