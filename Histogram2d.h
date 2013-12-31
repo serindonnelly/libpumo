@@ -20,6 +20,19 @@ public:
 	float getMaxX() const;
 	float getMinY() const;
 	float getMaxY() const;
+	int getBinCountX() const {
+		return binCountX;
+	};
+	int getBinCountY() const {
+		return binCountY;
+	};
+	const std::vector<float>& getBinBoundariesX() const {
+		return binBoundariesX;
+	};
+	const std::vector<float>& getBinBoundariesY() const {
+		return binBoundariesY;
+	};
+
 private:
 	void zero();
 	Eigen::MatrixXf mHistogram;

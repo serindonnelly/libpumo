@@ -23,6 +23,7 @@ JointDistributionAnalysis::generateAngle(const Node *n, float& newAngle) const
 	if (!selectDistribution(n, chosenDistribution))
 		return false;
 	newAngle = (*mConditionalDistributions[chosenDistribution])(gen);
+	return true;
 }
 
 
@@ -58,16 +59,16 @@ void JointDistributionAnalysis::updateImpl()
 		mHistogram.insertSample(samplesX[i], samplesY[i], sampleWeights[i]);
 	}
 	// add gets for inaccessible members here
-	for (int i = 0; i < mHistogram.binCountY; i++)
+	for (int i = 0; i < mHistogram.getBinCountY(); i++)
 	{
 		std::vector<float> binWeights;
-		for (int j = 0; j < mHistogram.binCountX; j++)
+		for (int j = 0; j < mHistogram.getBinCountX(); j++)
 		{
 			binWeights.push_back(mHistogram(j, i));
 		}
 		mConditionalDistributions[i] = new std::piecewise_constant_distribution<float>(
-			mHistogram.binBoundariesX.begin(),
-			mHistogram.binBoundariesX.end(),
+			mHistogram.getBinBoundariesX().begin(),
+			mHistogram.getBinBoundariesX().end(),
 			binWeights.begin());
 	}
 }
