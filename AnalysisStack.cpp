@@ -11,6 +11,7 @@
 #include "AxesAnalysis.h"
 #include "AngleDistributionAnalysis.h"
 #include "MonteCarloAnalysis.h"
+#include "HeightDistributionAnalysis.h"
 
 AnalysisStack::~AnalysisStack()
 {
@@ -175,10 +176,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		//{
 
 		//}
-		//else if (routine == "heightdistribution")
-		//{
-
-		//}
+		else if (routine == "heightdistribution")
+		{
+			a = new HeightDistributionAnalysis();
+		}
 		//else if (routine == "distancedistribution")
 		//{
 

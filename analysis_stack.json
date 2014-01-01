@@ -55,5 +55,11 @@
 	"to":"NN",
 	"ids":"@all",
 	"from":["","a","n"]
+},
+{
+	"routine":"heightdistribution",
+	"to":"h",
+	"ids":"@all",
+	"from":["","a"]
 }
 ]
