@@ -40,8 +40,8 @@ AngleDistributionAnalysis::updateImpl()
 	for (const auto& angleLength : angleLengthSamples)
 	{
 		auto insert = std::lower_bound(binBoundaries.begin(), binBoundaries.end(), angleLength.first);
-		assert(*insert >= angleLength.first);
-		assert(*(insert-1) <= angleLength.first);
+		//assert(*insert >= angleLength.first);
+		//assert(*(insert-1) <= angleLength.first);
 		int index = insert - binBoundaries.begin() - 1;
 		binWeights[index] += angleLength.second;
 
@@ -93,7 +93,52 @@ AngleDistributionAnalysis::serialise(picojson::value &v) const
 bool
 AngleDistributionAnalysis::deserialise(const picojson::value &v)
 {
-	return false;
+	int provisionalBinCount;
+	picojson::array provisionalBinBoundaries;
+	picojson::array provisionalBinWeights;
+
+	if (!jat(provisionalBinCount, v, "bin_count")) return false;
+	if (!jat(provisionalBinBoundaries, v, "bin_boundaries")) return false;
+	if (!jat(provisionalBinWeights, v, "bin_weights")) return false;
+
+	if (provisionalBinCount <= 0) return false;
+	if (provisionalBinBoundaries.size() != provisionalBinCount + 1) return false;
+	if (provisionalBinWeights.size() != provisionalBinCount + 1) return false;
+
+	std::vector<float> readBinBoundaries;
+	for (const auto& bound : provisionalBinBoundaries)
+	{
+		float provisionalBound;
+		if (!jget(provisionalBound, bound)) return false;
+		readBinBoundaries.push_back(provisionalBound);
+		if (provisionalBound <= readBinBoundaries.back()) return false;
+	}
+
+	std::vector<float> readBinWeights;
+	for (const auto& weight : provisionalBinWeights)
+	{
+		float provisionalWeight;
+		if (!jget(provisionalWeight, weight)) return false;
+		readBinWeights.push_back(provisionalWeight);
+		if (provisionalWeight <= 0.f) return false;
+	}
+
+	binBoundaries.clear();
+	binWeights.clear();
+	binCount = provisionalBinCount;
+	for (float bound : readBinBoundaries)
+	{
+		binBoundaries.push_back(bound);
+	}
+	for (float weight : readBinWeights)
+	{
+		binWeights.push_back(weight);
+	}
+
+
+	mDistribution = std::piecewise_constant_distribution<float>(binBoundaries.begin(), binBoundaries.end(), binWeights.begin());
+
+	return true;
 }
 
 
