@@ -52,7 +52,11 @@ public:
 	void renumber();
 	bool validate();
 	void write(std::string filename);
-	void samplePoints(std::vector<Point> &sample, int n, std::vector<int>* sampleSegmentIDs=nullptr) const;
+	void samplePoints(
+		std::vector<Point> &sample,
+		int n,
+		std::vector<int>* sampleSegmentIDs = nullptr,
+		std::vector<float>* sampleSegmentRatios = nullptr) const;
 	const std::map<int, Node*> getGraph() const { return mGraph; }
 	float getWidth(vecN pf) const;
 private:
