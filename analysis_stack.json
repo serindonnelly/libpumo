@@ -1,15 +1,18 @@
-[
+{
+"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"C:\\Dropbox\\phdcode\\analyses\\",
+"analysis_stack":[
 {
 	"routine":"specifyfile",
 	"to":"",
 	"ids":"1",
-	"from":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\cell11_x40_scaled.swc"
+	"from":"cell11_x40_scaled.swc"
 },
 {
 	"routine":"specifyfile",
 	"to":"",
 	"ids":"2",
-	"from":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\cell12_x40_scaled.swc"
+	"from":"cell12_x40_scaled.swc"
 },
 {
 	"routine":"makelist",

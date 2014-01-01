@@ -8,10 +8,10 @@ public:
 	SWCAnalysis(std::string& fn);
 	~SWCAnalysis();
 	std::string getSWCFilename() { return SWCfilename; };
-	virtual void load(){};
 private:
 	std::string SWCfilename;
-	virtual void save(){};
+	virtual bool serialise(picojson::value& v) const;
+	virtual bool deserialise(const picojson::value& v);
 	virtual void updateImpl(){};
 };
 

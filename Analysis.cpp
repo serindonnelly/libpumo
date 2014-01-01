@@ -54,10 +54,18 @@ Analysis::getUpdateTime()
 void
 Analysis::update()
 {
-	updateImpl();
-	mUpdated = time(nullptr);
-	std::cout << "Updated analysis " << mIdentity << std::endl;
-	//save();
+	if (!load())
+	{
+		std::cout << "Failed to load analysis " << mIdentity << " from " << mFilename << std::endl;
+		updateImpl();
+		mUpdated = time(nullptr);
+		std::cout << "Updated analysis " << mIdentity << std::endl;
+		save();
+	}
+	else
+	{
+		std::cout << "Loaded analysis " << mIdentity << " from " << mFilename << std::endl;
+	}
 }
 
 
@@ -73,4 +81,48 @@ Analysis::setIdentity(std::string id, int order)
 	mIdentity = id;
 	mOrder = order;
 }
+
+/***********************************************************************
+ *  Method: Analysis::load
+ *  Params: 
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+bool
+Analysis::load()
+{
+	std::ifstream in(mFilename);
+	picojson::value v;
+	if (!in.good())
+		return false;
+	if (!deserialise(v))
+		return false;
+	return true;
+}
+
+
+/***********************************************************************
+ *  Method: Analysis::save
+ *  Params: 
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Analysis::save()
+{
+	picojson::value v;
+	if (serialise(v))
+	{
+		std::ofstream of(mFilename);
+		if (of.good())
+		{
+			of << v;
+			std::cout << "Saved analysis " << mIdentity << " to " << mFilename << std::endl;
+			return;
+		}
+	}	
+	std::cout << "Failed to save analysis " << mIdentity << " to " << mFilename << std::endl;
+	// TODO encapsulate v in two-part object with date
+}
+
 

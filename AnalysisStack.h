@@ -21,6 +21,7 @@ private:
 	bool addProcessing(const std::string& routine, const std::string& to, const picojson::value& ids, const picojson::value& from);
 	bool expandList(const picojson::value& input, std::list<std::string>& output);
 	bool expandList(ListAnalysis& input, std::list<std::string>& output);
-	
+	std::string readDirectory;
+	std::string writeDirectory;
 };
 

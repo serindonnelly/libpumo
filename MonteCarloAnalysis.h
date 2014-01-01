@@ -6,11 +6,11 @@ class MonteCarloAnalysis :
 public:
 	MonteCarloAnalysis();
 	~MonteCarloAnalysis();
-	virtual void load();
 	std::vector<float> widths;
 private:
 	virtual void updateImpl();
-	virtual void save();
+	virtual bool serialise(picojson::value& v) const;
+	virtual bool deserialise(const picojson::value& v);
 	int mTreeCount = 3;
 };
 

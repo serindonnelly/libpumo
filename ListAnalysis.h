@@ -7,10 +7,10 @@ class ListAnalysis :
 public:
 	ListAnalysis();
 	~ListAnalysis();
-	virtual void load() {};
 	std::vector<std::string> contents;
 private:
-	virtual void save() {};
+	virtual bool serialise(picojson::value& v) const;
+	virtual bool deserialise(const picojson::value& v);
 	virtual void updateImpl() {};
 };
 

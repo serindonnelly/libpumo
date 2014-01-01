@@ -50,23 +50,49 @@ Forest::Forest(const Forest &f) : error(false)
  *  Params: std::string filename
  * Effects: 
  ***********************************************************************/
-Forest::Forest(std::string filename) : error(false)
+Forest::Forest(std::string filename, bool json) : error(false)
 {
 	std::ifstream file(filename);
 	if (!file)
 		throw;
-	std::string line;
-	while (std::getline(file, line))
+	if (json)
 	{
-		if (line.length() == 0) continue;
-		if (line[0] == '#')
+		picojson::value v;
+		picojson::parse(v, file);
+		assert(v.is<picojson::object>());
+		const picojson::object& vo = v.get<picojson::object>();
+
+		const picojson::value& headerj = vo.at("header");
+		assert(headerj.is<picojson::array>());
+		for (const auto& headerline : headerj.get<picojson::array>())
 		{
-			header.push_back(line);
-			continue;
+			header.push_back(headerline.get<std::string>());
 		}
-		int ID;
-		NodeSpec ns = readNode(ID, line);
-		addNode(ID, ns);
+
+		const picojson::value& forestj = vo.at("forest");
+		assert(forestj.is<picojson::array>());
+		for (const auto& nodej : forestj.get<picojson::array>())
+		{
+			int ID;
+			NodeSpec ns = readJSONNode(ID, nodej);
+			addNode(ID, ns);
+		}
+	}
+	else
+	{
+		std::string line;
+		while (std::getline(file, line))
+		{
+			if (line.length() == 0) continue;
+			if (line[0] == '#')
+			{
+				header.push_back(line);
+				continue;
+			}
+			int ID;
+			NodeSpec ns = readNode(ID, line);
+			addNode(ID, ns);
+		}
 	}
 }
 

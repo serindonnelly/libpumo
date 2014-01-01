@@ -15,13 +15,13 @@ ForestAnalysis::~ForestAnalysis()
  * Returns: void
  * Effects: 
  ***********************************************************************/
-void
-ForestAnalysis::load()
-{
-	if (f)
-		delete f;
-	f = new Forest(getFilename());
-}
+//void
+//ForestAnalysis::load()
+//{
+//	if (f)
+//		delete f;
+//	f = new Forest(getFilename());
+//}
 
 
 /***********************************************************************
@@ -30,10 +30,36 @@ ForestAnalysis::load()
  * Returns: void
  * Effects: 
  ***********************************************************************/
-void
-ForestAnalysis::save()
+//void
+//ForestAnalysis::save()
+//{
+//	f->write(getFilename());
+//}
+
+
+/***********************************************************************
+ *  Method: ForestAnalysis::serialise
+ *  Params: picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+bool
+ForestAnalysis::serialise(picojson::value &v) const
 {
-	f->write(getFilename());
+	return false;
+}
+
+
+/***********************************************************************
+ *  Method: ForestAnalysis::deserialise
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+ForestAnalysis::deserialise(const picojson::value &v)
+{
+	return false;
 }
 
 

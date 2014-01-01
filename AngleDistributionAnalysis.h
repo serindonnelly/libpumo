@@ -11,11 +11,11 @@ public:
 	int sampleCount;
 	std::vector<float> binBoundaries;
 	std::vector<float> binWeights;
-	virtual void load();
 	virtual void updateImpl();
 	virtual bool generateAngle(const Node* n, float& newAngle) const;
 private:
-	virtual void save();
+	virtual bool serialise(picojson::value& v) const;
+	virtual bool deserialise(const picojson::value& v);
 	virtual void zero();
 	std::piecewise_constant_distribution<float> mDistribution;
 };

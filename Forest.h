@@ -21,7 +21,7 @@ class Forest
 public:
 	Forest();
 	Forest(const Forest& f);
-	Forest(std::string filename);
+	Forest(std::string filename, bool json);
 	~Forest();
 
 	void addNode(int ID, NodeSpec ns);

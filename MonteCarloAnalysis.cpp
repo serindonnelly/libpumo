@@ -12,16 +12,7 @@ MonteCarloAnalysis::MonteCarloAnalysis()
 MonteCarloAnalysis::~MonteCarloAnalysis()
 {
 }
-/***********************************************************************
- *  Method: MonteCarloAnalysis::load
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-void
-MonteCarloAnalysis::load()
-{
-}
+
 
 
 /***********************************************************************
@@ -49,14 +40,28 @@ MonteCarloAnalysis::updateImpl()
 
 
 /***********************************************************************
- *  Method: MonteCarloAnalysis::save
- *  Params: 
+ *  Method: MonteCarloAnalysis::serialise
+ *  Params: picojson::value &v
  * Returns: void
  * Effects: 
  ***********************************************************************/
-void
-MonteCarloAnalysis::save()
+bool
+MonteCarloAnalysis::serialise(picojson::value &v) const
 {
+	return false;
+}
+
+
+/***********************************************************************
+ *  Method: MonteCarloAnalysis::deserialise
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+MonteCarloAnalysis::deserialise(const picojson::value &v)
+{
+	return false;
 }
 
 

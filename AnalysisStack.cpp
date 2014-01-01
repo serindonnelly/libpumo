@@ -26,8 +26,14 @@ AnalysisStack::AnalysisStack(std::string filename)
 	std::ifstream file(filename);
 	picojson::value document;
 	picojson::parse(document, file);
-	assert(document.is<picojson::array>());
-	for (const auto& it : document.get<picojson::array>())
+	assert(document.is<picojson::object>());
+	picojson::object& doco = document.get<picojson::object>();
+
+	readDirectory = doco.at("read_directory").get<std::string>();
+	writeDirectory = doco.at("write_directory").get<std::string>();
+	picojson::array& stackDefinition = doco.at("analysis_stack").get<picojson::array>();
+	//assert(document.is<picojson::array>());
+	for (const auto& it : stackDefinition)
 	{
 		addAnalysis(it);
 	}
@@ -119,7 +125,7 @@ AnalysisStack::addFile(const std::string &to, const picojson::value& ids, const 
 		ii != idsFull.end() && fi != fromFull.end();
 		++ii, ++fi)
 	{
-		SWCAnalysis* f = new SWCAnalysis(*fi);
+		SWCAnalysis* f = new SWCAnalysis(readDirectory + *fi);
 		registerAnalysis(f, to + *ii);
 		//f->setIdentity(to + *ii);
 		//mStack[to + *ii] = f;
@@ -262,6 +268,8 @@ AnalysisStack::registerAnalysis(Analysis *a, const std::string &name)
 	mStack[name] = a;
 	mTopologicalOrder.push_back(name);
 	a->setIdentity(name, mTopologicalOrder.size() - 1);
+	a->setFilename(writeDirectory + name + ".json");
+	
 	std::cout << "Registered analysis " << name << std::endl;
 	a->update();
 	// TODO attempt to load before updating

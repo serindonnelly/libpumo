@@ -16,19 +16,6 @@ AngleDistributionAnalysis::~AngleDistributionAnalysis()
 }
 
 void
-AngleDistributionAnalysis::save()
-{
-}
-
-void
-AngleDistributionAnalysis::load()
-{
-	picojson::value v;
-	parseFile(v,getFilename());
-
-}
-
-void
 AngleDistributionAnalysis::updateImpl()
 {
 	binCount = 180;
@@ -84,4 +71,29 @@ bool AngleDistributionAnalysis::generateAngle(const Node* n, float& newAngle) co
 {
 	newAngle = mDistribution(gen);
 	return true;
+}/***********************************************************************
+ *  Method: AngleDistributionAnalysis::serialise
+ *  Params: picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+bool
+AngleDistributionAnalysis::serialise(picojson::value &v) const
+{
+	return false;
 }
+
+
+/***********************************************************************
+ *  Method: AngleDistributionAnalysis::deserialise
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+AngleDistributionAnalysis::deserialise(const picojson::value &v)
+{
+	return false;
+}
+
+

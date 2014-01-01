@@ -1,6 +1,7 @@
 #include "Node.h"
 #include <sstream>
 #include <algorithm>
+#include <picojson.h>
 
 NodeSpec::~NodeSpec()
 {
@@ -27,7 +28,7 @@ mType(type), mPosition(xyz), mRadius(radius), mParentID(parentID)
 *  Params: std::string line
 * Effects:
 ***********************************************************************/
-NodeSpec readNode(int& ID, std::string line)
+NodeSpec readNode(int& ID, const std::string& line)
 {
 	int type;
 	float x, y, z;
@@ -35,6 +36,23 @@ NodeSpec readNode(int& ID, std::string line)
 	int parentID;
 	std::stringstream ss(line);
 	ss >> ID >> type >> x >> y >> z >> radius >> parentID;
+	return NodeSpec(type, Point(x, y, z), radius, parentID);
+}
+
+NodeSpec readJSONNode(int& ID, const picojson::value& v)
+{
+	int type;
+	float x, y, z;
+	float radius;
+	int parentID;
+	assert(v.is<picojson::object>());
+	const picojson::object vo = v.get<picojson::object>();
+	type = (int)vo.at("type").get<double>();
+	x = (float)vo.at("x").get<double>();
+	y = (float)vo.at("y").get<double>();
+	z = (float)vo.at("z").get<double>();
+	radius = (float)vo.at("radius").get<double>();
+	parentID = (int)vo.at("parent").get<double>();
 	return NodeSpec(type, Point(x, y, z), radius, parentID);
 }
 

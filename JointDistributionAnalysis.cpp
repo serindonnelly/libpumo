@@ -72,3 +72,29 @@ void JointDistributionAnalysis::updateImpl()
 			binWeights.begin());
 	}
 }
+/***********************************************************************
+ *  Method: JointDistributionAnalysis::serialise
+ *  Params: picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+bool
+JointDistributionAnalysis::serialise(picojson::value &v) const
+{
+	return false;
+}
+
+
+/***********************************************************************
+ *  Method: JointDistributionAnalysis::deserialise
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+JointDistributionAnalysis::deserialise(const picojson::value &v)
+{
+	return false;
+}
+
+

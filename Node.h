@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <picojson.h>
 #include "Forest.h"
 #include "Segment.h"
 #include "vec.h"
@@ -29,7 +30,8 @@ protected:
 	int mParentID;
 };
 
-NodeSpec readNode(int& ID, std::string line);
+NodeSpec readNode(int& ID, const std::string& line);
+NodeSpec readJSONNode(int& ID, const picojson::value& v);
 
 class Node : public NodeSpec
 {

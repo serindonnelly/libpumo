@@ -22,19 +22,19 @@ AxesAnalysis::~AxesAnalysis()
  * Returns: void
  * Effects: 
  ***********************************************************************/
-void
-AxesAnalysis::load()
-{
-	picojson::value v;
-	parseFile(v, getFilename());
-	assert(v.is<picojson::object>());
-	picojson::value& pf = v.get<picojson::object>().at("pf axis");
-	assert(pf.is<picojson::object>());
-	picojson::object& pfObj = pf.get<picojson::object>();
-	pfAxis = vecN((float)pfObj.at("x").get<double>(),
-				  (float)pfObj.at("y").get<double>(),
-				  (float)pfObj.at("z").get<double>());
-}
+//void
+//AxesAnalysis::load()
+//{
+//	picojson::value v;
+//	parseFile(v, getFilename());
+//	assert(v.is<picojson::object>());
+//	picojson::value& pf = v.get<picojson::object>().at("pf axis");
+//	assert(pf.is<picojson::object>());
+//	picojson::object& pfObj = pf.get<picojson::object>();
+//	pfAxis = vecN((float)pfObj.at("x").get<double>(),
+//				  (float)pfObj.at("y").get<double>(),
+//				  (float)pfObj.at("z").get<double>());
+//}
 
 
 /***********************************************************************
@@ -43,19 +43,19 @@ AxesAnalysis::load()
  * Returns: void
  * Effects: 
  ***********************************************************************/
-void
-AxesAnalysis::save()
-{
-	picojson::object pf;
-	pf["x"] = picojson::value(pfAxis.x);
-	pf["y"] = picojson::value(pfAxis.y);
-	pf["z"] = picojson::value(pfAxis.z);
-
-	picojson::object v;
-	v["pf axis"] = picojson::value(pf);
-
-	saveJSON(getFilename(), picojson::value(v));
-}
+//void
+//AxesAnalysis::save()
+//{
+//	picojson::object pf;
+//	pf["x"] = picojson::value(pfAxis.x);
+//	pf["y"] = picojson::value(pfAxis.y);
+//	pf["z"] = picojson::value(pfAxis.z);
+//
+//	picojson::object v;
+//	v["pf axis"] = picojson::value(pf);
+//
+//	saveJSON(getFilename(), picojson::value(v));
+//}
 
 
 /***********************************************************************
@@ -87,6 +87,32 @@ AxesAnalysis::updateImpl()
 	//return (int)cov.coeff(2, 2);
 	Eigen::Vector3f pf = eig.eigenvectors().col(0);
 	pfAxis = vecN(pf.x(), pf.y(), pf.z());
+}
+
+
+/***********************************************************************
+ *  Method: AxesAnalysis::serialise
+ *  Params: picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+bool
+AxesAnalysis::serialise(picojson::value &v) const
+{
+	return false;
+}
+
+
+/***********************************************************************
+ *  Method: AxesAnalysis::deserialise
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+AxesAnalysis::deserialise(const picojson::value &v)
+{
+	return false;
 }
 
 

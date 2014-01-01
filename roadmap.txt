@@ -41,16 +41,19 @@ LikelihoodRatioAnalysis (replace)
 ======================================
 
 analysis enhancements:
-load and save functions for all non-tree analyses
+serialise and deserialise functions for all non-tree analyses
+generic json-based load and save functions in Analysis
 
 ======================================
 
 other:
 
-generate filenames and paths in a sensible way: specify directory in json, make all other paths relative to that
+generate filenames and paths in a nicer way
 log analyses registered, loaded, saved, updated
+timestamp logs
 tag analysis update methods with dates
 tag analysis update methods with dates automagically?
 date comparison
 date generation
 date verification
+unit tests

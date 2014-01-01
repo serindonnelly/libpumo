@@ -20,5 +20,7 @@ private:
 	Histogram2d mHistogram;
 	virtual void zero();
 	std::vector<std::piecewise_constant_distribution<float>*> mConditionalDistributions;
+	virtual bool serialise(picojson::value& v) const;
+	virtual bool deserialise(const picojson::value& v);
 };
 
