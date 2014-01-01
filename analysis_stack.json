@@ -52,7 +52,7 @@
 },
 {
 	"routine":"montecarlo",
-	"to":"N",
+	"to":"NN",
 	"ids":"@all",
 	"from":["","a","n"]
 }
