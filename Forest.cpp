@@ -485,7 +485,7 @@ Forest::write(std::string filename)
  * Effects: 
  ***********************************************************************/
 void
-Forest::samplePoints(std::vector<Point> &sample, int n) const
+Forest::samplePoints(std::vector<Point> &sample, int n, std::vector<int>* sampleSegmentIDs) const
 {
 
 
@@ -512,6 +512,8 @@ Forest::samplePoints(std::vector<Point> &sample, int n) const
 	{
 		const Segment* s = getSegment(segmentSelector(gen));
 		sample.push_back(s->getPoint(fractions(gen)));
+		if (sampleSegmentIDs)
+			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 	}
 }
 
