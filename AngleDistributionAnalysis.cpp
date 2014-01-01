@@ -80,7 +80,22 @@ bool AngleDistributionAnalysis::generateAngle(const Node* n, float& newAngle) co
 bool
 AngleDistributionAnalysis::serialise(picojson::value &v) const
 {
-	return false;
+	picojson::array jBinBoundaries;
+	picojson::array jBinWeights;
+	for (float bound : binBoundaries)
+	{
+		jBinBoundaries.push_back(picojson::value(bound));
+	}
+	for (float weight : binWeights)
+	{
+		jBinWeights.push_back(picojson::value(weight));
+	}
+	picojson::object vo;
+	vo["bin_count"] = picojson::value((double)binCount);
+	vo["bin_weights"] = picojson::value(jBinWeights);
+	vo["bin_boundaries"] = picojson::value(jBinBoundaries);
+	v = picojson::value(vo);
+	return true;
 }
 
 
