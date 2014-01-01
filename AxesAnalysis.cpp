@@ -99,7 +99,12 @@ AxesAnalysis::updateImpl()
 bool
 AxesAnalysis::serialise(picojson::value &v) const
 {
-	return false;
+	picojson::object vo;
+	vo["x"] = picojson::value(pfAxis.x);
+	vo["y"] = picojson::value(pfAxis.y);
+	vo["z"] = picojson::value(pfAxis.z);
+	v = picojson::value(vo);
+	return true;
 }
 
 
@@ -112,6 +117,21 @@ AxesAnalysis::serialise(picojson::value &v) const
 bool
 AxesAnalysis::deserialise(const picojson::value &v)
 {
+	if (v.is<picojson::object>())
+	{
+		if (v.contains("x") && v.contains("y") && v.contains("z"))
+		{
+			const picojson::object& vo = v.get<picojson::object>();
+			if (vo.at("x").is<double>() && vo.at("y").is<double>() && vo.at("z").is<double>())
+			{
+				float x = (float)vo.at("x").get<double>();
+				float y = (float)vo.at("y").get<double>();
+				float z = (float)vo.at("z").get<double>();
+				pfAxis = vecN(x, y, z);
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
