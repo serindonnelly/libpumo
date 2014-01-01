@@ -35,7 +35,7 @@ static void saveJSON(const std::string& filename, const picojson::value& documen
 
 #define JGET(ctype,jtype) \
 	static bool jget(ctype& out, const picojson::value& v) \
-{if (!v.is<ctype>()) return false; out = (ctype)v.get<jtype>(); return true;}
+{if (!v.is<jtype>()) return false; out = (ctype)v.get<jtype>(); return true;}
 JGET(int,double)
 JGET(bool,bool)
 JGET(float,double)
