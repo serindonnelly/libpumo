@@ -52,7 +52,7 @@ static bool jat(T& out, const picojson::value& v, const std::string& key)
 		return false;
 	if (!v.contains(key))
 		return false;
-	return jget(out, v.at(key));
+	return jget(out, v.get(key));
 }
 
 const float PI = 3.14159265358979323846f;
