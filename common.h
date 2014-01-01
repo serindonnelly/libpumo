@@ -33,5 +33,27 @@ static void saveJSON(const std::string& filename, const picojson::value& documen
 	f << document;
 }
 
+#define JGET(ctype,jtype) \
+	static bool jget(ctype& out, const picojson::value& v) \
+{if (!v.is<ctype>()) return false; out = (ctype)v.get<jtype>(); return true;}
+JGET(int,double)
+JGET(bool,bool)
+JGET(float,double)
+JGET(double,double)
+JGET(std::string,std::string)
+JGET(picojson::object, picojson::object)
+JGET(picojson::array, picojson::array)
+#undef JGET
+
+template<typename T>
+static bool jat(T& out, const picojson::value& v, const std::string& key)
+{
+	if (!v.is<picojson::object>())
+		return false;
+	if (!v.contains(key))
+		return false;
+	return jget(out, v.at(key));
+}
+
 const float PI = 3.14159265358979323846f;
 static const float RAD_TO_DEG = 180.f/PI;

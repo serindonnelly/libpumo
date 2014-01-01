@@ -4,9 +4,9 @@
 #include "AnalysisStack.h"
 #include "vec.h"
 #include "Forest.h"
-#include "common.h"
 #include "teestream.h"
 #include "LogStream.h"
+#include "common.h"
 
 int main(int argc, char** argv)
 {
