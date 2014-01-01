@@ -4,6 +4,11 @@ simplest working version (done):
 replace analysis request with "everything".
 update all analyses in order of declaration and save.
 
+next simplest (done):
+replace analysis request with "everything".
+attempt to load all analyses in order of declaration and fail gracefully whenever a problem occurs
+update all analyses where loading failed
+
 next simplest:
 replace analysis request with "everything".
 attempt to load all analyses in order of declaration and fail gracefully whenever a problem occurs
@@ -40,16 +45,9 @@ LikelihoodRatioAnalysis (replace)
 
 ======================================
 
-analysis enhancements:
-serialise and deserialise functions for all non-tree analyses
-generic json-based load and save functions in Analysis
-
-======================================
-
 other:
 
 generate filenames and paths in a nicer way
-log analyses registered, loaded, saved, updated
 timestamp logs
 tag analysis update methods with dates
 tag analysis update methods with dates automagically?
