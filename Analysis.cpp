@@ -95,6 +95,7 @@ Analysis::load()
 	picojson::value v;
 	if (!in.good())
 		return false;
+	picojson::parse(v, in);
 	if (!deserialise(v))
 		return false;
 	return true;
