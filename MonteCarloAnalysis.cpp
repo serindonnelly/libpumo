@@ -2,6 +2,7 @@
 #include "ForestAnalysis.h"
 #include "AxesAnalysis.h"
 #include "DistributionAnalysis.h"
+#include "common.h"
 
 
 MonteCarloAnalysis::MonteCarloAnalysis()
@@ -48,7 +49,13 @@ MonteCarloAnalysis::updateImpl()
 bool
 MonteCarloAnalysis::serialise(picojson::value &v) const
 {
-	return false;
+	picojson::array va;
+	for (float width : widths)
+	{
+		va.push_back(picojson::value(width));
+	}
+	v = picojson::value(va);
+	return true;
 }
 
 
@@ -61,7 +68,21 @@ MonteCarloAnalysis::serialise(picojson::value &v) const
 bool
 MonteCarloAnalysis::deserialise(const picojson::value &v)
 {
-	return false;
+	picojson::array provisionalWidths;
+	if (!jget(provisionalWidths,v)) return false;
+	for (const auto& width : provisionalWidths)
+	{
+		float readWidth;
+		if (!jget(readWidth, width)) return false;
+	}
+	widths.clear();
+	for (const auto& width : provisionalWidths)
+	{
+		float readWidth;
+		jget(readWidth, width);
+		widths.push_back(readWidth);
+	}
+	return true;
 }
 
 
