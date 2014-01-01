@@ -171,15 +171,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new MonteCarloAnalysis();
 		}
-		//else if (routine == "anglemc")
-		//{
-
-		//}
 		//else if (routine == "parentdistribution")
-		//{
-
-		//}
-		//else if (routine == "parentmc")
 		//{
 
 		//}
@@ -188,10 +180,6 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 
 		//}
 		//else if (routine == "distancedistribution")
-		//{
-
-		//}
-		//else if (routine == "distancemc")
 		//{
 
 		//}
