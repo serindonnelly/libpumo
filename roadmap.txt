@@ -47,9 +47,11 @@ LikelihoodRatioAnalysis (replace)
 
 other:
 
+comments
 generate filenames and paths in a nicer way
 timestamp logs
 tag analysis update methods with dates
+fixing stubgen autocomments that were later falsified
 tag analysis update methods with dates automagically?
 date comparison
 date generation
