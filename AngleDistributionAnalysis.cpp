@@ -118,15 +118,15 @@ AngleDistributionAnalysis::deserialise(const picojson::value &v)
 
 	if (provisionalBinCount <= 0) return false;
 	if (provisionalBinBoundaries.size() != provisionalBinCount + 1) return false;
-	if (provisionalBinWeights.size() != provisionalBinCount + 1) return false;
+	if (provisionalBinWeights.size() != provisionalBinCount) return false;
 
 	std::vector<float> readBinBoundaries;
 	for (const auto& bound : provisionalBinBoundaries)
 	{
 		float provisionalBound;
 		if (!jget(provisionalBound, bound)) return false;
+		if (readBinBoundaries.size() && (provisionalBound <= readBinBoundaries.back())) return false;
 		readBinBoundaries.push_back(provisionalBound);
-		if (provisionalBound <= readBinBoundaries.back()) return false;
 	}
 
 	std::vector<float> readBinWeights;
@@ -134,8 +134,8 @@ AngleDistributionAnalysis::deserialise(const picojson::value &v)
 	{
 		float provisionalWeight;
 		if (!jget(provisionalWeight, weight)) return false;
+		if (provisionalWeight < 0.f) return false;
 		readBinWeights.push_back(provisionalWeight);
-		if (provisionalWeight <= 0.f) return false;
 	}
 
 	binBoundaries.clear();
