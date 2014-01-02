@@ -264,8 +264,7 @@ Forest::generateForest(std::function<bool(const Node*,float& angle)> angleGenera
 			{
 				Displacement seg = n->getSegment()->getVector();
 				float angle;
-				//TODO use angleGenerator on node from new tree
-				if (angleGenerator(n, angle))
+				if (angleGenerator(newNode, angle))
 				{
 					vec horizontal = pf.projectOrth(seg);
 					vecN horizontalUnit(horizontal);

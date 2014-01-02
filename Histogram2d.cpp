@@ -24,29 +24,6 @@ Histogram2d::operator()(int x, int y) const
 }
 
 
-/***********************************************************************
- *  Method: Histogram2d::insertSample
- *  Params: float x, float y, float weight
- * Returns: bool
- * Effects: 
- ***********************************************************************/
-bool
-Histogram2d::insertSample(float x, float y, float weight)
-{
-	if (getMinX() > x || getMaxX() < x)
-		return false;
-	if (getMinY() > y || getMaxY() < y)
-		return false;
-	int indexX, indexY;
-	indexX = (int)floor((float)mBinCountX * (x - getMinX()) / (getMaxX() - getMinX()));
-	indexY = (int)floor((float)mBinCountY * (y - getMinY()) / (getMaxY() - getMinY()));
-	if (indexX == mBinCountX)
-		indexX--;
-	if (indexY == mBinCountY)
-		indexY--;
-	mHistogram(indexX, indexY) += weight;
-	return true;
-}
 
 
 /***********************************************************************
@@ -287,16 +264,60 @@ Histogram2d::operator()(int x, int y)
 }
 
 
-///***********************************************************************
-// *  Method: Histogram2d::setEntry
-// *  Params: int x, int y, float v
-// * Returns: void
-// * Effects: 
-// ***********************************************************************/
-//void
-//Histogram2d::setEntry(int x, int y, float v)
-//{
-//	mHistogram(x, y) = v;
-//}
+/***********************************************************************
+ *  Method: Histogram2d::sampleInsertBinX
+ *  Params: float x
+ * Returns: int
+ * Effects: 
+ ***********************************************************************/
+int
+Histogram2d::sampleInsertBinX(float x) const
+{
+	if (getMinX() > x || getMaxX() < x)
+		return -1;
+	int indexX;
+	indexX = (int)floor((float)mBinCountX * (x - getMinX()) / (getMaxX() - getMinX()));
+	if (indexX == mBinCountX)
+		indexX--;
+	return indexX;
+}
 
 
+/***********************************************************************
+ *  Method: Histogram2d::sampleInsertBinY
+ *  Params: float y
+ * Returns: int
+ * Effects: 
+ ***********************************************************************/
+int
+Histogram2d::sampleInsertBinY(float y) const
+{
+	if (getMinY() > y || getMaxY() < y)
+		return -1;
+	int indexY;
+	indexY = (int)floor((float)mBinCountY * (y - getMinY()) / (getMaxY() - getMinY()));
+	if (indexY == mBinCountY)
+		indexY--;
+	return indexY;
+}
+
+
+/***********************************************************************
+*  Method: Histogram2d::insertSample
+*  Params: float x, float y, float weight
+* Returns: bool
+* Effects:
+***********************************************************************/
+bool
+Histogram2d::insertSample(float x, float y, float weight)
+{
+	int indexX = sampleInsertBinX(x);
+	if (indexX == -1)
+		return false;
+	int indexY = sampleInsertBinY(y);
+	if (indexY == -1)
+		return false;
+
+	mHistogram(indexX, indexY) += weight;
+	return true;
+}

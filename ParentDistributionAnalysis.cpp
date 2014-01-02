@@ -21,7 +21,17 @@ ParentDistributionAnalysis::~ParentDistributionAnalysis()
 bool
 ParentDistributionAnalysis::selectDistribution(const Node *n, int &selection) const
 {
-	return false;
+	if (n->isRoot())
+		return false;
+	if (n->getParent()->isRoot())
+		return false;
+	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
+	float parentAngle = RAD_TO_DEG*acos(pf.cosine(n->getParent()->getSegment()->getVector()));
+	int indexY = mHistogram.sampleInsertBinY(parentAngle);
+	if (indexY == -1)
+		return false;
+	selection = indexY;
+	return true;
 }
 
 

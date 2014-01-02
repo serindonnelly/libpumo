@@ -11,6 +11,8 @@ public:
 	~JointDistributionAnalysis();
 	virtual bool generateAngle(const Node* n, float& newAngle) const;
 	virtual void updateImpl();
+protected:
+	Histogram2d mHistogram;
 private:
 	virtual bool selectDistribution(const Node* n, int& selection) const = 0;
 	virtual void collectSample(
@@ -18,7 +20,6 @@ private:
 		std::vector<float>& samplesY,
 		std::vector<float>& sampleWeights) const = 0;
 	void updateConditionalDistributions();
-	Histogram2d mHistogram;
 	std::vector<std::piecewise_constant_distribution<float>*> mConditionalDistributions;
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);

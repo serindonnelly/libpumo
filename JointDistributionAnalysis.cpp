@@ -21,7 +21,9 @@ JointDistributionAnalysis::generateAngle(const Node *n, float& newAngle) const
 {
 	int chosenDistribution;
 	if (!selectDistribution(n, chosenDistribution))
-		return false;
+		return false; // distribution doesn't want to alter the node
+	if (mConditionalDistributions[chosenDistribution] == nullptr)
+		return false; // distribution has no samples for this condition
 	newAngle = (*mConditionalDistributions[chosenDistribution])(gen);
 	return true;
 }

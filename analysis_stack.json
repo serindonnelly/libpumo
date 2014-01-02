@@ -67,5 +67,11 @@
 	"to":"p",
 	"ids":"@all",
 	"from":["","a"]
+},
+{
+	"routine":"montecarlo",
+	"to":"PP",
+	"ids":"@all",
+	"from":["","a","p"]
 }
 ]

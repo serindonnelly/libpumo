@@ -10,8 +10,10 @@ public:
 	~Histogram2d();
 	float operator()(int x, int y) const;
 	float& operator()(int x, int y);
-	void setEntry(int x, int y, float v);
+	//void setEntry(int x, int y, float v);
 	bool insertSample(float x, float y, float weight = 1.f);
+	int sampleInsertBinX(float x) const;
+	int sampleInsertBinY(float y) const;
 	void setBinCountX(int count);
 	void setBinCountY(int count);
 	void setRangeX(float minX, float maxX);
