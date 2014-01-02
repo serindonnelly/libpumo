@@ -61,5 +61,11 @@
 	"to":"h",
 	"ids":"@all",
 	"from":["","a"]
+},
+{
+	"routine":"parentdistribution",
+	"to":"p",
+	"ids":"@all",
+	"from":["","a"]
 }
 ]
