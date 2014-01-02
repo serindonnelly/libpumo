@@ -41,15 +41,25 @@ void JointDistributionAnalysis::updateImpl()
 
 	collectSample(samplesX, samplesY, sampleWeights);
 	float minX, maxX;
-	if (!preferredBinBoundariesX(minX,maxX))
+	if (!preferredBinBoundariesX(minX, maxX))
 	{
 		mHistogram.guessRangeX(samplesX);
 	}
+	else
+	{
+		mHistogram.setRangeX(minX, maxX);
+	}
+
 	float minY, maxY;
 	if (!preferredBinBoundariesY(minY, maxY))
 	{
 		mHistogram.guessRangeY(samplesY);
 	}
+	else
+	{
+		mHistogram.setRangeX(minY, maxY);
+	}
+
 	int count = std::min({ samplesX.size(), samplesY.size(), sampleWeights.size() });
 	for (int i = 0; i < count; i++)
 	{
