@@ -46,6 +46,7 @@ LikelihoodRatioAnalysis (replace)
 
 other:
 
+Interface with python to generate visualisations
 comments
 generate filenames and paths in a nicer way
 debug: test equality of serialised and deserialised json
