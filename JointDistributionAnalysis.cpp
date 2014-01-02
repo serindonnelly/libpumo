@@ -57,7 +57,7 @@ void JointDistributionAnalysis::updateImpl()
 	}
 	else
 	{
-		mHistogram.setRangeX(minY, maxY);
+		mHistogram.setRangeY(minY, maxY);
 	}
 
 	int count = std::min({ samplesX.size(), samplesY.size(), sampleWeights.size() });
