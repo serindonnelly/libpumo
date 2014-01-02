@@ -50,6 +50,7 @@ comments
 generate filenames and paths in a nicer way
 debug: test equality of serialised and deserialised json
 timestamp logs
+add remaining cells to stack
 tag analysis update methods with dates
 fixing stubgen autocomments that were later falsified
 tag analysis update methods with dates automagically?

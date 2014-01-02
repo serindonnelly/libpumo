@@ -12,5 +12,10 @@ private:
 		std::vector<float>& samplesX,
 		std::vector<float>& samplesY,
 		std::vector<float>& sampleWeights) const;
+	virtual bool preferredBinBoundariesX(float& minX, float& maxX)
+	{
+		minX = 0.f; maxX = 180.f;
+		return true;
+	}
 };
 
