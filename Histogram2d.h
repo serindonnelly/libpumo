@@ -9,6 +9,8 @@ public:
 	Histogram2d();
 	~Histogram2d();
 	float operator()(int x, int y) const;
+	float& operator()(int x, int y);
+	void setEntry(int x, int y, float v);
 	bool insertSample(float x, float y, float weight = 1.f);
 	void setBinCountX(int count);
 	void setBinCountY(int count);
@@ -21,28 +23,30 @@ public:
 	float getMinY() const;
 	float getMaxY() const;
 	int getBinCountX() const {
-		return binCountX;
+		return mBinCountX;
 	};
 	int getBinCountY() const {
-		return binCountY;
+		return mBinCountY;
 	};
-	const std::vector<float>& getBinBoundariesX() const {
-		return binBoundariesX;
-	};
-	const std::vector<float>& getBinBoundariesY() const {
-		return binBoundariesY;
-	};
+	void getBinBoundariesX(std::vector<float>& binBoundariesX) const;
+	void getBinBoundariesY(std::vector<float>& binBoundariesY) const;
+
+	float getBinBoundaryX(int i) const;
+	float getBinBoundaryY(int i) const;
+
+	void zero();
 
 private:
-	void zero();
 	Eigen::MatrixXf mHistogram;
-	int binCountX;
-	int binCountY;
+	int mBinCountX;
+	int mBinCountY;
 
-	std::vector<float> binBoundariesX;
-	std::vector<float> binBoundariesY;
+	float mMinX;
+	float mMaxX;
+	float mMinY;
+	float mMaxY;
 
-	std::vector<float> binWeights;
+	//std::vector<float> binWeights;
 
 };
 

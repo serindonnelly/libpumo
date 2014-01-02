@@ -1,6 +1,7 @@
 #include "HeightDistributionAnalysis.h"
 #include "ForestAnalysis.h"
 #include "AxesAnalysis.h"
+#include "common.h"
 
 
 HeightDistributionAnalysis::HeightDistributionAnalysis()
@@ -42,10 +43,10 @@ std::vector<float> &sampleWeights) const
 	std::vector<Point> samples;
 	std::vector<int> sampleIDs;
 	std::vector<float> sampleRatios;
-	f->samplePoints(samples, 500000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
-	for (int i = 0; i < samples.size() && i < sampleIDs.size() && sampleRatios.size(); i++)
+	f->samplePoints(samples, 5000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
+	for (unsigned int i = 0; i < samples.size() && i < sampleIDs.size() && sampleRatios.size(); i++)
 	{
-		float angle = pf.cosine(f->getSegment(sampleIDs[i])->getVector());
+		float angle = RAD_TO_DEG*acos(pf.cosine(f->getSegment(sampleIDs[i])->getVector()));
 		float height = pf.dot(samples[i]);
 		samplesX.push_back(angle);
 		samplesY.push_back(height);

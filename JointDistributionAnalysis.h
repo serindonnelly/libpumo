@@ -17,10 +17,14 @@ private:
 		std::vector<float>& samplesX,
 		std::vector<float>& samplesY,
 		std::vector<float>& sampleWeights) const = 0;
+	void updateConditionalDistributions();
 	Histogram2d mHistogram;
-	virtual void zero();
 	std::vector<std::piecewise_constant_distribution<float>*> mConditionalDistributions;
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
+	virtual int preferredBinCountX() { return 30; }
+	virtual int preferredBinCountY() { return 30; }
+	virtual bool preferredBinBoundariesX(float& minX, float& maxX) { return false; }
+	virtual bool preferredBinBoundariesY(float& minY, float& maxY) { return false; }
 };
 

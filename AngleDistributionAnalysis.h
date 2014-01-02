@@ -16,7 +16,7 @@ public:
 private:
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
-	virtual void zero();
+	void zero();
 	std::piecewise_constant_distribution<float> mDistribution;
 };
 

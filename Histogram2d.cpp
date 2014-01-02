@@ -38,11 +38,11 @@ Histogram2d::insertSample(float x, float y, float weight)
 	if (getMinY() > y || getMaxY() < y)
 		return false;
 	int indexX, indexY;
-	indexX = (int)floor((float)binCountX * (x - getMinX()) / (getMaxX() - getMinX()));
-	indexY = (int)floor((float)binCountY * (x - getMinY()) / (getMaxY() - getMinY()));
-	if (indexX == binCountX)
+	indexX = (int)floor((float)mBinCountX * (x - getMinX()) / (getMaxX() - getMinX()));
+	indexY = (int)floor((float)mBinCountY * (y - getMinY()) / (getMaxY() - getMinY()));
+	if (indexX == mBinCountX)
 		indexX--;
-	if (indexY == binCountY)
+	if (indexY == mBinCountY)
 		indexY--;
 	mHistogram(indexX, indexY) += weight;
 	return true;
@@ -58,8 +58,7 @@ Histogram2d::insertSample(float x, float y, float weight)
 void
 Histogram2d::setBinCountX(int count)
 {
-	binCountX = count;
-	zero();
+	mBinCountX = count;
 }
 
 
@@ -72,8 +71,7 @@ Histogram2d::setBinCountX(int count)
 void
 Histogram2d::setBinCountY(int count)
 {
-	binCountY = count;
-	zero();
+	mBinCountY = count;
 }
 
 
@@ -86,10 +84,8 @@ Histogram2d::setBinCountY(int count)
 void
 Histogram2d::setRangeX(float minX, float maxX)
 {
-	binBoundariesX.clear();
-	binBoundariesX.push_back(minX);
-	binBoundariesX.push_back(maxX);
-	zero();
+	mMinX = minX;
+	mMaxX = maxX;
 }
 
 
@@ -102,10 +98,8 @@ Histogram2d::setRangeX(float minX, float maxX)
 void
 Histogram2d::setRangeY(float minY, float maxY)
 {
-	binBoundariesY.clear();
-	binBoundariesY.push_back(minY);
-	binBoundariesY.push_back(maxY);
-	zero();
+	mMinY = minY;
+	mMaxY = maxY;
 }
 
 
@@ -162,26 +156,8 @@ Histogram2d::guessRangeY(const std::vector<float> &samples)
 void
 Histogram2d::zero()
 {
-	mHistogram.resize(binCountX, binCountY);
+	mHistogram.resize(mBinCountX, mBinCountY);
 	mHistogram.fill(0); // check this works
-
-	float minX = getMinX();
-	float maxX = getMaxX();
-	binBoundariesX.clear();
-	for (int i = 0; i <= binCountX; i++)
-	{
-		//risk of floating point errors in maxX, maxY
-		binBoundariesX.push_back(minX + (float)i*((maxX - minX) / binCountX));
-	}
-
-	float minY = getMinY();
-	float maxY = getMaxY();
-	binBoundariesY.clear();
-	for (int i = 0; i <= binCountY; i++)
-	{
-		//risk of floating point errors in maxX, maxY
-		binBoundariesY.push_back(minY + (float)i*((maxY - minY) / binCountY));
-	}
 
 }
 
@@ -195,7 +171,7 @@ Histogram2d::zero()
 float
 Histogram2d::getMinX() const
 {
-	return binBoundariesX.front();
+	return mMinX;
 }
 
 
@@ -208,7 +184,7 @@ Histogram2d::getMinX() const
 float
 Histogram2d::getMaxX() const
 {
-	return binBoundariesX.back();
+	return mMaxX;
 }
 
 
@@ -221,7 +197,7 @@ Histogram2d::getMaxX() const
 float
 Histogram2d::getMinY() const
 {
-	return binBoundariesY.front();
+	return mMinY;
 }
 
 
@@ -234,7 +210,93 @@ Histogram2d::getMinY() const
 float
 Histogram2d::getMaxY() const
 {
-	return binBoundariesY.back();
+	return mMaxY;
 }
+
+
+/***********************************************************************
+ *  Method: Histogram2d::getBinBoundariesX
+ *  Params: 
+ * Returns: const std::vector<float> &
+ * Effects: 
+ ***********************************************************************/
+void 
+Histogram2d::getBinBoundariesX(std::vector<float>& binBoundariesX) const
+{
+	for (int i = 0; i <= mBinCountX; i++)
+	{
+		//risk of floating point errors in maxX, maxY
+		binBoundariesX.push_back(getBinBoundaryX(i));
+	}
+}
+
+
+/***********************************************************************
+ *  Method: Histogram2d::getBinBoundariesY
+ *  Params: 
+ * Returns: const std::vector<float> &
+ * Effects: 
+ ***********************************************************************/
+void
+Histogram2d::getBinBoundariesY(std::vector<float> & binBoundariesY) const
+{
+	for (int i = 0; i <= mBinCountY; i++)
+	{
+		//risk of floating point errors in maxX, maxY
+		binBoundariesY.push_back(getBinBoundaryY(i));
+	}
+}
+
+
+/***********************************************************************
+ *  Method: Histogram2d::getBinBoundariesY
+ *  Params: 
+ * Returns: const std::vector<float> &
+ * Effects: 
+ ***********************************************************************/
+float
+Histogram2d::getBinBoundaryX(int i) const
+{
+	return mMinX + (float)i*((mMaxX - mMinX) / mBinCountX);
+}
+
+
+/***********************************************************************
+ *  Method: Histogram2d::getBinBoundaryY
+ *  Params: 
+ * Returns: float
+ * Effects: 
+ ***********************************************************************/
+float
+Histogram2d::getBinBoundaryY(int i) const
+{
+	return mMinY + (float)i*((mMaxY - mMinY) / mBinCountY);
+}
+
+
+/***********************************************************************
+ *  Method: Histogram2d::operator()
+ *  Params: int x, int y
+ * Returns: float &
+ * Effects: 
+ ***********************************************************************/
+float &
+Histogram2d::operator()(int x, int y)
+{
+	return mHistogram(x, y);
+}
+
+
+///***********************************************************************
+// *  Method: Histogram2d::setEntry
+// *  Params: int x, int y, float v
+// * Returns: void
+// * Effects: 
+// ***********************************************************************/
+//void
+//Histogram2d::setEntry(int x, int y, float v)
+//{
+//	mHistogram(x, y) = v;
+//}
 
 

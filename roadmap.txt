@@ -38,7 +38,6 @@ analyses:
 extend AxesAnalysis to calculate long axis and side axis
 AxisVisualisationAnalysis (unimportant)
 ParentDistributionAnalysis
-HeightDistributionAnalysis
 DistanceDistributionAnalysis
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
@@ -49,6 +48,7 @@ other:
 
 comments
 generate filenames and paths in a nicer way
+debug: test equality of serialised and deserialised json
 timestamp logs
 tag analysis update methods with dates
 fixing stubgen autocomments that were later falsified

@@ -35,6 +35,6 @@ private:
 	std::string mIdentity;
 	int mOrder;
 	virtual void updateImpl() = 0;
-	void save();
+	virtual void save();
 };
 

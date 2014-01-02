@@ -27,50 +27,36 @@ JointDistributionAnalysis::generateAngle(const Node *n, float& newAngle) const
 }
 
 
-/***********************************************************************
- *  Method: JointDistributionAnalysis::zero
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-void
-JointDistributionAnalysis::zero()
-{
-	// TODO
-}
+
 
 void JointDistributionAnalysis::updateImpl()
 {
 	std::vector<float> samplesX;
 	std::vector<float> samplesY;
-	//REPLACE THIS
-	mHistogram.setBinCountX(30);
-	mHistogram.setBinCountY(30);
-	//BIN COUNTS MUST BE VARIABLE FOR DISTANCE DEP ANALYSIS
-	mHistogram.guessRangeX(samplesX);
-	mHistogram.guessRangeY(samplesY);
-	// BIN RANGES MUST BE EXACTLY SETTABLE FOR ANGLE DISTRIBUTIONS ([0,180])
+
+	mHistogram.setBinCountX(preferredBinCountX());
+	mHistogram.setBinCountY(preferredBinCountY());
+	mHistogram.zero();
 	std::vector<float> sampleWeights;
 
 	collectSample(samplesX, samplesY, sampleWeights);
+	float minX, maxX;
+	if (!preferredBinBoundariesX(minX,maxX))
+	{
+		mHistogram.guessRangeX(samplesX);
+	}
+	float minY, maxY;
+	if (!preferredBinBoundariesY(minY, maxY))
+	{
+		mHistogram.guessRangeY(samplesY);
+	}
 	int count = std::min({ samplesX.size(), samplesY.size(), sampleWeights.size() });
 	for (int i = 0; i < count; i++)
 	{
 		mHistogram.insertSample(samplesX[i], samplesY[i], sampleWeights[i]);
 	}
-	// add gets for inaccessible members here
-	for (int i = 0; i < mHistogram.getBinCountY(); i++)
-	{
-		std::vector<float> binWeights;
-		for (int j = 0; j < mHistogram.getBinCountX(); j++)
-		{
-			binWeights.push_back(mHistogram(j, i));
-		}
-		mConditionalDistributions[i] = new std::piecewise_constant_distribution<float>(
-			mHistogram.getBinBoundariesX().begin(),
-			mHistogram.getBinBoundariesX().end(),
-			binWeights.begin());
-	}
+	updateConditionalDistributions();
+	
 }
 /***********************************************************************
  *  Method: JointDistributionAnalysis::serialise
@@ -81,7 +67,26 @@ void JointDistributionAnalysis::updateImpl()
 bool
 JointDistributionAnalysis::serialise(picojson::value &v) const
 {
-	return false;
+	picojson::object vo;
+	vo["bin_count_x"] = picojson::value((double)mHistogram.getBinCountX());
+	vo["bin_count_y"] = picojson::value((double)mHistogram.getBinCountY());
+
+	vo["min_x"] = picojson::value((double)mHistogram.getMinX());
+	vo["max_x"] = picojson::value((double)mHistogram.getMaxX());
+	vo["min_y"] = picojson::value((double)mHistogram.getMinY());
+	vo["max_y"] = picojson::value((double)mHistogram.getMaxY());
+
+	picojson::array va;
+	for (int i = 0; i < mHistogram.getBinCountX(); i++)
+	{
+		for (int j = 0; j < mHistogram.getBinCountY(); j++)
+		{
+			va.push_back(picojson::value((double)mHistogram(i, j)));
+		}
+	}
+	vo["weights"] = picojson::value(va);
+	v = picojson::value(vo);
+	return true;
 }
 
 
@@ -94,7 +99,85 @@ JointDistributionAnalysis::serialise(picojson::value &v) const
 bool
 JointDistributionAnalysis::deserialise(const picojson::value &v)
 {
-	return false;
+	float minX, maxX, minY, maxY;
+	if (!jat(minX, v, "min_x")) return false;
+	if (!jat(maxX, v, "max_x")) return false;
+	if (!jat(minY, v, "min_y")) return false;
+	if (!jat(maxY, v, "max_y")) return false;
+
+	int binCountX, binCountY;
+	if (!jat(binCountX, v, "bin_count_x")) return false;
+	if (!jat(binCountY, v, "bin_count_y")) return false;
+
+	picojson::array weights;
+	if (!jat(weights, v, "weights")) return false;
+	if (weights.size() != binCountX * binCountY) return false;
+	for (const auto& weight : weights)
+	{
+		float w;
+		if (!jget(w, weight)) return false;
+		if (w < 0.f) return false;
+	}
+
+	mHistogram.setBinCountX(binCountX);
+	mHistogram.setBinCountY(binCountY);
+	mHistogram.zero();
+
+	int c = 0;
+	for (int i = 0; i < binCountX; i++)
+	{
+		for (int j = 0; j < binCountY; j++)
+		{
+			float w;
+			jget(w, weights[c]);
+			mHistogram(i, j) = w;
+			//mHistogram.setEntry(i, j, w);
+			c++;
+		}
+
+	}
+	updateConditionalDistributions();
+
+	return true;
+}
+
+
+/***********************************************************************
+ *  Method: JointDistributionAnalysis::updateConditionalDistributions
+ *  Params: 
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+JointDistributionAnalysis::updateConditionalDistributions()
+{
+	for (auto* dist : mConditionalDistributions)
+	{
+		delete dist;
+	}
+	mConditionalDistributions.clear();
+	for (int i = 0; i < mHistogram.getBinCountY(); i++)
+	{
+		std::vector<float> binWeights;
+		for (int j = 0; j < mHistogram.getBinCountX(); j++)
+		{
+			binWeights.push_back(mHistogram(j, i));
+		}
+		std::vector<float> binBoundariesX;
+		mHistogram.getBinBoundariesX(binBoundariesX);
+		std::piecewise_constant_distribution<float>* dist = nullptr;
+		for (float w : binWeights)
+		{
+			if (w > 0.f)
+			{
+				dist = new std::piecewise_constant_distribution<float>(
+					binBoundariesX.begin(),
+					binBoundariesX.end(),
+					binWeights.begin());
+			}
+		}
+		mConditionalDistributions.push_back(dist);
+	}
 }
 
 
