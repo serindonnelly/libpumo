@@ -7,10 +7,11 @@ public:
 	MonteCarloAnalysis();
 	~MonteCarloAnalysis();
 	std::vector<float> widths;
+	float originalWidth;
 private:
 	virtual void updateImpl();
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
-	int mTreeCount = 3;
+	int mTreeCount = 10;
 };
 

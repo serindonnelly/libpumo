@@ -27,6 +27,7 @@ MonteCarloAnalysis::updateImpl()
 {
 	const Forest* f = ((ForestAnalysis*)inputs[0])->getForest();
 	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
+	originalWidth = f->getWidth(pf);
 	DistributionAnalysis* dist = (DistributionAnalysis*)inputs[2];
 	widths.clear();
 	for (int i = 0; i < mTreeCount; i++)
@@ -49,12 +50,15 @@ MonteCarloAnalysis::updateImpl()
 bool
 MonteCarloAnalysis::serialise(picojson::value &v) const
 {
+	picojson::object vo;
+	vo["original_width"] = picojson::value(originalWidth);
 	picojson::array va;
 	for (float width : widths)
 	{
 		va.push_back(picojson::value(width));
 	}
-	v = picojson::value(va);
+	vo["generated_widths"] = picojson::value(va);
+	v = picojson::value(vo);
 	return true;
 }
 
@@ -68,14 +72,24 @@ MonteCarloAnalysis::serialise(picojson::value &v) const
 bool
 MonteCarloAnalysis::deserialise(const picojson::value &v)
 {
+	float provisionalOriginalWidth;
+	if (!jat(provisionalOriginalWidth, v, "original_width"))
+		return false;
+
 	picojson::array provisionalWidths;
-	if (!jget(provisionalWidths,v)) return false;
+	if (!jat(provisionalWidths, v, "generated_widths"))
+		return false;
+
+	if (provisionalWidths.size() != mTreeCount)
+		return false;
 	for (const auto& width : provisionalWidths)
 	{
 		float readWidth;
 		if (!jget(readWidth, width)) return false;
 	}
+
 	widths.clear();
+	originalWidth = provisionalOriginalWidth;
 	for (const auto& width : provisionalWidths)
 	{
 		float readWidth;

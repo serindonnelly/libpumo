@@ -45,7 +45,6 @@ LikelihoodRatioAnalysis (replace)
 
 other:
 
-include original width in MC analyses
 Interface with python to generate visualisations
 comments
 generate filenames and paths in a nicer way
@@ -54,7 +53,7 @@ timestamp logs
 fail gracefully when SWC files aren't found
 add remaining cells to stack
 tag analysis update methods with dates
-fixing stubgen autocomments that were later falsified
+fix stubgen autocomments that were later falsified
 tag analysis update methods with dates automagically?
 date comparison
 date generation
