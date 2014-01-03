@@ -36,6 +36,8 @@ update all analyses where loading failed, or where any level of dependency had a
 analyses:
 
 extend AxesAnalysis to calculate long axis and side axis
+wrap JointDistributionAnalysis (de)serialisation to allow extra information to be recorded
+report unaltered segment fraction in MonteCarloAnalysis
 AxisVisualisationAnalysis (unimportant)
 DistanceDistributionAnalysis
 HeightDependenceGroupAnalysis
