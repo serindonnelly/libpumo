@@ -13,10 +13,14 @@ public:
 	Node* getDistalNode() const;
 	Forest* getForest() const;
 	Displacement getVector() const;
+	//Displacement getCachedVector() const;
 	Point getPoint(float fraction) const;
+	void update();
+
 private:
 	int mNodeID;
 	int mParentID;
 	Forest* mForest;
+	Displacement mVector;
 };
 

@@ -59,24 +59,7 @@ Forest::Forest(std::string filename, bool json) : error(false)
 	{
 		picojson::value v;
 		picojson::parse(v, file);
-		assert(v.is<picojson::object>());
-		const picojson::object& vo = v.get<picojson::object>();
-
-		const picojson::value& headerj = vo.at("header");
-		assert(headerj.is<picojson::array>());
-		for (const auto& headerline : headerj.get<picojson::array>())
-		{
-			header.push_back(headerline.get<std::string>());
-		}
-
-		const picojson::value& forestj = vo.at("forest");
-		assert(forestj.is<picojson::array>());
-		for (const auto& nodej : forestj.get<picojson::array>())
-		{
-			int ID;
-			NodeSpec ns = readJSONNode(ID, nodej);
-			addNode(ID, ns);
-		}
+		readJSON(v);
 	}
 	else
 	{
@@ -245,8 +228,10 @@ Forest::getNodeAndSegment(int NSID) const
  * Effects: 
  ***********************************************************************/
 Forest*
-Forest::generateForest(std::function<bool(const Node*,float& angle)> angleGenerator, vecN pf) const
+Forest::generateForest(std::function<bool(const Node*, float& angle)> angleGenerator,
+vecN pf, int& alteredNodeCount) const
 {
+	alteredNodeCount = 0;
 	// TODO copy header
 	Forest* f = new Forest();
 	std::vector<int> roots;
@@ -258,17 +243,18 @@ Forest::generateForest(std::function<bool(const Node*,float& angle)> angleGenera
 			const Node* n = getNode(nodeID);
 			NodeSpec ns(*n);
 
-			f->addNode(nodeID, ns);
-			Node* newNode = f->getNode(nodeID);
+			Node* newNode = f->addNode(nodeID, ns);
+			
 			if (!newNode->isRoot())
 			{
 				Displacement seg = n->getSegment()->getVector();
 				float angle;
 				if (angleGenerator(newNode, angle))
 				{
+					alteredNodeCount++;
 					vec horizontal = pf.projectOrth(seg);
 					vecN horizontalUnit(horizontal);
-					seg = cos(angle)*horizontalUnit + sin(angle)*pf;
+					seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
 				}
 				newNode->setPosition(newNode->getParent()->getPosition() + seg);
 			}
@@ -311,17 +297,18 @@ Forest::rebase(const ONBasis &B)
  * Returns: int
  * Effects: 
  ***********************************************************************/
-void
+Node*
 Forest::addNode(int ID, NodeSpec ns)
 {
 	if (mGraph.find(ID) != mGraph.end())
 	{
 		error = true;
-		return;
+		return nullptr;
 	}
 	Node* n = new Node(ID, ns, this);
 	mGraph[ID] = n;
 	n->createSegment();
+	return n;
 }
 
 
@@ -517,7 +504,7 @@ std::vector<float>* sampleSegmentRatios) const
 		const Segment* s = getSegment(segmentSelector(gen));
 		float r = fractions(gen);
 		sample.push_back(s->getPoint(r));
-		if (sampleSegmentIDs)
+		if (sampleSegmentIDs) // rare crash here when called from Forest::getWidth ). count: 2, approximately once per 12 trees.
 			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 		if (sampleSegmentRatios)
 			sampleSegmentRatios->push_back(r);
@@ -559,6 +546,71 @@ Forest::getWidth(vecN pf) const
 void
 Forest::initAxes()
 {
+}
+
+
+/***********************************************************************
+ *  Method: Forest::writeJSON
+ *  Params: picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Forest::writeJSON(picojson::value &v)
+{
+	picojson::object vo;
+	picojson::array va;
+	for (const auto& n : mGraph)
+	{
+		picojson::object vn;
+		vn["id"] = picojson::value((double)n.second->getID());
+		vn["type"] = picojson::value((double)n.second->getType());
+		vn["x"] = picojson::value((double)n.second->getPosition().x);
+		vn["y"] = picojson::value((double)n.second->getPosition().y);
+		vn["z"] = picojson::value((double)n.second->getPosition().z);
+		vn["radius"] = picojson::value((double)n.second->getRadius());
+		vn["parent_id"] = picojson::value((double)n.second->getParentID());
+		va.push_back(picojson::value(vn));
+	}
+	vo["forest"] = picojson::value(va);
+	picojson::array vh;
+	for (const auto& s : header)
+	{
+		vh.push_back(picojson::value(s));
+	}
+	vo["header"] = picojson::value(vh);
+	v = picojson::value(vo);
+}
+
+
+/***********************************************************************
+ *  Method: Forest::readJSON
+ *  Params: const picojson::value &v
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Forest::readJSON(const picojson::value &v)
+{
+
+	assert(v.is<picojson::object>());
+	const picojson::object& vo = v.get<picojson::object>();
+
+	const picojson::value& headerj = vo.at("header");
+	assert(headerj.is<picojson::array>());
+	for (const auto& headerline : headerj.get<picojson::array>())
+	{
+		header.push_back(headerline.get<std::string>());
+	}
+
+	const picojson::value& forestj = vo.at("forest");
+	assert(forestj.is<picojson::array>());
+	for (const auto& nodej : forestj.get<picojson::array>())
+	{
+		int ID;
+		NodeSpec ns = readJSONNode(ID, nodej);
+		addNode(ID, ns);
+	}
 }
 
 

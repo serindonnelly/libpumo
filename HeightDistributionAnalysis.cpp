@@ -43,7 +43,7 @@ std::vector<float> &sampleWeights) const
 	std::vector<Point> samples;
 	std::vector<int> sampleIDs;
 	std::vector<float> sampleRatios;
-	f->samplePoints(samples, 500000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
+	f->samplePoints(samples, 5000000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
 	for (unsigned int i = 0; i < samples.size() && i < sampleIDs.size() && sampleRatios.size(); i++)
 	{
 		float angle = RAD_TO_DEG*acos(pf.cosine(f->getSegment(sampleIDs[i])->getVector()));

@@ -69,7 +69,7 @@ AxesAnalysis::updateImpl()
 {
 	std::vector<Point> samples;
 	const Forest* f = ((ForestAnalysis*)inputs[0])->getForest();
-	f->samplePoints(samples, 500000);
+	f->samplePoints(samples, 5000000);
 	std::vector<float> samplesFlat;
 
 	for (const auto& p : samples)

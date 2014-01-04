@@ -52,7 +52,7 @@ NodeSpec readJSONNode(int& ID, const picojson::value& v)
 	y = (float)vo.at("y").get<double>();
 	z = (float)vo.at("z").get<double>();
 	radius = (float)vo.at("radius").get<double>();
-	parentID = (int)vo.at("parent").get<double>();
+	parentID = (int)vo.at("parent_id").get<double>();
 	return NodeSpec(type, Point(x, y, z), radius, parentID);
 }
 
@@ -257,6 +257,25 @@ Node::hasChild(int nodeID) const
 	if (mChildren.size() == 0)
 		return false;
 	return std::find(mChildren.begin(), mChildren.end(), nodeID) != mChildren.end();
+}
+
+
+/***********************************************************************
+ *  Method: Node::setPosition
+ *  Params: Point p
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Node::setPosition(Point p)
+{
+	NodeSpec::setPosition(p);
+	if (mSegment)
+		mSegment->update();
+	for (auto child : mChildren)
+	{
+		mForest->getSegment(child)->update();
+	}
 }
 
 

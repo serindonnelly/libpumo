@@ -47,6 +47,9 @@ bool
 ForestAnalysis::serialise(picojson::value &v) const
 {
 	return false;
+	//f->writeJSON(v);
+	//return true;
+	//reading/writing trees in json is slow
 }
 
 
@@ -60,6 +63,12 @@ bool
 ForestAnalysis::deserialise(const picojson::value &v)
 {
 	return false;
+	//if (f)
+	//	delete f;
+	//f = new Forest();
+	//f->readJSON(v);
+	//return true;
+	//reading/writing trees in json is slow
 }
 
 

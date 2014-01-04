@@ -24,7 +24,7 @@ public:
 	Forest(std::string filename, bool json);
 	~Forest();
 
-	void addNode(int ID, NodeSpec ns);
+	Node* addNode(int ID, NodeSpec ns);
 
 	Node* getNode(int nodeID);
 	void deleteNode(int nodeID);
@@ -46,18 +46,21 @@ public:
 	void getTrees(T treeContainer) const;
 
 	void reduce();
-	Forest* generateForest(std::function<bool(const Node*, float&)> angleGenerator, vecN pf) const;
+	Forest* generateForest(std::function<bool(const Node*, float&)> angleGenerator,
+		vecN pf, int& alteredNodeCount) const;
 	void rebase(const ONBasis& B);
 	void rescale(const vec& scale);
 	void renumber();
 	bool validate();
 	void write(std::string filename);
+	void writeJSON(picojson::value& v);
+	void readJSON(const picojson::value& v);
 	void samplePoints(
 		std::vector<Point> &sample,
 		int n,
 		std::vector<int>* sampleSegmentIDs = nullptr,
 		std::vector<float>* sampleSegmentRatios = nullptr) const;
-	const std::map<int, Node*> getGraph() const { return mGraph; }
+	const std::map<int, Node*>& getGraph() const { return mGraph; }
 	float getWidth(vecN pf) const;
 private:
 

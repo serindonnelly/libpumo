@@ -1,9 +1,10 @@
 #include "Segment.h"
 
 
-Segment::Segment(int nodeID, Forest* f) : mNodeID(nodeID), mForest(f)
+Segment::Segment(int nodeID, Forest* f) : mNodeID(nodeID), mForest(f), mVector(0,0,0)
 {
 	mParentID = mForest->getNode(nodeID)->getParentID();
+	update();
 }
 
 
@@ -49,16 +50,27 @@ Segment::getForest() const
 }
 
 
+///***********************************************************************
+// *  Method: Segment::getVector
+// *  Params: 
+// * Returns: Displacement
+// * Effects: 
+// ***********************************************************************/
+//Displacement
+//Segment::getVector() const
+//{
+//	return getDistalNode()->getPosition() - getProximalNode()->getPosition();
+//}
 /***********************************************************************
- *  Method: Segment::getVector
- *  Params: 
- * Returns: Displacement
- * Effects: 
- ***********************************************************************/
+*  Method: Segment::getCachedVector
+*  Params:
+* Returns: Displacement
+* Effects:
+***********************************************************************/
 Displacement
 Segment::getVector() const
 {
-	return getDistalNode()->getPosition() - getProximalNode()->getPosition();
+	return mVector;
 }
 /***********************************************************************
  *  Method: Segment::getPoint
@@ -69,7 +81,20 @@ Segment::getVector() const
 Point
 Segment::getPoint(float fraction) const
 {
-	return getProximalNode()->getPosition() + fraction*getVector();
+	return getProximalNode()->getPosition() + fraction*mVector;
+}
+
+
+/***********************************************************************
+ *  Method: Segment::updateVector
+ *  Params: 
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Segment::update()
+{
+	mVector = getDistalNode()->getPosition() -getProximalNode()->getPosition();
 }
 
 

@@ -18,7 +18,7 @@ public:
 	int getParentID() const { return mParentID; }
 	virtual void setParentID(int parentID) { mParentID = parentID;  }
 	Point getPosition() const { return mPosition; }
-	void setPosition(Point p) { mPosition = p; }
+	virtual void setPosition(Point p) { mPosition = p; }
 	float getRadius() const { return mRadius; }
 	void setRadius(float r) { mRadius = r; }
 	int getType() const { return mType; }
@@ -42,7 +42,8 @@ public:
 	Node* getParent() const;
 	Segment* getSegment() const;
 	Forest* getForest() const;
-	void setParentID(int parentID);
+	virtual void setParentID(int parentID);
+	virtual void setPosition(Point p);
 	std::vector<int>::const_iterator beginChildren() const;
 	std::vector<int>::const_iterator endChildren() const;
 	std::vector<int>::iterator beginChildren();
