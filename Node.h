@@ -55,6 +55,7 @@ public:
 	void createSegment();
 	void destroySegment();
 	bool hasChild(int nodeID) const;
+	void reserveChildren(int n) { mChildren.reserve(n); };
 private:
 	int mID;
 	Forest* mForest;

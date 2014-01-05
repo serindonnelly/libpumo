@@ -244,7 +244,7 @@ vecN pf, int& alteredNodeCount) const
 			NodeSpec ns(*n);
 
 			Node* newNode = f->addNode(nodeID, ns);
-			
+			newNode->reserveChildren(n->endChildren() - n->beginChildren());
 			if (!newNode->isRoot())
 			{
 				Displacement seg = n->getSegment()->getVector();
@@ -300,11 +300,11 @@ Forest::rebase(const ONBasis &B)
 Node*
 Forest::addNode(int ID, NodeSpec ns)
 {
-	if (mGraph.find(ID) != mGraph.end())
-	{
-		error = true;
-		return nullptr;
-	}
+	//if (mGraph.find(ID) != mGraph.end())
+	//{
+	//	error = true;
+	//	return nullptr;
+	//}
 	Node* n = new Node(ID, ns, this);
 	mGraph[ID] = n;
 	n->createSegment();
@@ -513,7 +513,7 @@ std::vector<float>* sampleSegmentRatios) const
 		const Segment* s = getSegment(segmentSelector(gen));
 		float r = fractions(gen);
 		sample.push_back(s->getPoint(r));
-		if (sampleSegmentIDs) // rare crash here. count: 4
+		if (sampleSegmentIDs) // rare crash here. count: 5
 			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 		if (sampleSegmentRatios)
 			sampleSegmentRatios->push_back(r);

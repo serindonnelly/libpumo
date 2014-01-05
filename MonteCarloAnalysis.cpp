@@ -26,24 +26,27 @@ void
 MonteCarloAnalysis::updateImpl()
 {
 	const Forest* f = ((ForestAnalysis*)inputs[0])->getForest();
+	nodeCount = f->getGraph().size();
+	std::cout << currentTimeString() << " Forest has " << nodeCount << " nodes" << std::endl;
 	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
 	WidthCalculator wco(f, pf);
 	originalWidth = wco.getWidth();
-	//originalWidth = f->getWidth(pf);
 	DistributionAnalysis* dist = (DistributionAnalysis*)inputs[2];
 	widths.clear();
 	int nodeCount = f->getGraph().size();
 	for (int i = 0; i < mTreeCount; i++)
 	{
+		if (!(i % 10)) std::cout << i / 10;
 		auto angleGenerator = std::bind(&DistributionAnalysis::generateAngle, dist,std::placeholders::_1,std::placeholders::_2);
 		int alteredNodeCount;
 		Forest* ff = f->generateForest(angleGenerator, pf, alteredNodeCount);
 		WidthCalculator wc(ff, pf);
-		//widths.push_back(ff->getWidth(pf));
-		widths.push_back(wc.getWidth());
+		WidthGroup wg = wc.getWidth();
+		widths.push_back(wg);
 		alteredFractions.push_back(((float)alteredNodeCount) / nodeCount);
 		delete ff;
 	}
+	std::cout << std::endl;
 	mean = { 0.f, 0.f, 0.f };
 	for (const auto width : widths)
 	{
@@ -76,6 +79,7 @@ MonteCarloAnalysis::serialise(picojson::value &v) const
 	vo["mean"] = mean.serialise();
 	vo["standard_deviation"] = SD.serialise();
 	vo["discrepancy"] = discrepancy.serialise();
+	vo["node_count"] = picojson::value((double)nodeCount);
 
 	picojson::array vaw;
 	for (unsigned int i = 0; i < widths.size() && i < alteredFractions.size(); i++)
@@ -113,6 +117,9 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 	WidthGroup provisionalDiscrepancy;
 	if (!jat(provisionalDiscrepancy, v, "discrepancy"))
 		return false;
+	int provisionalNodeCount;
+	if (!jat(provisionalNodeCount, v, "node_count"))
+		return false;
 
 	picojson::array provisionalWidths;
 	if (!jat(provisionalWidths, v, "generated_widths"))
@@ -134,6 +141,7 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 	mean = provisionalMean;
 	SD = provisionalSD;
 	discrepancy = provisionalDiscrepancy;
+	nodeCount = provisionalNodeCount;
 	for (const auto& widthFract : provisionalWidths)
 	{
 		WidthGroup readWidth;

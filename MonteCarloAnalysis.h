@@ -18,5 +18,6 @@ private:
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
 	int mTreeCount = 500;
+	int nodeCount;
 };
 
