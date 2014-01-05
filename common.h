@@ -2,10 +2,13 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <random>
 #include <cmath>
 #include <picojson.h>
+#include <ctime>
+#include <iomanip>
 
 static std::random_device rd;
 static std::mt19937 gen(rd());
@@ -53,6 +56,18 @@ static bool jat(T& out, const picojson::value& v, const std::string& key)
 	if (!v.contains(key))
 		return false;
 	return jget(out, v.get(key));
+}
+
+static std::string currentTimeString(std::string fmt = "%H:%M:%S")
+{
+	auto t = std::time(nullptr);
+	//std::localtime not thread safe
+#pragma warning(suppress: 4996)
+	auto tm = *std::localtime(&t);
+	//#pragma warning(pop)
+	std::stringstream ss;
+	ss << std::put_time(&tm, fmt.c_str());
+	return ss.str();
 }
 
 const float PI = 3.14159265358979323846f;

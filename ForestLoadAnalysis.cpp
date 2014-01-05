@@ -1,6 +1,7 @@
 #include <iostream>
 #include "ForestLoadAnalysis.h"
 #include "SWCAnalysis.h"
+#include "common.h"
 
 /***********************************************************************
  *  Method: ForestLoadAnalysis::ForestLoadAnalysis
@@ -34,7 +35,7 @@ ForestLoadAnalysis::updateImpl()
 	if (f)
 		delete f;
 	std::string fn = ((SWCAnalysis*)inputs[0])->getSWCFilename();
-	std::cout << "reading forest " << fn << "\n";
+	std::cout << currentTimeString() << " Reading forest " << fn << "\n";
 	f = new Forest(fn,false);
 }
 

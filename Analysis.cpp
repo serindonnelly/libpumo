@@ -56,15 +56,15 @@ Analysis::update()
 {
 	if (!load())
 	{
-		std::cout << "Failed to load analysis " << mIdentity << " from " << mFilename << std::endl;
+		std::cout << currentTimeString() << " Load failed: " << mFilename << std::endl;
 		updateImpl();
 		mUpdated = time(nullptr);
-		std::cout << "Updated analysis " << mIdentity << std::endl;
+		std::cout << currentTimeString() << " Updated analysis " << mIdentity << std::endl;
 		save();
 	}
 	else
 	{
-		std::cout << "Loaded analysis " << mIdentity << " from " << mFilename << std::endl;
+		std::cout << currentTimeString() << " Load successful: " << mFilename << std::endl;
 	}
 }
 
@@ -118,11 +118,11 @@ Analysis::save()
 		if (of.good())
 		{
 			of << v;
-			std::cout << "Saved analysis " << mIdentity << " to " << mFilename << std::endl;
+			std::cout << currentTimeString() << " Saved analysis: " << mFilename << std::endl;
 			return;
 		}
 	}	
-	std::cout << "Failed to save analysis " << mIdentity << " to " << mFilename << std::endl;
+	std::cout << currentTimeString() << " Save failed: " << mFilename << std::endl;
 	// TODO encapsulate v in two-part object with date
 }
 

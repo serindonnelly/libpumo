@@ -13,6 +13,7 @@
 #include "MonteCarloAnalysis.h"
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
+#include "common.h"
 
 AnalysisStack::~AnalysisStack()
 {
@@ -260,7 +261,7 @@ AnalysisStack::registerAnalysis(Analysis *a, const std::string &name)
 	a->setIdentity(name, mTopologicalOrder.size() - 1);
 	a->setFilename(writeDirectory + name + ".json");
 	
-	std::cout << "Registered analysis " << name << std::endl;
+	std::cout << "\n" << currentTimeString() <<  " Registered analysis " << name << std::endl;
 	a->update();
 	// TODO attempt to load before updating
 	// TODO make this line conditional on date of loaded analysis

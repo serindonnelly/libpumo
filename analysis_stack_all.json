@@ -1,6 +1,6 @@
 {
 "read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"E:\\Dropbox\\phdcode\\analyses-all\\",
+"write_directory":"E:\\Dropbox\\phdcode\\json\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -190,21 +190,21 @@
 },
 {
 	"routine":"loadswc",
-	"to":"unreduced_",
+	"to":"unred_",
 	"ids":"@allu",
 	"from":""
 },
 {
-	"routine":"reduced_",
-	"to":"reduce_",
+	"routine":"reduce",
+	"to":"red_",
 	"ids":"@allu",
-	"from":"unreduced_"
+	"from":"unred_"
 },
 {
 	"routine":"makelist",
 	"to":"all",
 	"ids":"@allu",
-	"from":["unreduced_","reduced_"]
+	"from":["unred_","red_"]
 },
 {
 	"routine":"axes",
