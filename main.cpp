@@ -18,6 +18,6 @@ int main(int argc, char** argv)
 	std::cout << "Beginning log" << std::endl;
 	//*logging::linfo << "Testing" << std::endl;
 	//AnalysisStack* analysisStack = new AnalysisStack(argv[1]);
-	AnalysisStack* analysisStack = new AnalysisStack("analysis_stack.json");
+	AnalysisStack* analysisStack = new AnalysisStack("analysis_stack_all.json");
 	return 0;
 }

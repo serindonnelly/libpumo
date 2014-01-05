@@ -1,0 +1,246 @@
+{
+"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"E:\\Dropbox\\phdcode\\analyses-all\\",
+"analysis_stack":[
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_1",
+	"from":"cell1_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_2",
+	"from":"cell2_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"yko_3",
+	"from":"cell3_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"yko_4",
+	"from":"cell4_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_5",
+	"from":"cell5_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_6",
+	"from":"cell6_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_9",
+	"from":"cell9_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_11",
+	"from":"cell11_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"oko_12",
+	"from":"cell12_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"oko_13",
+	"from":"cell13_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"yko_14",
+	"from":"cell14_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"yko_15",
+	"from":"cell15_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_16",
+	"from":"cell16_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_17",
+	"from":"cell17_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"yko_19",
+	"from":"cell19_x40b_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"ywt_21",
+	"from":"cell21_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_22",
+	"from":"cell22_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_23",
+	"from":"cell23_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_24",
+	"from":"cell24_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_26",
+	"from":"cell26_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"oko_27",
+	"from":"cell27_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_28",
+	"from":"cell28_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_29",
+	"from":"cell29_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"oko_30",
+	"from":"cell30_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_31",
+	"from":"cell31_x40_scaled.swc"
+},
+{
+	"routine":"specifyfile",
+	"to":"",
+	"ids":"owt_32",
+	"from":"cell32_x40_scaled.swc"
+},
+{
+	"routine":"makelist",
+	"to":"ywt",
+	"ids":["ywt_1","ywt_2","ywt_5","ywt_9","ywt_11","ywt_16","ywt_17","ywt_21"],
+	"from":""
+},
+{
+	"routine":"makelist",
+	"to":"owt",
+	"ids":["owt_6","owt_22","owt_23","owt_24","owt_26","owt_28","owt_29","owt_31","owt_32"],
+	"from":""
+},
+{
+	"routine":"makelist",
+	"to":"yko",
+	"ids":["yko_3","yko_4","yko_14","yko_15","yko_19"],
+	"from":""
+},
+{
+	"routine":"makelist",
+	"to":"oko",
+	"ids":["oko_12","oko_13","oko_27","oko_30"],
+	"from":""
+},
+{
+	"routine":"makelist",
+	"to":"allu",
+	"ids":["@ywt","@yko","@owt","@oko"],
+	"from":""
+},
+{
+	"routine":"loadswc",
+	"to":"unreduced_",
+	"ids":"@allu",
+	"from":""
+},
+{
+	"routine":"reduced_",
+	"to":"reduce_",
+	"ids":"@allu",
+	"from":"u"
+},
+{
+	"routine":"makelist",
+	"to":"all",
+	"ids":"@allu",
+	"from":["u","r"]
+},
+{
+	"routine":"axes",
+	"to":"axes_",
+	"ids":"@all",
+	"from":""
+},
+{
+	"routine":"angledistribution",
+	"to":"angleDistr_",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"montecarlo",
+	"to":"angleMC_",
+	"ids":"@all",
+	"from":["","a","n"]
+},
+{
+	"routine":"heightdistribution",
+	"to":"heightJoint_",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"parentdistribution",
+	"to":"parentJoint_",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"montecarlo",
+	"to":"parentMC_",
+	"ids":"@all",
+	"from":["","a","p"]
+}
+]
+}
