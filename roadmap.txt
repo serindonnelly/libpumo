@@ -37,11 +37,12 @@ analyses:
 
 extend AxesAnalysis to calculate long axis and side axis
 wrap JointDistributionAnalysis (de)serialisation to allow extra information to be recorded
-report unaltered segment fraction in MonteCarloAnalysis
+reportmean, std, and unaltered segment fractions in MonteCarloAnalysis
 AxisVisualisationAnalysis (unimportant)
 DistanceDistributionAnalysis
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
+SampleMCForestAnalysis
 
 ======================================
 
@@ -53,7 +54,10 @@ generate filenames and paths in a nicer way
 debug: test equality of serialised and deserialised json
 timestamp logs
 fail gracefully when SWC files aren't found
-add remaining cells to stack
+change all floats to doubles
+optimise Forest::samplePoints: Consider vectorisation?
+fix crash in Forest::samplePoints
+move from map<Node*> to vector<Node*> in Forest and reduce lookup times (require renumbering)
 tag analysis update methods with dates
 fix stubgen autocomments that were later falsified
 tag analysis update methods with dates automagically?
