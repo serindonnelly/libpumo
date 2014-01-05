@@ -198,13 +198,13 @@
 	"routine":"reduced_",
 	"to":"reduce_",
 	"ids":"@allu",
-	"from":"u"
+	"from":"unreduced_"
 },
 {
 	"routine":"makelist",
 	"to":"all",
 	"ids":"@allu",
-	"from":["u","r"]
+	"from":["unreduced_","reduced_"]
 },
 {
 	"routine":"axes",
@@ -216,31 +216,31 @@
 	"routine":"angledistribution",
 	"to":"angleDistr_",
 	"ids":"@all",
-	"from":["","a"]
+	"from":["","axes_"]
 },
 {
 	"routine":"montecarlo",
 	"to":"angleMC_",
 	"ids":"@all",
-	"from":["","a","n"]
+	"from":["","axes_","angleDistr_"]
 },
 {
 	"routine":"heightdistribution",
 	"to":"heightJoint_",
 	"ids":"@all",
-	"from":["","a"]
+	"from":["","axes_"]
 },
 {
 	"routine":"parentdistribution",
 	"to":"parentJoint_",
 	"ids":"@all",
-	"from":["","a"]
+	"from":["","axes_"]
 },
 {
 	"routine":"montecarlo",
 	"to":"parentMC_",
 	"ids":"@all",
-	"from":["","a","p"]
+	"from":["","axes_","parentJoint_"]
 }
 ]
 }
