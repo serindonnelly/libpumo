@@ -499,12 +499,21 @@ std::vector<float>* sampleSegmentRatios) const
 	}
 	);
 	std::uniform_real_distribution<float> fractions(0.f, 1.f);
+
+	sample.clear();
+	if (sampleSegmentIDs) sampleSegmentIDs->clear();
+	if (sampleSegmentRatios) sampleSegmentRatios->clear();
+
+	sample.reserve(n);
+	if (sampleSegmentIDs) sampleSegmentIDs->reserve(n);
+	if (sampleSegmentRatios) sampleSegmentRatios->reserve(n);
+
 	for (int i = 0; i < n; i++)
 	{
 		const Segment* s = getSegment(segmentSelector(gen));
 		float r = fractions(gen);
 		sample.push_back(s->getPoint(r));
-		if (sampleSegmentIDs) // rare crash here when called from Forest::getWidth ). count: 2, approximately once per 12 trees.
+		if (sampleSegmentIDs) // rare crash here. count: 4
 			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 		if (sampleSegmentRatios)
 			sampleSegmentRatios->push_back(r);

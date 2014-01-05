@@ -7,6 +7,7 @@
 #include "Segment.h"
 #include "ONBasis.h"
 #include "Axis.h"
+#include "WidthCalculator.h"
 
 class Axis;
 class PFAxis; 

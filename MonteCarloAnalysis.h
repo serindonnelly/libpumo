@@ -1,17 +1,18 @@
 #pragma once
 #include "Analysis.h"
+#include "WidthGroup.h"
 class MonteCarloAnalysis :
 	public Analysis
 {
 public:
 	MonteCarloAnalysis();
 	~MonteCarloAnalysis();
-	std::vector<float> widths;
+	std::vector<WidthGroup> widths;
 	std::vector<float> alteredFractions;
-	float mean;
-	float SD;
-	float originalWidth;
-	float discrepancy;
+	WidthGroup mean;
+	WidthGroup SD;
+	WidthGroup originalWidth;
+	WidthGroup discrepancy;
 private:
 	virtual void updateImpl();
 	virtual bool serialise(picojson::value& v) const;

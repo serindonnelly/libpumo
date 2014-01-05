@@ -9,6 +9,7 @@
 #include <picojson.h>
 #include <ctime>
 #include <iomanip>
+#include "WidthGroup.h"
 
 static std::random_device rd;
 static std::mt19937 gen(rd());
@@ -47,6 +48,14 @@ JGET(std::string,std::string)
 JGET(picojson::object, picojson::object)
 JGET(picojson::array, picojson::array)
 #undef JGET
+static bool jget(WidthGroup& out, const picojson::value& v)
+{
+	WidthGroup wg(v);
+	if (!wg.isValid())
+		return false;
+	out = wg;
+	return true;
+}
 
 template<typename T>
 static bool jat(T& out, const picojson::value& v, const std::string& key)

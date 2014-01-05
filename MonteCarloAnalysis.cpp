@@ -3,7 +3,7 @@
 #include "AxesAnalysis.h"
 #include "DistributionAnalysis.h"
 #include "common.h"
-
+#include "WidthCalculator.h"
 
 MonteCarloAnalysis::MonteCarloAnalysis()
 {
@@ -27,7 +27,9 @@ MonteCarloAnalysis::updateImpl()
 {
 	const Forest* f = ((ForestAnalysis*)inputs[0])->getForest();
 	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
-	originalWidth = f->getWidth(pf);
+	WidthCalculator wco(f, pf);
+	originalWidth = wco.getWidth();
+	//originalWidth = f->getWidth(pf);
 	DistributionAnalysis* dist = (DistributionAnalysis*)inputs[2];
 	widths.clear();
 	int nodeCount = f->getGraph().size();
@@ -36,31 +38,27 @@ MonteCarloAnalysis::updateImpl()
 		auto angleGenerator = std::bind(&DistributionAnalysis::generateAngle, dist,std::placeholders::_1,std::placeholders::_2);
 		int alteredNodeCount;
 		Forest* ff = f->generateForest(angleGenerator, pf, alteredNodeCount);
-		widths.push_back(ff->getWidth(pf));
+		WidthCalculator wc(ff, pf);
+		//widths.push_back(ff->getWidth(pf));
+		widths.push_back(wc.getWidth());
 		alteredFractions.push_back(((float)alteredNodeCount) / nodeCount);
 		delete ff;
 	}
-	mean = 0.f;
+	mean = { 0.f, 0.f, 0.f };
 	for (const auto width : widths)
 	{
-		mean += width;
+		mean = mean + width;
 	}
-	mean /= mTreeCount;
-	SD = 0.f;
+	mean = mean / mTreeCount;
+	SD = { 0.f, 0.f, 0.f };
 	for (const auto width : widths)
 	{
-		SD += (width - mean)*(width - mean);
+		SD = SD + (width - mean)*(width - mean);
 	}
-	SD /= mTreeCount; // mTreeCount-1?
-	SD = sqrt(SD);
-	if (SD != 0.f)
-	{
-		discrepancy = (mean - originalWidth) / SD;
-	}
-	else
-	{
-		discrepancy = 0.f;
-	}
+	SD = SD / mTreeCount; // mTreeCount-1?
+	SD = SD.sqrtWG();
+	discrepancy = (mean - originalWidth) / SD;
+
 }
 
 
@@ -74,16 +72,16 @@ bool
 MonteCarloAnalysis::serialise(picojson::value &v) const
 {
 	picojson::object vo;
-	vo["original_width"] = picojson::value(originalWidth);
-	vo["mean"] = picojson::value(mean);
-	vo["standard_deviation"] = picojson::value(SD);
-	vo["discrepancy"] = picojson::value(discrepancy);
+	vo["original_width"] = originalWidth.serialise();
+	vo["mean"] = mean.serialise();
+	vo["standard_deviation"] = SD.serialise();
+	vo["discrepancy"] = discrepancy.serialise();
 
 	picojson::array vaw;
 	for (unsigned int i = 0; i < widths.size() && i < alteredFractions.size(); i++)
 	{
 		picojson::object vp;
-		vp["width"] = picojson::value(widths[i]);
+		vp["width"] = widths[i].serialise();
 		vp["fract"] = picojson::value(alteredFractions[i]);
 		vaw.push_back(picojson::value(vp));
 	}
@@ -103,16 +101,16 @@ MonteCarloAnalysis::serialise(picojson::value &v) const
 bool
 MonteCarloAnalysis::deserialise(const picojson::value &v)
 {
-	float provisionalOriginalWidth;
+	WidthGroup provisionalOriginalWidth(0,0,0);
 	if (!jat(provisionalOriginalWidth, v, "original_width"))
 		return false;
-	float provisionalMean;
+	WidthGroup provisionalMean(0, 0, 0);
 	if (!jat(provisionalMean, v, "mean"))
 		return false;
-	float provisionalSD;
+	WidthGroup provisionalSD(0, 0, 0);
 	if (!jat(provisionalSD, v, "standard_deviation"))
 		return false;
-	float provisionalDiscrepancy;
+	WidthGroup provisionalDiscrepancy;
 	if (!jat(provisionalDiscrepancy, v, "discrepancy"))
 		return false;
 
@@ -124,7 +122,7 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 		return false;
 	for (const auto& widthFract : provisionalWidths)
 	{
-		float readWidth;
+		WidthGroup readWidth;
 		float readFract;
 		if (!jat(readWidth, widthFract, "width")) return false;
 		if (!jat(readFract, widthFract, "fract")) return false;
@@ -138,7 +136,7 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 	discrepancy = provisionalDiscrepancy;
 	for (const auto& widthFract : provisionalWidths)
 	{
-		float readWidth;
+		WidthGroup readWidth;
 		float readFract;
 		jat(readWidth, widthFract, "width");
 		jat(readFract, widthFract, "fract");

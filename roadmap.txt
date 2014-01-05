@@ -55,7 +55,7 @@ debug: test equality of serialised and deserialised json
 timestamp logs
 fail gracefully when SWC files aren't found
 change all floats to doubles
-fix crash in Forest::samplePoints: seems to have disappeared
+fix crash in Forest::samplePoints
 optimise Forest::generateForest: move from map<Node*> to vector<Node*> in Forest and reduce lookup times? (require renumbering)
 tag analysis update methods with dates
 fix stubgen autocomments that were later falsified

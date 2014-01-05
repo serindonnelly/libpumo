@@ -6,9 +6,9 @@ WidthCalculator::WidthCalculator()
 }
 
 
-WidthCalculator::~WidthCalculator()
-{
-}
+//WidthCalculator::~WidthCalculator()
+//{
+//}
 
 /***********************************************************************
  *  Method: WidthCalculator::calculate
@@ -102,14 +102,14 @@ WidthCalculator::calculateIQ()
 			if (currentTotal < totalLengthDirect / 4.f &&
 				nextTotal >= totalLengthDirect / 4.f)
 			{
-				float ratio = (totalLengthDirect - currentTotal) / (nextTotal - currentTotal);
-				lowerQuartile = currentTotal + ratio*(totalLengthDirect - currentTotal);
+				float ratio = (totalLengthDirect/4.f - currentTotal) / (nextTotal - currentTotal);
+				lowerQuartile = currentHeight + ratio*(nextHeight - currentHeight);
 			}
 			else if (currentTotal < 3.f*totalLengthDirect / 4.f &&
 				nextTotal >= 3.f*totalLengthDirect / 4.f)
 			{
-				float ratio = (totalLengthDirect - currentTotal) / (nextTotal - currentTotal);
-				upperQuartile = currentTotal + ratio*(totalLengthDirect - currentTotal);
+				float ratio = (3.f*totalLengthDirect / 4.f - currentTotal) / (nextTotal - currentTotal);
+				upperQuartile = currentHeight + ratio*(nextHeight - currentHeight);
 			}
 		}
 		currentHeight = nextHeight;
@@ -185,5 +185,28 @@ WidthCalculator::calculateMean()
 {
 	mean = weightedSumHeight / totalLengthDirect;
 }
+
+
+/***********************************************************************
+ *  Method: WidthCalculator::WidthCalculator
+ *  Params: Forest *f
+ * Effects: 
+ ***********************************************************************/
+WidthCalculator::WidthCalculator(const Forest *f, vecN pf)
+{
+	for (const auto& n : f->getGraph())
+	{
+		if (n.second->isRoot())
+			continue;
+		const Segment* seg = n.second->getSegment();
+		//want to get start and end points as quickly as posible here, ie. without a map lookup
+		Point parentPos = seg->getProximalNode()->getPosition();
+		Point nodePos = n.second->getPosition();
+		addSegment(pf.dot(parentPos), pf.dot(nodePos), seg->getVector().norm());
+	}
+	calculate();
+}
+
+
 
 
