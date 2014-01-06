@@ -54,7 +54,7 @@ debug: test equality of serialised and deserialised json
 fail gracefully when SWC files aren't found
 change all floats to doubles
 fix crash in Forest::samplePoints
-optimise Forest::generateForest: move from map<Node*> to vector<Node*> in Forest and reduce lookup times? (require renumbering) change mChildren from vector to list?
+optimise Forest::generateForest: move from map<Node*> to vector<Node*> in Forest and reduce lookup times? (require renumbering) change mChildren from vector to list? binary representation of n-ary tree?
 optimise Forest::generateForest: fix nonlinear complexity in node count. < 5000 nodes takes ~1 minute, >10000 nodes takes at least 10 minutes and increases rapidly.
 tag analysis update methods with dates
 fix stubgen autocomments that were later falsified

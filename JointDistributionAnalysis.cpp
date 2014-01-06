@@ -131,6 +131,8 @@ JointDistributionAnalysis::deserialise(const picojson::value &v)
 		if (w < 0.f) return false;
 	}
 
+	mHistogram.setRangeX(minX, maxX);
+	mHistogram.setRangeY(minY, maxY);
 	mHistogram.setBinCountX(binCountX);
 	mHistogram.setBinCountY(binCountY);
 	mHistogram.zero();
