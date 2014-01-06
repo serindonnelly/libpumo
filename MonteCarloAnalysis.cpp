@@ -36,7 +36,8 @@ MonteCarloAnalysis::updateImpl()
 	int nodeCount = f->getGraph().size();
 	for (int i = 0; i < mTreeCount; i++)
 	{
-		if (!(i % 10)) std::cout << i / 10;
+		if (!(i % 20)) std::cout << i / 10;
+		else if (!(i % 10)) std::cout << ".";
 		auto angleGenerator = std::bind(&DistributionAnalysis::generateAngle, dist,std::placeholders::_1,std::placeholders::_2);
 		int alteredNodeCount;
 		Forest* ff = f->generateForest(angleGenerator, pf, alteredNodeCount);
