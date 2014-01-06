@@ -13,6 +13,7 @@
 #include "MonteCarloAnalysis.h"
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
+#include "DistanceDistributionAnalysis.h"
 #include "common.h"
 
 AnalysisStack::~AnalysisStack()
@@ -184,7 +185,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		}
 		else if (routine == "distancedistribution")
 		{
-
+			a = new DistanceDistribtionAnalysis();
 		}
 		for (auto fi : fromFull)
 		{
