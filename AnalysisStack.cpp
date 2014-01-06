@@ -185,7 +185,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		}
 		else if (routine == "distancedistribution")
 		{
-			a = new DistanceDistribtionAnalysis();
+			a = new DistanceDistributionAnalysis();
 		}
 		for (auto fi : fromFull)
 		{
