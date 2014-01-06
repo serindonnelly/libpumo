@@ -41,8 +41,7 @@ MonteCarloAnalysis::updateImpl()
 		int alteredNodeCount;
 		Forest* ff = f->generateForest(angleGenerator, pf, alteredNodeCount);
 		WidthCalculator wc(ff, pf);
-		WidthGroup wg = wc.getWidth();
-		widths.push_back(wg);
+		widths.push_back(wc.getWidth());
 		alteredFractions.push_back(((float)alteredNodeCount) / nodeCount);
 		delete ff;
 	}

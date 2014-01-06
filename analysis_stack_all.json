@@ -241,6 +241,18 @@
 	"to":"parentMC_",
 	"ids":"@all",
 	"from":["","axes_","parentJoint_"]
+},
+{
+	"routine":"distancedistribution",
+	"to":"distanceJoint_",
+	"ids":"@all",
+	"from":["","axes_"]
+},
+{
+	"routine":"montecarlo",
+	"to":"distanceMC_",
+	"ids":"@all",
+	"from":["","axes_","distanceJoint_"]
 }
 ]
 }

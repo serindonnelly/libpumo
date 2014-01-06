@@ -1,6 +1,6 @@
 {
-"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"C:\\Dropbox\\phdcode\\analyses\\",
+"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"E:\\Dropbox\\phdcode\\analyses\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -69,10 +69,22 @@
 	"from":["","a"]
 },
 {
+	"routine":"distancedistribution",
+	"to":"d",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
 	"routine":"montecarlo",
 	"to":"PP",
 	"ids":"@all",
 	"from":["","a","p"]
+},
+{
+	"routine":"montecarlo",
+	"to":"DD",
+	"ids":"@all",
+	"from":["","a","d"]
 }
 ]
 }

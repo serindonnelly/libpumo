@@ -182,10 +182,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new HeightDistributionAnalysis();
 		}
-		//else if (routine == "distancedistribution")
-		//{
+		else if (routine == "distancedistribution")
+		{
 
-		//}
+		}
 		for (auto fi : fromFull)
 		{
 			a->addInput(mStack.at(fi + ii));

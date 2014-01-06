@@ -76,7 +76,7 @@ Segment::getVector() const
  *  Method: Segment::getPoint
  *  Params: float fraction
  * Returns: Point
- * Effects: 
+ * Effects: low fraction produces point nearer to parent
  ***********************************************************************/
 Point
 Segment::getPoint(float fraction) const
