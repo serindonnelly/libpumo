@@ -79,7 +79,11 @@ void JointDistributionAnalysis::updateImpl()
 bool
 JointDistributionAnalysis::serialise(picojson::value &v) const
 {
+	picojson::value vadd;
+	if (!serialiseAdditional(vadd)) return false;
 	picojson::object vo;
+	vo["additional"] = vadd;
+
 	vo["bin_count_x"] = picojson::value((double)mHistogram.getBinCountX());
 	vo["bin_count_y"] = picojson::value((double)mHistogram.getBinCountY());
 
@@ -87,6 +91,7 @@ JointDistributionAnalysis::serialise(picojson::value &v) const
 	vo["max_x"] = picojson::value((double)mHistogram.getMaxX());
 	vo["min_y"] = picojson::value((double)mHistogram.getMinY());
 	vo["max_y"] = picojson::value((double)mHistogram.getMaxY());
+
 
 	picojson::array va;
 	for (int i = 0; i < mHistogram.getBinCountX(); i++)
@@ -131,6 +136,11 @@ JointDistributionAnalysis::deserialise(const picojson::value &v)
 		if (w < 0.f) return false;
 	}
 
+	picojson::value vadd;
+	if (v.contains("additional"))
+		vadd = v.get("additional");
+	if (!deserialiseAdditional(vadd)) return false;
+
 	mHistogram.setRangeX(minX, maxX);
 	mHistogram.setRangeY(minY, maxY);
 	mHistogram.setBinCountX(binCountX);
@@ -165,6 +175,7 @@ JointDistributionAnalysis::deserialise(const picojson::value &v)
 void
 JointDistributionAnalysis::updateConditionalDistributions()
 {
+	calculatePartialSums();
 	for (auto* dist : mConditionalDistributions)
 	{
 		delete dist;
@@ -195,3 +206,23 @@ JointDistributionAnalysis::updateConditionalDistributions()
 }
 
 
+/***********************************************************************
+*  Method: JointDistributionAnalysis::calculatePartialSums
+*  Params:
+* Returns: void
+* Effects:
+***********************************************************************/
+void
+JointDistributionAnalysis::calculatePartialSums()
+{
+	// sum rows
+	binTotals.clear();
+	for (int y = 0; y < mHistogram.getBinCountY(); y++)
+	{
+		binTotals.push_back(0.f);
+		for (int x = 0; x < mHistogram.getBinCountX(); x++)
+		{
+			binTotals[y] += mHistogram(x, y);
+		}
+	}
+}

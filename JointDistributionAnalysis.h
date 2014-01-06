@@ -13,6 +13,7 @@ public:
 	virtual void updateImpl();
 protected:
 	Histogram2d mHistogram;
+	std::vector<float> binTotals;
 private:
 	virtual bool selectDistribution(const Node* n, int& selection) const = 0;
 	virtual void collectSample(
@@ -20,9 +21,12 @@ private:
 		std::vector<float>& samplesY,
 		std::vector<float>& sampleWeights) const = 0;
 	void updateConditionalDistributions();
+	void calculatePartialSums();
 	std::vector<std::piecewise_constant_distribution<float>*> mConditionalDistributions;
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
+	virtual bool serialiseAdditional(picojson::value& v) const { return true; }
+	virtual bool deserialiseAdditional(const picojson::value& v) { return true; }
 	virtual int preferredBinCountX() { return 30; }
 	virtual int preferredBinCountY() { return 30; }
 	virtual bool preferredBinBoundariesX(float& minX, float& maxX) { return false; }

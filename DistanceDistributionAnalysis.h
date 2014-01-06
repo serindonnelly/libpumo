@@ -16,7 +16,8 @@ private:
 		std::vector<float>& samplesY,
 		std::vector<float>& sampleWeights) const;
 	std::map<int, std::list<float>> distances;
-	std::vector<float> binTotals;
 	void annotateDistances(const Forest* f);
+	virtual bool serialiseAdditional(picojson::value& v) const;
+	virtual bool deserialiseAdditional(const picojson::value& v);
 };
 

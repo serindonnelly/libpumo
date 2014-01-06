@@ -123,15 +123,67 @@ DistanceDistributionAnalysis::updateImpl()
 {
 	annotateDistances(((ForestAnalysis*)inputs[0])->getForest());
 	JointDistributionAnalysis::updateImpl();
-	// sum rows
-	for (int y = 0; y < mHistogram.getBinCountY(); y++)
-	{
-		binTotals.push_back(0.f);
-		for (int x = 0; x < mHistogram.getBinCountX(); x++)
-		{
-			binTotals[y] += mHistogram(x, y);
-		}
-	}
 }
 
+
+
+
+
+/***********************************************************************
+ *  Method: DistanceDistributionAnalysis::serialiseAdditional
+ *  Params: picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+DistanceDistributionAnalysis::serialiseAdditional(picojson::value &v) const
+{
+	picojson::object vo;
+	picojson::object vd;
+	for (const auto& dd : distances)
+	{
+		picojson::array va;
+		for (const auto f : dd.second)
+		{
+			va.push_back(picojson::value(f));
+		}
+		vd[std::to_string(dd.first)] = picojson::value(va);
+	}
+	vo["distances"] = picojson::value(vd);
+	v = picojson::value(vo);
+	return true;
+}
+
+
+/***********************************************************************
+ *  Method: DistanceDistributionAnalysis::deserialiseAdditional
+ *  Params: const picojson::value &v
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+DistanceDistributionAnalysis::deserialiseAdditional(const picojson::value &v)
+{
+	picojson::object vd;
+	if (!jat(vd, v, "distances")) return false;
+	std::map<int, std::list<float>> provisionalDistances;
+	for (const auto& indexDists : vd)
+	{
+		int provisionalIndex = std::stoi(indexDists.first);
+		if (provisionalDistances.find(provisionalIndex) == provisionalDistances.end()) return false;
+
+		picojson::array va;
+		if (!jget(va, indexDists.second)) return false;
+		for (const auto& vf : va)
+		{
+			float dist;
+			if (!jget(dist, vf)) return false;
+			provisionalDistances[provisionalIndex].push_back(dist);
+		}
+	}
+
+
+	distances = provisionalDistances;
+	return true;
+}
 
