@@ -242,6 +242,12 @@ vecN pf, int& alteredNodeCount) const
 		{
 			const Node* n = getNode(nodeID);
 			NodeSpec ns(*n);
+			if (ns.getParentID() != -1)
+			{
+				const Node* parent = f->getNode(ns.getParentID());
+				// do this before angle generation so that DistanceDistrbutionAnalysis doesn't get confused
+				ns.setPosition(parent->getPosition() + n->getSegment()->getVector());
+			}
 
 			Node* newNode = f->addNode(nodeID, ns);
 			newNode->reserveChildren(n->endChildren() - n->beginChildren());
@@ -255,8 +261,8 @@ vecN pf, int& alteredNodeCount) const
 					vec horizontal = pf.projectOrth(seg);
 					vecN horizontalUnit(horizontal);
 					seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
+					newNode->setPosition(newNode->getParent()->getPosition() + seg);
 				}
-				newNode->setPosition(newNode->getParent()->getPosition() + seg);
 			}
 		}
 		);

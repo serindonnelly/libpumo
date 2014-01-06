@@ -34,6 +34,7 @@ DistanceDistributionAnalysis::selectDistribution(const Node *n, int &selection) 
 			distance < baseDistance + length;
 			distance += length / (sampleCount))
 		{
+			assert(baseDistance + length <= mMaxDistance);
 			int bin = mHistogram.sampleInsertBinY(distance);
 			float weight = 1.f / nodeDistances.size();
 			binWeights[bin] += weight/binTotals[bin];
@@ -91,6 +92,7 @@ std::vector<float> &sampleWeights) const
 void
 DistanceDistributionAnalysis::annotateDistances(const Forest *f)
 {
+	mMaxDistance = 0.f;
 	std::list<int> terminals;
 	for (const auto& n : f->getGraph())
 	{
@@ -105,10 +107,11 @@ DistanceDistributionAnalysis::annotateDistances(const Forest *f)
 		{
 			distances[n->getID()].push_back(dist);
 			dist += n->getSegment()->getVector().norm();
+			if (dist > mMaxDistance)
+				mMaxDistance = dist;
 			n = n->getParent();
 		}
 	}
-
 }
 
 
@@ -150,6 +153,7 @@ DistanceDistributionAnalysis::serialiseAdditional(picojson::value &v) const
 		vd[std::to_string(dd.first)] = picojson::value(va);
 	}
 	vo["distances"] = picojson::value(vd);
+	vo["max_distance"] = picojson::value(mMaxDistance);
 	v = picojson::value(vo);
 	return true;
 }
@@ -166,11 +170,13 @@ DistanceDistributionAnalysis::deserialiseAdditional(const picojson::value &v)
 {
 	picojson::object vd;
 	if (!jat(vd, v, "distances")) return false;
+	float provisionalMaxDistance;
+	if (!jat(provisionalMaxDistance, v, "max_distance")) return false;
 	std::map<int, std::list<float>> provisionalDistances;
 	for (const auto& indexDists : vd)
 	{
 		int provisionalIndex = std::stoi(indexDists.first);
-		if (provisionalDistances.find(provisionalIndex) == provisionalDistances.end()) return false;
+		if (provisionalDistances.find(provisionalIndex) != provisionalDistances.end()) return false;
 
 		picojson::array va;
 		if (!jget(va, indexDists.second)) return false;
@@ -182,7 +188,7 @@ DistanceDistributionAnalysis::deserialiseAdditional(const picojson::value &v)
 		}
 	}
 
-
+	mMaxDistance = provisionalMaxDistance;
 	distances = provisionalDistances;
 	return true;
 }
