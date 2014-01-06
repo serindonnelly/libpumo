@@ -126,6 +126,7 @@ DistanceDistributionAnalysis::updateImpl()
 	// sum rows
 	for (int y = 0; y < mHistogram.getBinCountY(); y++)
 	{
+		binTotals.push_back(0.f);
 		for (int x = 0; x < mHistogram.getBinCountX(); x++)
 		{
 			binTotals[y] += mHistogram(x, y);

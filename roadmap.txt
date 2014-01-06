@@ -39,7 +39,7 @@ extend AxesAnalysis to calculate long axis and side axis
 wrap JointDistributionAnalysis (de)serialisation to allow extra information to be recorded
 reportmean, std, and unaltered segment fractions in MonteCarloAnalysis
 AxisVisualisationAnalysis (unimportant)
-DistanceDistributionAnalysis
+DistanceDistributionAnalysis: load/save extra info
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
 SampleMCForestAnalysis
