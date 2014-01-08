@@ -65,6 +65,8 @@ MCExampleAnalysis::serialise(picojson::value &v) const
 		vtree["altered"] = picojson::value(alteredFractions[i]);
 		vexamples.push_back(picojson::value(vtree));
 	}
+	vo["examples"] = picojson::value(vexamples);
+	return true;
 }
 
 

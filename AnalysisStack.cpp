@@ -156,7 +156,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 	{
 		Analysis* a = nullptr;
 		bool dontRegister = false;
-		if (routine == "parseswc")
+		if (routine == "loadswc")
 		{
 			a = new ForestLoadAnalysis();
 		}

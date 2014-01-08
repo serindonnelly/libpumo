@@ -1,6 +1,6 @@
 {
-"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"E:\\Dropbox\\phdcode\\json\\",
+"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"C:\\Dropbox\\phdcode\\json\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -225,6 +225,12 @@
 	"from":["","axes_","angleDistr_"]
 },
 {
+	"routine":"mcexamples",
+	"to":"angleMC_ex_",
+	"ids":"@all",
+	"from":["","axes_","angleDistr_"]
+},
+{
 	"routine":"heightdistribution",
 	"to":"heightJoint_",
 	"ids":"@all",
@@ -243,6 +249,12 @@
 	"from":["","axes_","parentJoint_"]
 },
 {
+	"routine":"mcexamples",
+	"to":"parentMC_ex_",
+	"ids":"@all",
+	"from":["","axes_","parentJoint_"]
+},
+{
 	"routine":"distancedistribution",
 	"to":"distanceJoint_",
 	"ids":"@all",
@@ -251,6 +263,12 @@
 {
 	"routine":"montecarlo",
 	"to":"distanceMC_",
+	"ids":"@all",
+	"from":["","axes_","distanceJoint_"]
+},
+{
+	"routine":"mcexamples",
+	"to":"distanceMC_ex_",
 	"ids":"@all",
 	"from":["","axes_","distanceJoint_"]
 }
