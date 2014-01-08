@@ -154,6 +154,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 	for (auto ii : idsFull)
 	{
 		Analysis* a;
+		bool dontRegister = false;
 		if (routine == "parseswc")
 		{
 			a = new ForestLoadAnalysis();
@@ -188,15 +189,19 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		}
 		else
 		{
-			a = new NullAnalysis();
+			//a = new NullAnalysis();
+			dontRegister = true;
 		}
-		for (auto fi : fromFull)
+		if (!dontRegister)
 		{
-			a->addInput(mStack.at(fi + ii));
+			for (auto fi : fromFull)
+			{
+				a->addInput(mStack.at(fi + ii));
+			}
+			//a->setIdentity(to + ii);
+			//mStack[to + ii] = a;
+			registerAnalysis(a, to + ii);
 		}
-		//a->setIdentity(to + ii);
-		//mStack[to + ii] = a;
-		registerAnalysis(a, to + ii);
 	}
 	
 	return true;
@@ -222,7 +227,7 @@ AnalysisStack::expandList(const picojson::value& input, std::list<std::string> &
 	else if (input.is<std::string>())
 	{
 		std::string s = input.get<std::string>();
-		if (s[0] == '@')
+		if (s.length() >0 && s[0] == '@')
 		{
 			ListAnalysis* L = (ListAnalysis*)mStack[s.substr(1, s.length() - 1)];
 			expandList(*L, output);
