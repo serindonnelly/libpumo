@@ -11,6 +11,7 @@
 #include "AxesAnalysis.h"
 #include "AngleDistributionAnalysis.h"
 #include "MonteCarloAnalysis.h"
+#include "MCExampleAnalysis.h"
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
 #include "DistanceDistributionAnalysis.h"
@@ -153,7 +154,7 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 	expandList(from, fromFull);
 	for (auto ii : idsFull)
 	{
-		Analysis* a;
+		Analysis* a = nullptr;
 		bool dontRegister = false;
 		if (routine == "parseswc")
 		{
@@ -175,6 +176,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new MonteCarloAnalysis();
 		}
+		else if (routine == "mcexamples")
+		{
+			a = new MCExampleAnalysis();
+		}
 		else if (routine == "parentdistribution")
 		{
 			a = new ParentDistributionAnalysis();
@@ -187,19 +192,13 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new DistanceDistributionAnalysis();
 		}
-		else
-		{
-			//a = new NullAnalysis();
-			dontRegister = true;
-		}
-		if (!dontRegister)
+
+		if (a)
 		{
 			for (auto fi : fromFull)
 			{
 				a->addInput(mStack.at(fi + ii));
 			}
-			//a->setIdentity(to + ii);
-			//mStack[to + ii] = a;
 			registerAnalysis(a, to + ii);
 		}
 	}

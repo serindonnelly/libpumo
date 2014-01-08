@@ -1,5 +1,6 @@
 #include <random>
 #include <algorithm>
+#include <ostream>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -419,7 +420,7 @@ Forest::bypassNode(int nodeID)
  * Effects: 
  ***********************************************************************/
 bool
-Forest::validate()
+Forest::validate() const
 {
 	for (auto it = graphBegin(); it != graphEnd(); ++it)
 	{
@@ -456,18 +457,10 @@ Forest::validate()
  * Effects: 
  ***********************************************************************/
 void
-Forest::write(std::string filename)
+Forest::write(std::string filename) const
 {
-	std::ofstream file(filename);
-	for (auto ih = header.begin(); ih != header.end(); ++ih)
-	{
-		file << *ih;
-	}
-	for (auto in = graphBegin(); in != graphEnd(); ++in)
-	{
-		Node* n = (*in).second;
-		file << n->getID() << ' ' << n->getType() << ' ' << n->getPosition().x << ' ' << n->getPosition().y << ' ' << n->getPosition().z << ' ' << n->getRadius() << ' ' << n->getParentID() << '\n';
-	}
+	std::ofstream f(filename);
+	writeStream(f);
 }
 
 
@@ -571,7 +564,7 @@ Forest::initAxes()
  * Effects: 
  ***********************************************************************/
 void
-Forest::writeJSON(picojson::value &v)
+Forest::writeJSON(picojson::value &v) const
 {
 	picojson::object vo;
 	picojson::array va;
@@ -626,6 +619,42 @@ Forest::readJSON(const picojson::value &v)
 		NodeSpec ns = readJSONNode(ID, nodej);
 		addNode(ID, ns);
 	}
+}
+
+
+/***********************************************************************
+ *  Method: Forest::writeStream
+ *  Params: std::ostream os
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Forest::writeStream(std::ostream& os) const
+{
+	for (auto ih = header.begin(); ih != header.end(); ++ih)
+	{
+		os << *ih;
+	}
+	for (auto in = graphBegin(); in != graphEnd(); ++in)
+	{
+		Node* n = (*in).second;
+		os << n->getID() << ' ' << n->getType() << ' ' << n->getPosition().x << ' ' << n->getPosition().y << ' ' << n->getPosition().z << ' ' << n->getRadius() << ' ' << n->getParentID() << '\n';
+	}
+}
+
+
+/***********************************************************************
+ *  Method: Forest::getSWCString
+ *  Params: 
+ * Returns: std::string
+ * Effects: 
+ ***********************************************************************/
+std::string
+Forest::getSWCString() const
+{
+	std::ostringstream ss;
+	writeStream(ss);
+	return ss.str();
 }
 
 

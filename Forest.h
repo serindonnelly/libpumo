@@ -3,11 +3,14 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <istream>
+#include <ostream>
 #include "Node.h"
 #include "Segment.h"
 #include "ONBasis.h"
 #include "Axis.h"
 #include "WidthCalculator.h"
+//#include "ktree.h"
 
 class Axis;
 class PFAxis; 
@@ -16,6 +19,8 @@ class SideAxis;
 class Node;
 class NodeSpec;
 class Segment;
+
+//ktree<Node> kt;
 
 class Forest
 {
@@ -52,10 +57,13 @@ public:
 	void rebase(const ONBasis& B);
 	void rescale(const vec& scale);
 	void renumber();
-	bool validate();
-	void write(std::string filename);
-	void writeJSON(picojson::value& v);
+	bool validate() const;
+	void writeStream(std::ostream& os) const;
+	std::string getSWCString() const;
+	void write(std::string filename) const;
+	void writeJSON(picojson::value& v) const;
 	void readJSON(const picojson::value& v);
+	void readSWC(std::istream& is);
 	void samplePoints(
 		std::vector<Point> &sample,
 		int n,
