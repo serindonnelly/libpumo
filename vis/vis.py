@@ -87,7 +87,7 @@ def expandedAnalysisStack(stack):
 
 def main():
     #filename = sys.argv[1]
-    filename = "../analysis_stack.json"
+    filename = "../analysis_stack_all.json"
     stack = AnalysisStack(filename)
     #pprint.pprint(stack.expandedStack)
     #getch()
