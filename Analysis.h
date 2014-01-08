@@ -13,7 +13,7 @@ public:
 	~Analysis();
 	void addInput(Analysis* input);
 	time_t getUpdateTime();
-	void update();
+	virtual void update();
 	virtual bool load();
 	void setIdentity(std::string id, int order);
 	void setFilename(std::string fn) {
