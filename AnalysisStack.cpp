@@ -154,7 +154,6 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 	for (auto ii : idsFull)
 	{
 		Analysis* a;
-		a = new ForestLoadAnalysis(); // kill this line with fire
 		if (routine == "parseswc")
 		{
 			a = new ForestLoadAnalysis();
@@ -186,6 +185,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		else if (routine == "distancedistribution")
 		{
 			a = new DistanceDistributionAnalysis();
+		}
+		else
+		{
+			a = new NullAnalysis();
 		}
 		for (auto fi : fromFull)
 		{

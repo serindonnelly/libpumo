@@ -1,7 +1,7 @@
 #pragma once
-#include "Analysis.h"
+#include "NullAnalysis.h"
 class ListAnalysis :
-	public Analysis
+	public NullAnalysis
 {
 
 public:
@@ -9,8 +9,5 @@ public:
 	~ListAnalysis();
 	std::vector<std::string> contents;
 private:
-	virtual bool serialise(picojson::value& v) const;
-	virtual bool deserialise(const picojson::value& v);
-	virtual void updateImpl() {};
 };
 
