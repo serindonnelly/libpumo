@@ -1,3 +1,23 @@
+immediate:
+
+* output all necessary information to reproduce all graphs and stats drawn by python
+	* fit lines in parent and height distributions, from sample data rather than histogram (hence calculated in libpumo)
+	* mean and std of each distance bin, from sample data rather than histogram (hence calculated in libpumo)  
+	* axis labels in distributions
+
+* produce python code to generate all graphs and tables from libpumo data
+	* projections of groups of files
+	* coplots of several eg. angle distributions
+	* summary plots drawing info from groups of files
+
+* add MC verification analyses to compare topology, segment lengths, distribution used in generation between source and synthetic trees
+	* factor out distribution analysis code to allow use on MCExampleAnalysis without copypaste code
+
+* equal bin count in distributions
+
+
+===========================================
+
 analysis stack behaviour:
 
 simplest working version (done):
@@ -39,7 +59,7 @@ extend AxesAnalysis to calculate long axis and side axis
 wrap JointDistributionAnalysis (de)serialisation to allow extra information to be recorded
 reportmean, std, and unaltered segment fractions in MonteCarloAnalysis
 AxisVisualisationAnalysis (unimportant)
-DistanceDistributionAnalysis: load/save extra info
+DistanceDistributionAnalysis: exclude primary dendrite
 HeightDependenceGroupAnalysis
 LikelihoodRatioAnalysis (replace)
 SampleMCForestAnalysis
