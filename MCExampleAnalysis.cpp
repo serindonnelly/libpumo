@@ -28,6 +28,7 @@ MCExampleAnalysis::updateImpl()
 	DistributionAnalysis* dist = (DistributionAnalysis*)inputs[2];
 	original = new Forest(*f);
 	originalWidth = WidthCalculator(f,pf).getWidth();
+	originalLength = f->getTotalLength();
 	int nodeCount = f->getGraph().size();
 	for (int i = 0; i < mTreeCount; i++)
 	{
@@ -37,6 +38,7 @@ MCExampleAnalysis::updateImpl()
 		examples.push_back(ff);
 		WidthCalculator wc(ff, pf);
 		widths.push_back(wc.getWidth());
+		lengths.push_back(ff->getTotalLength());
 		alteredFractions.push_back(((float)alteredNodeCount) / nodeCount);
 	}
 }
@@ -66,6 +68,7 @@ MCExampleAnalysis::serialise(picojson::value &v) const
 		vexamples.push_back(picojson::value(vtree));
 	}
 	vo["examples"] = picojson::value(vexamples);
+	v = picojson::value(vo);
 	return true;
 }
 
