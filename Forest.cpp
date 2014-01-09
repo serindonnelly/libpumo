@@ -56,28 +56,7 @@ Forest::Forest(std::string filename, bool json) : error(false)
 	std::ifstream file(filename);
 	if (!file)
 		throw;
-	if (json)
-	{
-		picojson::value v;
-		picojson::parse(v, file);
-		readJSON(v);
-	}
-	else
-	{
-		std::string line;
-		while (std::getline(file, line))
-		{
-			if (line.length() == 0) continue;
-			if (line[0] == '#')
-			{
-				header.push_back(line);
-				continue;
-			}
-			int ID;
-			NodeSpec ns = readNode(ID, line);
-			addNode(ID, ns);
-		}
-	}
+	readSWC(file,json);
 }
 
 
@@ -584,7 +563,7 @@ Forest::writeJSON(picojson::value &v) const
 	picojson::array vh;
 	for (const auto& s : header)
 	{
-		vh.push_back(picojson::value(s));
+		vh.push_back(picojson::value(s+"\n"));
 	}
 	vo["header"] = picojson::value(vh);
 	v = picojson::value(vo);
@@ -633,7 +612,7 @@ Forest::writeStream(std::ostream& os) const
 {
 	for (auto ih = header.begin(); ih != header.end(); ++ih)
 	{
-		os << *ih;
+		os << *ih << "\n";
 	}
 	for (auto in = graphBegin(); in != graphEnd(); ++in)
 	{
@@ -655,6 +634,62 @@ Forest::getSWCString() const
 	std::ostringstream ss;
 	writeStream(ss);
 	return ss.str();
+}
+
+
+/***********************************************************************
+ *  Method: Forest::readSWC
+ *  Params: std::istream &is
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+Forest::readSWC(std::istream &is, bool json)
+{
+	if (json)
+	{
+		picojson::value vswc;
+		picojson::parse(vswc, is);
+		readJSON(vswc);
+	}
+	else
+	{
+		std::string line;
+		while (std::getline(is, line))
+		{
+			if (line.length() == 0) continue;
+			if (line[0] == '#')
+			{
+				header.push_back(line);
+				continue;
+			}
+			int ID;
+			NodeSpec ns = readNode(ID, line);
+			addNode(ID, ns);
+		}
+	}
+}
+
+
+
+/***********************************************************************
+ *  Method: Forest::getTotalLength
+ *  Params: 
+ * Returns: float
+ * Effects: 
+ ***********************************************************************/
+float
+Forest::getTotalLength() const
+{
+	float length = 0.f;
+	for (auto& n : mGraph)
+	{
+		if (!n.second->isRoot())
+		{
+			length += n.second->getSegment()->getVector().norm();
+		}
+	}
+	return length;
 }
 
 

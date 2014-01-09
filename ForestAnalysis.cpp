@@ -1,5 +1,5 @@
 #include "ForestAnalysis.h"
-
+#include "common.h"
 
 ForestAnalysis::ForestAnalysis()
 {
@@ -9,32 +9,6 @@ ForestAnalysis::ForestAnalysis()
 ForestAnalysis::~ForestAnalysis()
 {
 }
-/***********************************************************************
- *  Method: ForestAnalysis::load
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-//void
-//ForestAnalysis::load()
-//{
-//	if (f)
-//		delete f;
-//	f = new Forest(getFilename());
-//}
-
-
-/***********************************************************************
- *  Method: ForestAnalysis::save
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-//void
-//ForestAnalysis::save()
-//{
-//	f->write(getFilename());
-//}
 
 
 /***********************************************************************
@@ -46,10 +20,10 @@ ForestAnalysis::~ForestAnalysis()
 bool
 ForestAnalysis::serialise(picojson::value &v) const
 {
-	return false;
-	//f->writeJSON(v);
-	//return true;
-	//reading/writing trees in json is slow
+	picojson::object vo;
+	vo["swc"] = picojson::value(f->getSWCString());
+	v = picojson::value(vo);
+	return true;
 }
 
 
@@ -62,13 +36,11 @@ ForestAnalysis::serialise(picojson::value &v) const
 bool
 ForestAnalysis::deserialise(const picojson::value &v)
 {
-	return false;
-	//if (f)
-	//	delete f;
-	//f = new Forest();
-	//f->readJSON(v);
-	//return true;
-	//reading/writing trees in json is slow
+	std::string swc;
+	if (!jat(swc,v,"swc")) return false;
+	std::stringstream ss(swc);
+	f = new Forest();
+	f->readSWC(ss, false);
+	return true; // does not guarantee valid tree
 }
-
 

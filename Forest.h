@@ -44,6 +44,7 @@ public:
 	void getRoots(T& NodeContainer) const;
 	void treeWalk(int nodeID, std::function < void(int)> f);
 	void treeWalk(int nodeID, std::function < void(int)> f) const;
+	float getTotalLength() const;
 
 	std::map<int, Node*>::const_iterator graphBegin() const;
 	std::map<int, Node*>::const_iterator graphEnd() const;
@@ -63,7 +64,7 @@ public:
 	void write(std::string filename) const;
 	void writeJSON(picojson::value& v) const;
 	void readJSON(const picojson::value& v);
-	void readSWC(std::istream& is);
+	void readSWC(std::istream& is,bool json);
 	void samplePoints(
 		std::vector<Point> &sample,
 		int n,
