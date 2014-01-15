@@ -213,6 +213,24 @@
 	"from":""
 },
 {
+	"routine":"lpproject",
+	"to":"projLP_Original_",
+	"ids":"@all",
+	"from":["","axes_"]
+},
+{
+	"routine":"lsproject",
+	"to":"projLS_Original_",
+	"ids":"@all",
+	"from":["","axes_"]
+},
+{
+	"routine":"spproject",
+	"to":"projSP_Original_",
+	"ids":"@all",
+	"from":["","axes_"]
+},
+{
 	"routine":"angledistribution",
 	"to":"angleDistr_",
 	"ids":"@all",
@@ -229,6 +247,30 @@
 	"to":"angleMC_ex_",
 	"ids":"@all",
 	"from":["","axes_","angleDistr_"]
+},
+{
+	"routine":"lpproject",
+	"to":"projLP_AngleMC_",
+	"ids":"@all",
+	"from":["angleMC_ex_","axes_"]
+},
+{
+	"routine":"lsproject",
+	"to":"projLS_AngleMC_",
+	"ids":"@all",
+	"from":["angleMC_ex_","axes_"]
+},
+{
+	"routine":"spproject",
+	"to":"projSP_AngleMC_",
+	"ids":"@all",
+	"from":["angleMC_ex_","axes_"]
+},
+{
+	"routine":"angledistributionarray",
+	"to":"angleDistr_ex_",
+	"ids":"@all",
+	"from":["","axes_","angleMC_ex_"]
 },
 {
 	"routine":"heightdistribution",
@@ -255,6 +297,30 @@
 	"from":["","axes_","parentJoint_"]
 },
 {
+	"routine":"lpproject",
+	"to":"projLP_ParentMC_",
+	"ids":"@all",
+	"from":["parentMC_ex_","axes_"]
+},
+{
+	"routine":"lsproject",
+	"to":"projLS_ParentMC_",
+	"ids":"@all",
+	"from":["parentMC_ex_","axes_"]
+},
+{
+	"routine":"spproject",
+	"to":"projSP_ParentMC_",
+	"ids":"@all",
+	"from":["parentMC_ex_","axes_"]
+},
+{
+	"routine":"parentdistributionarray",
+	"to":"parentJoint_ex_",
+	"ids":"@all",
+	"from":["","axes_","parentMC_ex_"]
+},
+{
 	"routine":"distancedistribution",
 	"to":"distanceJoint_",
 	"ids":"@all",
@@ -271,6 +337,30 @@
 	"to":"distanceMC_ex_",
 	"ids":"@all",
 	"from":["","axes_","distanceJoint_"]
+},
+{
+	"routine":"lpproject",
+	"to":"projLP_DistanceMC_",
+	"ids":"@all",
+	"from":["distanceMC_ex_","axes_"]
+},
+{
+	"routine":"lsproject",
+	"to":"projLS_DistanceMC_",
+	"ids":"@all",
+	"from":["distanceMC_ex_","axes_"]
+},
+{
+	"routine":"spproject",
+	"to":"projSP_DistanceMC_",
+	"ids":"@all",
+	"from":["distanceMC_ex_","axes_"]
+},
+{
+	"routine":"distancedistributionarray",
+	"to":"distanceJoint_ex_",
+	"ids":"@all",
+	"from":["","axes_","distanceMC_ex_"]
 }
 ]
 }

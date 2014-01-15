@@ -45,6 +45,24 @@
 	"from":""
 },
 {
+	"routine":"lpproject",
+	"to":"lpp",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"lsproject",
+	"to":"lsp",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
+	"routine":"spproject",
+	"to":"spp",
+	"ids":"@all",
+	"from":["","a"]
+},
+{
 	"routine":"angledistribution",
 	"to":"n",
 	"ids":"@all",
@@ -55,6 +73,30 @@
 	"to":"NN",
 	"ids":"@all",
 	"from":["","a","n"]
+},
+{
+	"routine":"mcexamples",
+	"to":"NNE",
+	"ids":"@all",
+	"from":["","a","n"]
+},
+{
+	"routine":"lpproject",
+	"to":"lppNNE",
+	"ids":"@all",
+	"from":["NNE","a"]
+},
+{
+	"routine":"lsproject",
+	"to":"lspNNE",
+	"ids":"@all",
+	"from":["NNE","a"]
+},
+{
+	"routine":"spproject",
+	"to":"sppNNE",
+	"ids":"@all",
+	"from":["NNE","a"]
 },
 {
 	"routine":"heightdistribution",
@@ -81,10 +123,58 @@
 	"from":["","a","p"]
 },
 {
+	"routine":"mcexamples",
+	"to":"PPE",
+	"ids":"@all",
+	"from":["","a","p"]
+},
+{
+	"routine":"lpproject",
+	"to":"lppPPE",
+	"ids":"@all",
+	"from":["PPE","a"]
+},
+{
+	"routine":"lsproject",
+	"to":"lspPPE",
+	"ids":"@all",
+	"from":["PPE","a"]
+},
+{
+	"routine":"spproject",
+	"to":"sppPPE",
+	"ids":"@all",
+	"from":["PPE","a"]
+},
+{
 	"routine":"montecarlo",
 	"to":"DD",
 	"ids":"@all",
 	"from":["","a","d"]
+},
+{
+	"routine":"mcexamples",
+	"to":"DDE",
+	"ids":"@all",
+	"from":["","a","d"]
 }
+{
+	"routine":"lpproject",
+	"to":"lppDDE",
+	"ids":"@all",
+	"from":["DDE","a"]
+},
+{
+	"routine":"lsproject",
+	"to":"lspDDE",
+	"ids":"@all",
+	"from":["DDE","a"]
+},
+{
+	"routine":"spproject",
+	"to":"sppDDE",
+	"ids":"@all",
+	"from":["DDE","a"]
+},
 ]
 }

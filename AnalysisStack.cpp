@@ -15,6 +15,7 @@
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
 #include "DistanceDistributionAnalysis.h"
+#include "ProjectionAnalysis.h"
 #include "common.h"
 
 AnalysisStack::~AnalysisStack()
@@ -179,6 +180,18 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		else if (routine == "mcexamples")
 		{
 			a = new MCExampleAnalysis();
+		}
+		else if (routine == "lpproject")
+		{
+			a = new LPProjectionAnalysis();
+		}
+		else if (routine == "lsproject")
+		{
+			a = new LSProjectionAnalysis();
+		}
+		else if (routine == "spproject")
+		{
+			a = new SPProjectionAnalysis();
 		}
 		else if (routine == "parentdistribution")
 		{
