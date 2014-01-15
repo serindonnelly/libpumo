@@ -1,12 +1,13 @@
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
+#include <Eigen/Geometry>
 #include "AxesAnalysis.h"
 #include "ForestAnalysis.h"
 #include "Forest.h"
 #include "common.h"
 
 
-AxesAnalysis::AxesAnalysis() : pfAxis(0,0,0)
+AxesAnalysis::AxesAnalysis() : pfAxis(0, 0, 0), longAxis(0, 0, 0), sideAxis(0, 0, 0)
 {
 }
 
@@ -15,48 +16,17 @@ AxesAnalysis::~AxesAnalysis()
 {
 }
 
+template<typename T>
+inline T sum(const std::vector<T>& v, T start)
+{
+	for (const auto& t : v){ start += t; } return start;
+}
 
-/***********************************************************************
- *  Method: AxesAnalysis::load
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-//void
-//AxesAnalysis::load()
-//{
-//	picojson::value v;
-//	parseFile(v, getFilename());
-//	assert(v.is<picojson::object>());
-//	picojson::value& pf = v.get<picojson::object>().at("pf axis");
-//	assert(pf.is<picojson::object>());
-//	picojson::object& pfObj = pf.get<picojson::object>();
-//	pfAxis = vecN((float)pfObj.at("x").get<double>(),
-//				  (float)pfObj.at("y").get<double>(),
-//				  (float)pfObj.at("z").get<double>());
-//}
-
-
-/***********************************************************************
- *  Method: AxesAnalysis::save
- *  Params: 
- * Returns: void
- * Effects: 
- ***********************************************************************/
-//void
-//AxesAnalysis::save()
-//{
-//	picojson::object pf;
-//	pf["x"] = picojson::value(pfAxis.x);
-//	pf["y"] = picojson::value(pfAxis.y);
-//	pf["z"] = picojson::value(pfAxis.z);
-//
-//	picojson::object v;
-//	v["pf axis"] = picojson::value(pf);
-//
-//	saveJSON(getFilename(), picojson::value(v));
-//}
-
+template<typename T>
+inline T mean(const std::vector<T>& v, T zero)
+{
+	return sum(v,zero) / v.size();
+}
 
 /***********************************************************************
  *  Method: AxesAnalysis::updateImpl
@@ -70,8 +40,9 @@ AxesAnalysis::updateImpl()
 	std::vector<Point> samples;
 	const Forest* f = ((ForestAnalysis*)inputs[0])->getForest();
 	f->samplePoints(samples, 5000000);
-	std::vector<float> samplesFlat;
 
+	// parallel fibre axis is estimated by axis that minimises variance
+	std::vector<float> samplesFlat;
 	for (const auto& p : samples)
 	{
 		samplesFlat.push_back(p.x);
@@ -87,6 +58,22 @@ AxesAnalysis::updateImpl()
 	//return (int)cov.coeff(2, 2);
 	Eigen::Vector3f pf = eig.eigenvectors().col(0);
 	pfAxis = vecN(pf.x(), pf.y(), pf.z());
+
+	// long axis is estimated by axis that passes through the mean point
+	const Point soma = f->getNode(1)->getPosition();
+	std::vector<vec> samplesProj;
+	for (const auto& p : samples)
+	{
+		samplesProj.push_back(pfAxis.projectOrth(p));
+	}
+	vec meanProj = mean(samplesProj, vec(0.f, 0.f, 0.f));
+	vec longAxisSuggestion = meanProj - pfAxis.projectOrth(soma);
+	longAxis = vecN(pfAxis.projectOrth(longAxisSuggestion));
+
+	Eigen::Vector3f ln(longAxis.x, longAxis.y, longAxis.z);
+	Eigen::Vector3f side = pf.cross(ln);
+	vec sideSuggestion = vec(side.x(), side.y(), side.z());
+	sideAxis = vecN(longAxis.projectOrth(pfAxis.projectOrth(sideSuggestion)));
 }
 
 
@@ -99,10 +86,27 @@ AxesAnalysis::updateImpl()
 bool
 AxesAnalysis::serialise(picojson::value &v) const
 {
+	picojson::object pfo;
+	picojson::object lno;
+	picojson::object sdo;
+
+	pfo["x"] = picojson::value(pfAxis.x);
+	pfo["y"] = picojson::value(pfAxis.y);
+	pfo["z"] = picojson::value(pfAxis.z);
+
+	lno["x"] = picojson::value(longAxis.x);
+	lno["y"] = picojson::value(longAxis.y);
+	lno["z"] = picojson::value(longAxis.z);
+
+	sdo["x"] = picojson::value(sideAxis.x);
+	sdo["y"] = picojson::value(sideAxis.y);
+	sdo["z"] = picojson::value(sideAxis.z);
+
 	picojson::object vo;
-	vo["x"] = picojson::value(pfAxis.x);
-	vo["y"] = picojson::value(pfAxis.y);
-	vo["z"] = picojson::value(pfAxis.z);
+	vo["parallel fibre axis"] = picojson::value(pfo);
+	vo["long axis"] = picojson::value(lno);
+	vo["side axis"] = picojson::value(sdo);
+
 	v = picojson::value(vo);
 	return true;
 }
@@ -117,22 +121,27 @@ AxesAnalysis::serialise(picojson::value &v) const
 bool
 AxesAnalysis::deserialise(const picojson::value &v)
 {
-	if (v.is<picojson::object>())
-	{
-		if (v.contains("x") && v.contains("y") && v.contains("z"))
-		{
-			const picojson::object& vo = v.get<picojson::object>();
-			if (vo.at("x").is<double>() && vo.at("y").is<double>() && vo.at("z").is<double>())
-			{
-				float x = (float)vo.at("x").get<double>();
-				float y = (float)vo.at("y").get<double>();
-				float z = (float)vo.at("z").get<double>();
-				pfAxis = vecN(x, y, z);
-				return true;
-			}
-		}
-	}
-	return false;
+	vec pfProvisional(0.f, 0.f, 0.f);
+	vec lnProvisional(0.f, 0.f, 0.f);
+	vec sdProvisional(0.f, 0.f, 0.f);
+
+	if (!jat(pfProvisional, v, "parallel fibre axis")) return false;
+	if (!jat(lnProvisional, v, "long axis")) return false;
+	if (!jat(sdProvisional, v, "side axis")) return false;
+
+	if (pfProvisional.norm2() - 1.f > 0.0001) return false;
+	if (lnProvisional.norm2() - 1.f > 0.0001) return false;
+	if (sdProvisional.norm2() - 1.f > 0.0001) return false;
+
+	if (pfProvisional.dot(lnProvisional) > 0.0001) return false;
+	if (lnProvisional.dot(sdProvisional) > 0.0001) return false;
+	if (sdProvisional.dot(pfProvisional) > 0.0001) return false;
+
+	pfAxis = vecN(pfProvisional);
+	longAxis = vecN(lnProvisional);
+	sideAxis = vecN(sdProvisional);
+
+	return true;
 }
 
 
