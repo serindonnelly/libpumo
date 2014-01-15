@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <picojson.h>
 
 struct vec;
 
@@ -56,6 +57,11 @@ public:
 static vec operator+(const vec& left, const vec& right)
 {
 	return vec(left.x + right.x, left.y + right.y, left.z + right.z);
+}
+
+static vec& operator+=(vec& left, const vec& right)
+{
+	return left = left + right;
 }
 
 template <typename Number>
