@@ -20,14 +20,16 @@ class AnalysisStack:
       #pprint.pprint(analysis)
       if "routine" not in analysis:
         continue
-      if analysis["routine"] == u"angledistribution":
+      elif analysis["routine"] == u"angledistribution":
         drawing.drawAngleDistribution(analysis["filename"])
-      if analysis["routine"] == u"heightdistribution":
-        pass
-      if analysis["routine"] == u"parentdistribution":
-        pass
-      if analysis["routine"] == u"distancedistribution":
-        pass
+      elif analysis["routine"] in [u"lpproject",u"lsproject",u"spproject"]:
+        drawing.drawProjection(analysis["filename"])
+      elif analysis["routine"] == u"heightdistribution":
+        drawing.drawJointDistribution(analysis["filename"])
+      elif analysis["routine"] == u"parentdistribution":
+        drawing.drawJointDistribution(analysis["filename"])
+      elif analysis["routine"] == u"distancedistribution":
+        drawing.drawJointDistribution(analysis["filename"])
 
   def expandAnalysisStack(self,stack):
     for analysis in stack:
