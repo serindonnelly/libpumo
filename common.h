@@ -10,6 +10,7 @@
 #include <ctime>
 #include <iomanip>
 #include "WidthGroup.h"
+#include "vec.h"
 
 static std::random_device rd;
 static std::mt19937 gen(rd());
@@ -54,6 +55,25 @@ static bool jget(WidthGroup& out, const picojson::value& v)
 	if (!wg.isValid())
 		return false;
 	out = wg;
+	return true;
+}
+
+static bool jget(vec& out, const picojson::value& v)
+{
+	if (!v.is<picojson::object>()) return false;
+	if (!v.contains("x")) return false;
+	if (!v.contains("y")) return false;
+	if (!v.contains("z")) return false;
+	picojson::value x, y, z;
+	x = v.get("x");
+	y = v.get("y");
+	z = v.get("z");
+	if (!x.is<double>()) return false;
+	if (!y.is<double>()) return false;
+	if (!z.is<double>()) return false;
+	out.x = (float)x.get<double>();
+	out.y = (float)y.get<double>();
+	out.z = (float)z.get<double>();
 	return true;
 }
 
