@@ -3,6 +3,8 @@
 struct vecN :
 	public vec
 {
+	// had some trouble in eg. cosine() where not dividing by norm() entails results outside [-1,1] in extreme cases.
+	// unvirtual such functions? reconsider this after the move from float to double
 public:
 	explicit vecN(const vec& v) :vec(v / v.norm()) { ; }
 	vecN(float x, float y, float z) : vecN(vec(x, y, z)) { ; }
