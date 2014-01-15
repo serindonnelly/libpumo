@@ -26,8 +26,14 @@ ParentDistributionAnalysis::selectDistribution(const Node *n, int &selection) co
 	if (n->getParent()->isRoot())
 		return false;
 	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
-	float parentAngle = RAD_TO_DEG*acos(pf.cosine(n->getParent()->getSegment()->getVector()));
-	int indexY = mHistogram.sampleInsertBinY(parentAngle);
+	float parentCos = pf.cosine(n->getParent()->getSegment()->getVector());
+	//assert(parentCos >= -1.f && parentCos <= 1.f);
+	if (parentCos < -1.f)
+		parentCos;// parentCos = -1.f;
+	else if (parentCos > 1.f)
+		parentCos;// parentCos = 1.f;
+	float parentAngle = RAD_TO_DEG*acos(parentCos);
+	int indexY = mHistogram.sampleInsertBinY(parentAngle); // fails when segment is too close to antiparallel with pf
 	if (indexY == -1)
 		return false;
 	selection = indexY;
