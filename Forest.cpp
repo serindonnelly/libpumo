@@ -214,38 +214,33 @@ vecN pf, int& alteredNodeCount) const
 	alteredNodeCount = 0;
 	// TODO copy header
 	Forest* f = new Forest();
-	std::vector<int> roots;
-	getRoots(roots);
-	for (auto ir = roots.begin(); ir != roots.end(); ++ir)
+	for (const auto& idNode : mGraph)
 	{
-		treeWalk(*ir, [&](int nodeID)
+		const Node* const& n = idNode.second;
+		const int& nodeID = idNode.first;
+		NodeSpec ns(*n);
+		if (ns.getParentID() != -1)
 		{
-			const Node* n = getNode(nodeID);
-			NodeSpec ns(*n);
-			if (ns.getParentID() != -1)
-			{
-				const Node* parent = f->getNode(ns.getParentID());
-				// do this before angle generation so that DistanceDistrbutionAnalysis doesn't get confused
-				ns.setPosition(parent->getPosition() + n->getSegment()->getVector());
-			}
+			const Node* parent = f->getNode(ns.getParentID());
+			// do this before angle generation so that DistanceDistrbutionAnalysis doesn't get confused
+			ns.setPosition(parent->getPosition() + n->getSegment()->getVector());
+		}
 
-			Node* newNode = f->addNode(nodeID, ns);
-			newNode->reserveChildren(n->endChildren() - n->beginChildren());
-			if (!newNode->isRoot())
+		Node* newNode = f->addNode(nodeID, ns);
+		newNode->reserveChildren(n->endChildren() - n->beginChildren());
+		if (!newNode->isRoot())
+		{
+			Displacement seg = n->getSegment()->getVector();
+			float angle;
+			if (angleGenerator(newNode, angle))
 			{
-				Displacement seg = n->getSegment()->getVector();
-				float angle;
-				if (angleGenerator(newNode, angle))
-				{
-					alteredNodeCount++;
-					vec horizontal = pf.projectOrth(seg);
-					vecN horizontalUnit(horizontal);
-					seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
-					newNode->setPosition(newNode->getParent()->getPosition() + seg);
-				}
+				alteredNodeCount++;
+				vec horizontal = pf.projectOrth(seg);
+				vecN horizontalUnit(horizontal);
+				seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
+				newNode->setPosition(newNode->getParent()->getPosition() + seg);
 			}
 		}
-		);
 	}
 	return f;
 }
@@ -399,7 +394,7 @@ Forest::bypassNode(int nodeID)
  * Effects: 
  ***********************************************************************/
 bool
-Forest::validate() const
+Forest::validate(float delta) const
 {
 	for (auto it = graphBegin(); it != graphEnd(); ++it)
 	{
@@ -411,6 +406,11 @@ Forest::validate() const
 			if (n->getParent() == nullptr)
 				return false;
 			if (!n->getParent()->hasChild(n->getID()))
+				return false;
+			if ((n->getSegment()->getVector() +
+				(n->getParent()->getPosition() - n->getPosition())).norm2() > delta)
+				return false;
+			if (n->getParentID() > n->getID())
 				return false;
 		}
 		else
@@ -491,7 +491,7 @@ std::vector<float>* sampleSegmentRatios) const
 		const Segment* s = getSegment(segmentSelector(gen));
 		float r = fractions(gen);
 		sample.push_back(s->getPoint(r));
-		if (sampleSegmentIDs) // rare crash here. count: 5
+		if (sampleSegmentIDs) // rare crash here. count: 6
 			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 		if (sampleSegmentRatios)
 			sampleSegmentRatios->push_back(r);
@@ -690,6 +690,48 @@ Forest::getTotalLength() const
 		}
 	}
 	return length;
+}
+
+
+/***********************************************************************
+ *  Method: Forest::compare
+ *  Params: const Forest *f, float delta
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+Forest::compare(const Forest* f, float delta) const
+{
+	return compareImpl(f, delta) && f->compareImpl(this, delta);
+}
+
+
+/***********************************************************************
+ *  Method: Forest::compareImpl
+ *  Params: const Forest *f, float delta
+ * Returns: bool
+ * Effects: 
+ ***********************************************************************/
+bool
+Forest::compareImpl(const Forest *f, float delta) const
+{
+	if (!f->validate()) return false;
+	for (const auto& n : mGraph)
+	{
+		const Node* node = n.second;
+		const Segment* seg = n.second->getSegment();
+		const Node* otherNode = f->getNode(n.first);
+		const Segment* otherSeg = otherNode->getSegment();
+		if (node->isRoot() != otherNode->isRoot()) return false;
+		if (node->numChildren() != otherNode->numChildren()) return false;
+		if (node->getParentID() != otherNode->getParentID()) return false;
+		if ((seg == nullptr) != (otherSeg == nullptr)) return false;
+		if (seg)
+		{
+			if (abs(seg->getVector().norm() - otherSeg->getVector().norm()) > delta) return false;
+		}
+	}
+	return true;
 }
 
 

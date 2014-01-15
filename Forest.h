@@ -58,7 +58,7 @@ public:
 	void rebase(const ONBasis& B);
 	void rescale(const vec& scale);
 	void renumber();
-	bool validate() const;
+	bool validate(float delta=0.0001) const;
 	void writeStream(std::ostream& os) const;
 	std::string getSWCString() const;
 	void write(std::string filename) const;
@@ -72,7 +72,9 @@ public:
 		std::vector<float>* sampleSegmentRatios = nullptr) const;
 	const std::map<int, Node*>& getGraph() const { return mGraph; }
 	float getWidth(vecN pf) const;
+	bool compare(const Forest* f, float delta = 0.0001f) const;
 private:
+	bool compareImpl(const Forest* f, float delta) const;
 
 	void initAxes();
 	//std::map<int,std::pair<Node*,Segment*>> mGraph;
