@@ -44,6 +44,7 @@ MonteCarloAnalysis::updateImpl()
 		WidthCalculator wc(ff, pf);
 		widths.push_back(wc.getWidth());
 		alteredFractions.push_back(((float)alteredNodeCount) / nodeCount);
+		assert(f->compare(ff));
 		delete ff;
 	}
 	std::cout << std::endl;
