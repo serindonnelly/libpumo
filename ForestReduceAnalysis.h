@@ -1,7 +1,7 @@
 #pragma once
 #include "ForestAnalysis.h"
 class ForestReduceAnalysis :
-	public ForestAnalysis
+	public ConcreteForestAnalysis
 {
 public:
 	ForestReduceAnalysis();

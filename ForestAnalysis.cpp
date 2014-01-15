@@ -18,7 +18,7 @@ ForestAnalysis::~ForestAnalysis()
  * Effects: 
  ***********************************************************************/
 bool
-ForestAnalysis::serialise(picojson::value &v) const
+ConcreteForestAnalysis::serialise(picojson::value &v) const
 {
 	picojson::object vo;
 	vo["swc"] = picojson::value(f->getSWCString());
@@ -34,7 +34,7 @@ ForestAnalysis::serialise(picojson::value &v) const
  * Effects: 
  ***********************************************************************/
 bool
-ForestAnalysis::deserialise(const picojson::value &v)
+ConcreteForestAnalysis::deserialise(const picojson::value &v)
 {
 	std::string swc;
 	if (!jat(swc,v,"swc")) return false;

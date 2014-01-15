@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "Forest.h"
+#include "ForestAnalysis.h"
 #include "Analysis.h"
 class MCExampleAnalysis :
-	public Analysis
+	public ForestAnalysis
 {
 public:
 	MCExampleAnalysis();
@@ -15,6 +15,9 @@ public:
 	std::vector<float> alteredFractions;
 	std::vector<WidthGroup> widths;
 	std::vector<float> lengths;
+	virtual const Forest* getForest() const { return examples[0]; }
+	virtual Forest* getForest() { return examples[0]; }
+	virtual void initForest() { Forest* f = new Forest; examples.push_back(f); }
 private:
 	virtual void updateImpl();
 	virtual bool serialise(picojson::value& v) const;
