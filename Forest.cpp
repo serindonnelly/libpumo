@@ -235,6 +235,7 @@ vecN pf, int& alteredNodeCount) const
 			if (angleGenerator(newNode, angle))
 			{
 				alteredNodeCount++;
+				angle /= RAD_TO_DEG;
 				vec horizontal = pf.projectOrth(seg);
 				vecN horizontalUnit(horizontal);
 				seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
