@@ -237,6 +237,18 @@
 	"from":["","axes_"]
 },
 {
+	"routine":"groupangledistribution",
+	"to":"Figure_2_6_Y",
+	"ids":"",
+	"from":["angleDistr_unred_ywt_17","angleDistr_unred_yko_15"]
+},
+{
+	"routine":"groupangledistribution",
+	"to":"Figure_2_6_O",
+	"ids":"",
+	"from":["angleDistr_unred_owt_29","angleDistr_unred_oko_12"]
+},
+{
 	"routine":"montecarlo",
 	"to":"angleMC_",
 	"ids":"@all",

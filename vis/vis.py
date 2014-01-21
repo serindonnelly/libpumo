@@ -30,6 +30,17 @@ class AnalysisStack:
         drawing.drawJointDistribution(analysis["filename"])
       elif analysis["routine"] == u"distancedistribution":
         drawing.drawJointDistribution(analysis["filename"])
+      elif analysis["routine"] in [u"groupangledistribution",u"groupprojection"]:
+        self.drawGroup(analysis)
+  
+  def drawGroup(self,analysis):
+    filenames = []
+    for input in analysis["inputs"]:
+      filenames.append(self.expandedStack[input]["filename"])
+    if analysis["routine"] == u"groupangledistribution":
+      drawing.drawGroupAngleDistribution(analysis["filename"],filenames,True)
+    elif analysis["routine"] == u"groupprojection":
+      drawing.drawGroupProjection(filenames)
 
   def expandAnalysisStack(self,stack):
     for analysis in stack:
