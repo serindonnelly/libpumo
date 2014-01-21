@@ -67,7 +67,7 @@ std::vector<float> &sampleWeights) const
 	std::vector<Point> samples;
 	std::vector<int> sampleIDs;
 	std::vector<float> sampleRatios;
-	f->samplePoints(samples, 5000000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
+	f->samplePoints(samples, 300000, &sampleIDs, &sampleRatios); // TODO factor out magic number of samples
 	for (unsigned int i = 0; i < samples.size() && i < sampleIDs.size() && i < sampleRatios.size(); i++)
 	{
 		Displacement seg = f->getSegment(sampleIDs[i])->getVector();
@@ -76,7 +76,7 @@ std::vector<float> &sampleWeights) const
 		{
 			float distance = baseDistance + seg.norm()*(1.f - sampleRatios[i]);
 			samplesX.push_back(angle);
-			samplesY.push_back(distance);
+			samplesY.push_back(distance); // BIG memory usage here (gigabyte). May be from parent dep or projections, but likely from here. Don't use 5 million samples.
 			sampleWeights.push_back(1.f / distances.at(sampleIDs[i]).size());
 		}
 	}
