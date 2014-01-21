@@ -123,6 +123,28 @@ def genericDrawTasks(title,xlabel,ylabel):
   pl.ylabel(ylabel)
   pl.title(title)
 
+def drawJointDistributionSub(filename,H,xedges,yedges,cond=""):
+  if cond == "":
+    HH = H
+  elif cond == "x":
+    HH = H/H.max(axis=1)[:,pl.newaxis]
+  elif cond == "y":
+    HH = H/H.sum(axis=0)
+  pl.clf()
+  pl.pcolormesh(pl.array(xedges),pl.array(yedges), HH,cmap='Greys')
+  #todo generate xlabel, ylabel in C++
+  if cond == "": title_append = ""
+  else: title_append = ", normalised along " + cond + " axis"
+  pl.title(filename+title_append)
+  new_filename = fp.replace_extension(fp.down_folder(filename,"plots"),".png")
+  new_filename = fp.down_folder(new_filename,"joint_dist")
+  if cond != "":
+    new_filename = fp.append_to_filename(new_filename,"_"+cond)
+  fp.create_folder_if_nonexistent(new_filename)
+  pl.colorbar()
+  pl.savefig(new_filename,bbox_inches=0)
+  print new_filename, "saved"
+
 def drawJointDistribution(filename):
   try:
     f = open(filename,'r')
@@ -142,18 +164,11 @@ def drawJointDistribution(filename):
     for y in range(bin_count_y):
       weights[y][x] = weights_flat[count]
       count += 1
-  pl.clf()
   bin_boundaries_x = [min_x + (max_x-min_x)*x/bin_count_x for x in range(bin_count_x+1)]
   bin_boundaries_y = [min_y + (max_y-min_y)*y/bin_count_y for y in range(bin_count_y+1)]
-  pl.pcolormesh(pl.array(bin_boundaries_x),pl.array(bin_boundaries_y), weights,cmap='Greys')
-  #todo generate xlabel, ylabel in C++
-  pl.title(filename)
-  new_filename = fp.replace_extension(fp.down_folder(filename,"plots"),".png")
-  new_filename = fp.down_folder(new_filename,"joint_dist")
-  fp.create_folder_if_nonexistent(new_filename)
-  pl.colorbar()
-  pl.savefig(new_filename,bbox_inches=0)
-  print new_filename, "saved"
+  drawJointDistributionSub(filename,weights,bin_boundaries_x,bin_boundaries_y)
+  drawJointDistributionSub(filename,weights,bin_boundaries_x,bin_boundaries_y,"x")
+  drawJointDistributionSub(filename,weights,bin_boundaries_x,bin_boundaries_y,"y")
 
 def drawProjection(filename,ranges):
   try:
@@ -168,7 +183,7 @@ def drawProjection(filename,ranges):
             "xmin":x_centre - (ranges[data["x_label"]]/2.0),
             "xmax":x_centre + (ranges[data["x_label"]]/2.0),
             "ymin":y_centre - (ranges[data["y_label"]]/2.0),
-            "ymax":x_centre - (ranges[data["y_label"]]/2.0),
+            "ymax":y_centre + (ranges[data["y_label"]]/2.0),
             "x_label":data["x_label"],
             "y_label":data["y_label"],
             "title":"Projection of " + filename
@@ -203,7 +218,9 @@ def drawProjectionSub(points,lines,params):
   pl.plot(lines["x"],lines["y"],marker=' ')
   pl.plot(points["x"],points["y"],marker='x',color='r')
   genericDrawTasks(params["title"],params["x_label"],params["y_label"])
-  pl.axes().set_aspect('equal', 'datalim')
+  pl.axes().set_aspect(1.0,adjustable='box')
+  pl.xlim(params["xmin"],params["xmax"])
+  pl.ylim(params["ymin"],params["ymax"])
 
 
 def drawGroupProjection(filenames):
