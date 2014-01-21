@@ -2,6 +2,9 @@ import pylab as pl
 import json
 import filepaths as fp
 
+def drawDiscrepancy(filename,filenames):
+  for fn,fns in zip(filename,filenames):
+    print fn,fns
 
 def drawGroupAngleDistribution(filename,filenames, control=False):
   data = []
@@ -129,7 +132,7 @@ def drawJointDistributionSub(filename,H,xedges,yedges,cond=""):
   elif cond == "x":
     HH = H/H.max(axis=1)[:,pl.newaxis]
   elif cond == "y":
-    HH = H/H.sum(axis=0)
+    HH = H/H.max(axis=0)
   pl.clf()
   pl.pcolormesh(pl.array(xedges),pl.array(yedges), HH,cmap='Greys')
   #todo generate xlabel, ylabel in C++
