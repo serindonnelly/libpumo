@@ -238,7 +238,7 @@ vecN pf, int& alteredNodeCount) const
 				angle /= RAD_TO_DEG;
 				vec horizontal = pf.projectOrth(seg);
 				vecN horizontalUnit(horizontal);
-				seg = seg.norm()*(cos(angle)*horizontalUnit + sin(angle)*pf);
+				seg = seg.norm()*(sin(angle)*horizontalUnit + cos(angle)*pf);
 				newNode->setPosition(newNode->getParent()->getPosition() + seg);
 			}
 		}
