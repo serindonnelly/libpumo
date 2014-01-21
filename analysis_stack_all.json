@@ -239,14 +239,14 @@
 {
 	"routine":"groupangledistribution",
 	"to":"Figure_2_6_Y",
-	"ids":["ywt_17","yko_15"]
-	"from:"angleDistr_unred_"
+	"ids":["ywt_17","yko_15"],
+	"from":"angleDistr_unred_"
 },
 {
 	"routine":"groupangledistribution",
 	"to":"Figure_2_6_O",
 	"ids":["owt_29","oko_12"],
-	"from:"angleDistr_unred_"
+	"from":"angleDistr_unred_"
 },
 {
 	"routine":"montecarlo",
@@ -373,15 +373,15 @@
 	"to":"distanceJoint_ex_",
 	"ids":"@all",
 	"from":["","axes_","distanceMC_ex_"]
-}
+},
 {
 	"routine":"groupprojection",
 	"to":"all_projections",
 	"ids":"@all",
-	"from:["projLP_Original_","projLS_Original_","projSP_Original_",
+	"from":["projLP_Original_","projLS_Original_","projSP_Original_",
 	"projLP_AngleMC_","projLS_AngleMC_","projSP_AngleMC_",
 	"projLP_ParentMC_","projLS_ParentMC_","projSP_ParentMC_",
 	"projLP_DistanceMC_","projLS_DistanceMC_","projSP_DistanceMC_"]
-},
+}
 ]
 }
