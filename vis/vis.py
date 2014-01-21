@@ -47,7 +47,7 @@ class AnalysisStack:
       if analysis["routine"] == "makelist":
         self.addList(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
       elif u"group" in analysis["routine"]: #make no analyses with "group" in their routine unless they should do this
-        self.addList(analysis["to"],analysis["from"],analysis["ids"])
+        self.addList(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
       elif analysis["routine"] == "specifyfile":
         self.addFile(analysis["to"],analysis["from"],analysis["ids"])
       else:
