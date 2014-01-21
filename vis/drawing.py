@@ -155,18 +155,20 @@ def drawJointDistribution(filename):
   pl.savefig(new_filename,bbox_inches=0)
   print new_filename, "saved"
 
-def drawProjection(filename):
+def drawProjection(filename,ranges):
   try:
     f = open(filename,'r')
   except IOError:
     return
   data = json.load(f)
   points, lines = interpretProjection(data["points"], data["lines"])
+  x_centre = (min(points["x"]+lines["x"]) + max(points["x"]+lines["x"]))/2.0
+  y_centre = (min(points["y"]+lines["y"]) + max(points["y"]+lines["y"]))/2.0
   params = {
-            "xmin":min(lines["x"]),
-            "xmax":max(lines["x"]),
-            "ymin":min(lines["y"]),
-            "ymax":max(lines["y"]),
+            "xmin":x_centre - (ranges[data["x_label"]]/2.0),
+            "xmax":x_centre + (ranges[data["x_label"]]/2.0),
+            "ymin":y_centre - (ranges[data["y_label"]]/2.0),
+            "ymax":x_centre - (ranges[data["y_label"]]/2.0),
             "x_label":data["x_label"],
             "y_label":data["y_label"],
             "title":"Projection of " + filename
@@ -221,7 +223,8 @@ def drawGroupProjection(filenames):
     yl = d["y_label"]
     max_ranges[xl] = max(range_x,max_ranges.setdefault(xl,range_x))
     max_ranges[yl] = max(range_y,max_ranges.setdefault(yl,range_y))
-  
+  for fn in filenames: #inefficient but that doesn't matter much here
+    drawProjection(fn,max_ranges)
   
   
   
