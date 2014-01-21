@@ -22,20 +22,20 @@ class AnalysisStack:
         continue
       elif analysis["routine"] == u"angledistribution":
         drawing.drawAngleDistribution(analysis["filename"])
-      elif analysis["routine"] in [u"lpproject",u"lsproject",u"spproject"]:
-        drawing.drawProjection(analysis["filename"])
+      #elif analysis["routine"] in [u"lpproject",u"lsproject",u"spproject"]:
+      #  drawing.drawProjection(analysis["filename"])
       elif analysis["routine"] == u"heightdistribution":
         drawing.drawJointDistribution(analysis["filename"])
       elif analysis["routine"] == u"parentdistribution":
         drawing.drawJointDistribution(analysis["filename"])
       elif analysis["routine"] == u"distancedistribution":
         drawing.drawJointDistribution(analysis["filename"])
-      elif analysis["routine"] in [u"groupangledistribution",u"groupprojection"]:
+      elif u"group" in analysis["routine"]:
         self.drawGroup(analysis)
   
   def drawGroup(self,analysis):
     filenames = []
-    for input in analysis["inputs"]:
+    for input in analysis["list"]:
       filenames.append(self.expandedStack[input]["filename"])
     if analysis["routine"] == u"groupangledistribution":
       drawing.drawGroupAngleDistribution(analysis["filename"],filenames,True)
@@ -45,6 +45,8 @@ class AnalysisStack:
   def expandAnalysisStack(self,stack):
     for analysis in stack:
       if analysis["routine"] == "makelist":
+        self.addList(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
+      elif u"group" in analysis["routine"]: #make no analyses with "group" in their routine unless they should do this
         self.addList(analysis["to"],analysis["from"],analysis["ids"])
       elif analysis["routine"] == "specifyfile":
         self.addFile(analysis["to"],analysis["from"],analysis["ids"])
@@ -62,8 +64,8 @@ class AnalysisStack:
     for f,i in zip(self.expandList(fromVal),self.expandList(idsVal)):
       self.expandedStack[toVal+i] = {"swc_filename":self.readDirectory+f}
 
-  def addList(self,toVal,fromVal,idsVal):
-    self.expandedStack[toVal] = {"list":self.makeList(fromVal,idsVal)}
+  def addList(self,routineVal,toVal,fromVal,idsVal):
+    self.expandedStack[toVal] = {"routine":routineVal,"list":self.makeList(fromVal,idsVal)}
 
   def makeList(self,fromVal,idsVal):
     fromFull = self.expandList(fromVal)
@@ -81,22 +83,6 @@ class AnalysisStack:
     else:
       return reduce(lambda L,x: L+x, map(self.expandList,stringOrList),[])
                 
-
-def expandList(name,lists):
-    if name[0] == '@':
-        return map(lambda n: expandlist(n,lists),lists[name[1:]])
-    return name
-
-def expandedAnalysisStack(stack):
-    expandedAnalysisStack = {}
-    lists = {}
-    for analysis in analysisStack:
-        if analysis["routine"] == "makelist":
-            pass
-        elif analysis["routine"] == "specifyfile":
-            pass
-        elif analysis["routine"] == "":
-            pass
 
 def main():
     #filename = sys.argv[1]
