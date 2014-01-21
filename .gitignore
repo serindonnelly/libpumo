@@ -217,3 +217,8 @@ pip-log.txt
 .mr.developer.cfg
 
 *.pyproj
+
+#############################
+LForest.*
+TCLForest.*
+BForest.*
