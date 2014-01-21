@@ -382,6 +382,13 @@
 	"projLP_AngleMC_","projLS_AngleMC_","projSP_AngleMC_",
 	"projLP_ParentMC_","projLS_ParentMC_","projSP_ParentMC_",
 	"projLP_DistanceMC_","projLS_DistanceMC_","projSP_DistanceMC_"]
+},
+{
+	"routine":"discrepancy",
+	"to":"discrepancy_",
+	"ids":{"ywt":"@ywt","owt":"@owt","yko":"@yko","oko":"@oko"},
+	"from":["angleMC_unred_","parentMC_unred_","distanceMC_unred_",
+		"angleMC_red_","parentMC_red_","distanceMC_red_"]
 }
 ]
 }

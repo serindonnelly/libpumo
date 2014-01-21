@@ -15,23 +15,40 @@ class AnalysisStack:
     self.expandedStack = {}
     self.expandAnalysisStack(analysisStack)
 
-  def drawAll(self):
-    for idx,analysis in self.expandedStack.items():
-      #pprint.pprint(analysis)
-      if "routine" not in analysis:
-        continue
-      elif analysis["routine"] == u"angledistribution":
-        drawing.drawAngleDistribution(analysis["filename"])
-      #elif analysis["routine"] in [u"lpproject",u"lsproject",u"spproject"]:
-      #  drawing.drawProjection(analysis["filename"])
-      elif analysis["routine"] == u"heightdistribution":
-        drawing.drawJointDistribution(analysis["filename"])
-      elif analysis["routine"] == u"parentdistribution":
-        drawing.drawJointDistribution(analysis["filename"])
-      elif analysis["routine"] == u"distancedistribution":
-        drawing.drawJointDistribution(analysis["filename"])
-      elif u"group" in analysis["routine"]:
-        self.drawGroup(analysis)
+  def draw(self,idx):
+    analysis = self.expandedStack[idx]
+    #pprint.pprint(analysis)
+    if "routine" not in analysis:
+      return
+    elif analysis["routine"] == u"angledistribution":
+      drawing.drawAngleDistribution(analysis["filename"])
+    #elif analysis["routine"] in [u"lpproject",u"lsproject",u"spproject"]:
+    #  drawing.drawProjection(analysis["filename"])
+    elif analysis["routine"] == u"heightdistribution":
+      drawing.drawJointDistribution(analysis["filename"])
+    elif analysis["routine"] == u"parentdistribution":
+      drawing.drawJointDistribution(analysis["filename"])
+    elif analysis["routine"] == u"distancedistribution":
+      drawing.drawJointDistribution(analysis["filename"])
+    elif u"group" in analysis["routine"]:
+      self.drawGroup(analysis)
+    elif analysis["routine"] == u"discrepancy":
+      pprint.pprint(analysis)
+      drawing.drawDiscrepancy([self.expandedStack[idx]["filename"] for idx in analysis["inputs"]],
+                              [[self.expandedStack[i]["filename"] for i in self.expandedStack[idx]["inputs"]]
+                                for idx in analysis["inputs"]])
+
+  def drawAll(self,first=[],last=[]):
+    ffirst = frozenset(first)
+    llast = frozenset(last)
+    for idx in ffirst:
+      self.draw(idx)
+    for idx in self.expandedStack.keys():
+      if idx not in ffirst and idx not in llast: self.draw(idx)
+    for idx in llast:
+      self.draw(idx)
+    
+
   
   def drawGroup(self,analysis):
     filenames = []
@@ -50,8 +67,21 @@ class AnalysisStack:
         self.addList(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
       elif analysis["routine"] == "specifyfile":
         self.addFile(analysis["to"],analysis["from"],analysis["ids"])
+      elif analysis["routine"] == "discrepancy":
+        self.addDiscrepancy(analysis["to"],analysis["from"],analysis["ids"])
       else:
         self.addProcessings(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
+        
+  def addDiscrepancy(self,toVal,fromVal,idsVal):
+    fromList = self.expandList(fromVal)
+    for fromSingle in fromList:
+      for name, lst in idsVal.items():
+        self.expandedStack[toVal+fromSingle+name] = {"inputs":[fromSingle+idx for idx in self.expandList(lst)],
+                                          "filename":self.writeDirectory+toVal+fromSingle+name+".json"
+                                          }
+    self.expandedStack[toVal] = {"routine":"discrepancy",
+                                 "inputs":[toVal+f+i for f in fromList for i in idsVal.keys()]
+                                 }
 
   def addProcessings(self,routine,toVal,fromVal,idsVal):
     for i in self.expandList(idsVal):
@@ -92,7 +122,7 @@ def main():
     stack = AnalysisStack(filename)
     #pprint.pprint(stack.expandedStack)
     #getch()
-    stack.drawAll()
+    stack.drawAll(first=["discrepancy_"])
 
 
 if __name__ == "__main__":
