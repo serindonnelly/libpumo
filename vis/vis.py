@@ -65,7 +65,9 @@ class AnalysisStack:
       self.expandedStack[toVal+i] = {"swc_filename":self.readDirectory+f}
 
   def addList(self,routineVal,toVal,fromVal,idsVal):
-    self.expandedStack[toVal] = {"routine":routineVal,"list":self.makeList(fromVal,idsVal)}
+    self.expandedStack[toVal] = {"routine":routineVal,
+                                 "list":self.makeList(fromVal,idsVal),
+                                 "filename":self.writeDirectory+toVal}
 
   def makeList(self,fromVal,idsVal):
     fromFull = self.expandList(fromVal)
