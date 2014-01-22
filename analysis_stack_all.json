@@ -1,6 +1,6 @@
 {
-"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"C:\\Dropbox\\phdcode\\json\\",
+"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"E:\\Dropbox\\phdcode\\json\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -264,7 +264,7 @@
 	"routine":"angledistribution",
 	"to":"angleMC_verify_",
 	"ids":"@all",
-	"from":["angleMC_ex_","axes"]
+	"from":["angleMC_ex_","axes_"]
 },
 {
 	"routine":"compareangledistribution",
@@ -324,7 +324,7 @@
 	"routine":"parentdistribution",
 	"to":"parentMC_verify_",
 	"ids":"@all",
-	"from":["parentMC_ex_","axes"]
+	"from":["parentMC_ex_","axes_"]
 },
 {
 	"routine":"compareparentdistribution",
@@ -378,7 +378,7 @@
 	"routine":"distancedistribution",
 	"to":"distanceMC_verify_",
 	"ids":"@all",
-	"from":["distanceMC_ex_","axes"]
+	"from":["distanceMC_ex_","axes_"]
 },
 {
 	"routine":"comparedistancedistribution",
