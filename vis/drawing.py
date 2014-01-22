@@ -7,6 +7,53 @@ import itertools
 import likelihood_ratio as lr
 import os.path as op
 
+def calcL2Error(weight1,weight2,bins=[]):
+  weights = [weight1,weight2]
+  total = [sum(w) for w in weights]
+  densities = [[weight/width for weight,width in zip(w,bw)] for w,bw in zip(weights,bin_widths)]
+  fractions = [[density/t for density in densities] for t in total]
+  cumul_fractions = [pl.cumsum(f) for f in fractions]
+  cumul_error = [a-b for (a,b) in zip(*cumul_fractions)]
+  if bins == []:
+    return pl.norm(cumul_error)
+  cumul_squared_error = [a*a for a in cumul_error]
+  cumul_squared_integral = [a*b for (a,b) in zip(cumul_squared_error,bin_widths[0])]
+  return pl.sqrt(sum(cumul_squared_integral))
+
+def drawAngleComparison(filename,source1,source2):
+  try:
+    f1 = open(source1,'r')
+    f2 = open(source2,'r')
+  except IOError:
+    return
+  data = []
+  data.append(json.load(f1))
+  data.append(json.load(f2))
+  bounds = [d["bin_boundaries"] for d in data]
+  bin_widths = [[y-x for x,y in zip(b[:-1],b[1:])] for b in bounds]
+  if bin_widths[0] != bin_widths[1]:
+    return
+  L2_error = calcL2Error(data[0]["bin_weights"],data[1]["bin_weights"],bin_widths[0])
+  f = open(filename)
+  json.dump({"L2_error":L2_error})
+
+def drawParentComparison(filename,source1,source2):
+  try:
+    f1 = open(source1,'r')
+    f2 = open(source2,'r')
+  except IOError:
+    return
+  data = []
+  data.append(json.load(f1))
+  data.append(json.load(f2))
+  bounds = [d["bin_boundaries"] for d in data]
+  bin_widths = [[y-x for x,y in zip(b[:-1],b[1:])] for b in bounds]
+  if bin_widths[0] != bin_widths[1]:
+    return
+  L2_error = calcL2Error(data[0]["bin_weights"],data[1]["bin_weights"],bin_widths[0])
+  f = open(filename)
+  json.dump({"L2_error":L2_error})
+
 
 def drawDiscrepancy(filename,filenames):
   x_max = 0.0
