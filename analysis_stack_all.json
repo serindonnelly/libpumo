@@ -261,6 +261,18 @@
 	"from":["","axes_","angleDistr_"]
 },
 {
+	"routine":"angledistribution",
+	"to":"angleMC_verify_",
+	"ids":"@all",
+	"from":["angleMC_ex_","axes"]
+},
+{
+	"routine":"compareangledistribution",
+	"to":"angleMC_verify_compare_",
+	"ids":"@all",
+	"from":["angleMC_verify_","angleDistr_"]
+},
+{
 	"routine":"lpproject",
 	"to":"projLP_AngleMC_",
 	"ids":"@all",
@@ -309,6 +321,18 @@
 	"from":["","axes_","parentJoint_"]
 },
 {
+	"routine":"parentdistribution",
+	"to":"parentMC_verify_",
+	"ids":"@all",
+	"from":["parentMC_ex_","axes"]
+},
+{
+	"routine":"compareparentdistribution",
+	"to":"parentMC_verify_compare_",
+	"ids":"@all",
+	"from":["parentMC_verify_","parentJoint_"]
+},
+{
 	"routine":"lpproject",
 	"to":"projLP_ParentMC_",
 	"ids":"@all",
@@ -349,6 +373,18 @@
 	"to":"distanceMC_ex_",
 	"ids":"@all",
 	"from":["","axes_","distanceJoint_"]
+},
+{
+	"routine":"distancedistribution",
+	"to":"distanceMC_verify_",
+	"ids":"@all",
+	"from":["distanceMC_ex_","axes"]
+},
+{
+	"routine":"comparedistancedistribution",
+	"to":"distanceMC_verify_compare_",
+	"ids":"@all",
+	"from":["distanceMC_verify_","distanceDistr_"]
 },
 {
 	"routine":"lpproject",
