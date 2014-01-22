@@ -1,10 +1,68 @@
 import pylab as pl
 import json
 import filepaths as fp
+import pprint
+import scipy.stats as ss
+import itertools
+import likelihood_ratio as lr
+import os.path as op
+
 
 def drawDiscrepancy(filename,filenames):
-  for fn,fns in zip(filename,filenames):
-    print fn,fns
+  x_max = 0.0
+  y_max = 0.0
+  for fn in itertools.chain(*filenames):
+    try:
+      f = open(fn,'r')
+    except IOError:
+      continue
+    #except TypeError:
+    #  #print "squick", fn,"\n\n"
+    #  continue
+    data = json.load(f)
+    x_max = max(x_max,data["original_width"]["IQ"])
+    y_max = max(y_max,data["mean"]["IQ"]+data["standard_deviation"]["IQ"])
+  for plot_filename,fns in zip(filename,filenames):
+    plot_points = []
+    for fn in fns:
+      try:
+        f = open(fn,'r')
+      except IOError:
+        continue
+      data = json.load(f)
+      plot_points.append({"original":data["original_width"]["IQ"],
+                         "mean":data["mean"]["IQ"],
+                         "sd":data["standard_deviation"]["IQ"] })
+    xs = [x["original"] for x in plot_points]
+    ys = [x["mean"] for x in plot_points]
+    es = [x["sd"] for x in plot_points]
+    y_plus_es = [y+e for (y,e) in zip(ys,es)]
+    y_minus_es = [y-e for (y,e) in zip(ys,es)]
+    yslope, yintercept,ycorrelationR,yprobability,ysterrest = ss.linregress(xs,ys)
+    ypslope, ypintercept,ypcorrelationR,ypprobability,ypsterrest = ss.linregress(xs,y_plus_es)
+    ymslope, ymintercept,ymcorrelationR,ymprobability,ymsterrest = ss.linregress(xs,y_minus_es)
+    fs = [x*yslope+yintercept for x in xs]
+    my_lr = lr.likelihood_ratio(xs,fs,ys,es)
+
+    pl.clf()
+
+    pl.errorbar(xs,ys,yerr=es,fmt='o')
+    max_coord = max(y_max,x_max)*1.05
+    pl.plot([0,max_coord],[0,max_coord],'g')
+    pl.plot([0,max_coord],[yintercept,yintercept+max_coord*yslope],'m')
+    pl.xlim(0,x_max*1.05)
+    pl.ylim(0,y_max*1.05)
+    pl.axes().set_aspect('1','box')
+    pl.xlabel("Original width")
+    pl.ylabel("Predicted width +- std")
+    title = op.split(plot_filename)[1]
+    pl.title(title+" slope = {0:.3}, r = {1:.3}, lambda = {2:.3}".format(yslope,ycorrelationR,my_lr))
+    new_filename = fp.down_folder(plot_filename,"plots")
+    new_filename = fp.down_folder(new_filename,"discrepancies")
+    new_filename = fp.replace_extension(new_filename,".png")
+    fp.create_folder_if_nonexistent(new_filename)
+    pl.savefig(new_filename)
+    print new_filename
 
 def drawGroupAngleDistribution(filename,filenames, control=False):
   data = []
