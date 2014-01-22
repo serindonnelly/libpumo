@@ -32,8 +32,10 @@ def drawAngleComparison(filename,source1,source2):
   if bin_widths[0] != bin_widths[1]:
     return
   L2_error = calcL2Error(data[0]["bin_weights"],data[1]["bin_weights"],bin_widths[0])
+  controlError1 = calcL2Error(angleDistributionControlData(180)[1],data[0]["bin_weights"],bin_widths[0])
+  controlError2 = calcL2Error(angleDistributionControlData(180)[1],data[1]["bin_weights"],bin_widths[0])
   f = open(filename,'w')
-  json.dump({"L2_error":L2_error},f)
+  json.dump({"L2_error":L2_error,"control1":controlError1,"control2":controlError2},f)
   print filename, "error", L2_error
 
   
