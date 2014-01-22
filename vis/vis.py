@@ -33,7 +33,6 @@ class AnalysisStack:
     elif u"group" in analysis["routine"]:
       self.drawGroup(analysis)
     elif analysis["routine"] == u"discrepancy":
-      pprint.pprint(analysis)
       drawing.drawDiscrepancy([self.expandedStack[idx]["filename"] for idx in analysis["inputs"]],
                               [[self.expandedStack[i]["filename"] for i in self.expandedStack[idx]["inputs"]]
                                 for idx in analysis["inputs"]])
@@ -122,7 +121,7 @@ def main():
     stack = AnalysisStack(filename)
     #pprint.pprint(stack.expandedStack)
     #getch()
-    stack.drawAll(first=["discrepancy_"])
+    stack.drawAll(first=["discrepancy_"],last=["all_projections"])
 
 
 if __name__ == "__main__":
