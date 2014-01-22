@@ -32,6 +32,18 @@ class AnalysisStack:
       drawing.drawJointDistribution(analysis["filename"])
     elif u"group" in analysis["routine"]:
       self.drawGroup(analysis)
+    elif analysis["routine"] == u"compareangledistribution":
+      drawing.c(analysis["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
+    elif analysis["routine"] == u"compareparentdistribution":
+      drawing.drawParentComparison(analysis["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
+    elif analysis["routine"] == u"comparedistancedistribution":
+      drawing.drawDistanceComparison(analysis["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
+                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
     elif analysis["routine"] == u"discrepancy":
       drawing.drawDiscrepancy([self.expandedStack[idx]["filename"] for idx in analysis["inputs"]],
                               [[self.expandedStack[i]["filename"] for i in self.expandedStack[idx]["inputs"]]
