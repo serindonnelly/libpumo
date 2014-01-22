@@ -9,7 +9,7 @@ struct WidthGroup
 	WidthGroup(float IQ, float SD, float Abs) :
 		widthIQ(IQ), widthSD(SD), widthAbs(Abs) {};
 	WidthGroup(const picojson::value& v) :
-		widthIQ(-1.f), widthSD(-1.f), widthAbs(-1.f)
+		widthIQ(FLT_MIN), widthSD(FLT_MIN), widthAbs(FLT_MIN)
 	{
 		//can't use jget, jat because they refer to this
 		if (!v.is<picojson::object>()) return;
@@ -69,8 +69,8 @@ struct WidthGroup
 	}
 	bool isValid() const
 	{
-		return widthIQ >= 0.f &&
-			widthSD >= 0.f &&
-			widthAbs >= 0.f;
+		return widthIQ != FLT_MIN &&
+			widthSD != FLT_MIN &&
+			widthAbs != FLT_MIN;
 	}
 };
