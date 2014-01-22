@@ -109,45 +109,45 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 	WidthGroup provisionalOriginalWidth(0,0,0);
 	if (!jat(provisionalOriginalWidth, v, "original_width"))
 	{
-		return false;
 		std::cout << "original width not found\n";
+		return false;
 	}
 	WidthGroup provisionalMean(0, 0, 0);
 	if (!jat(provisionalMean, v, "mean"))
 	{
-		return false;
 		std::cout << "mean not found\n";
+		return false;
 	}
 	WidthGroup provisionalSD(0, 0, 0);
 	if (!jat(provisionalSD, v, "standard_deviation"))
 	{
-		return false;
 		std::cout << "standard deviation not found\n";
+		return false;
 	}
 	WidthGroup provisionalDiscrepancy;
 	if (!jat(provisionalDiscrepancy, v, "discrepancy"))
 	{
-		return false;
 		std::cout << "discrepancy not found\n";
+		return false;
 	}
 	int provisionalNodeCount;
 	if (!jat(provisionalNodeCount, v, "node_count"))
 	{
-		return false;
 		std::cout << "node count not found\n";
+		return false;
 	}
 
 	picojson::array provisionalWidths;
 	if (!jat(provisionalWidths, v, "generated_widths"))
 	{
-		return false;
 		std::cout << "generated widths not found\n";
+		return false;
 	}
 
 	if (provisionalWidths.size() != mTreeCount)
 	{
-		return false;
 		std::cout << "tree counts not equal\n";
+		return false;
 	}
 	for (const auto& widthFract : provisionalWidths)
 	{
@@ -155,13 +155,13 @@ MonteCarloAnalysis::deserialise(const picojson::value &v)
 		float readFract;
 		if (!jat(readWidth, widthFract, "width"))
 		{
-			return false;
 			std::cout << "width not found\n";
+			return false;
 		}
 		if (!jat(readFract, widthFract, "fract"))
 		{
-			return false;
 			std::cout << "altered fraction not found\n";
+			return false;
 		}
 	}
 
