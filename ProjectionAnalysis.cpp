@@ -1,6 +1,7 @@
 #include "ProjectionAnalysis.h"
 #include "ForestAnalysis.h"
 #include "AxesAnalysis.h"
+#include "common.h"
 
 
 ProjectionAnalysis::ProjectionAnalysis()
@@ -60,7 +61,63 @@ ProjectionAnalysis::serialise(picojson::value &v) const
 bool
 ProjectionAnalysis::deserialise(const picojson::value &v)
 {
-	return false;
+	std::string getLabel;
+	if (!jat(getLabel, v, "x_label")) return false;
+	if (getLabel != xLabel()) return false;
+	if (!jat(getLabel, v, "y_label")) return false;
+	if (getLabel != yLabel()) return false;
+	picojson::array provisionalPoints;
+	picojson::array provisionalLines;
+	if (!jat(provisionalLines, v, "lines")) return false;
+	if (!jat(provisionalPoints, v, "points")) return false;
+
+	for (const auto& p : provisionalPoints)
+	{
+		float provX;
+		if (!jat(provX, p, "x")) return false;
+		float provY;
+		if (!jat(provY, p, "y")) return false;
+	}
+	for (const auto& l : provisionalLines)
+	{
+		picojson::object provStart, provEnd;
+		float provSX;
+		float provSY;
+		float provEX;
+		float provEY;
+		if (!jat(provStart, l, "start")) return false;
+		if (!jat(provEnd, l, "end")) return false;
+		if (!jat(provSX, picojson::value(provStart), "x")) return false;
+		if (!jat(provSY, picojson::value(provStart), "y")) return false;
+		if (!jat(provEX, picojson::value(provEnd), "x")) return false;
+		if (!jat(provEY, picojson::value(provEnd), "y")) return false;
+	}
+
+	for (const auto& p : provisionalPoints)
+	{
+		float provX;
+		jat(provX, p, "x");
+		float provY;
+		jat(provY, p, "y");
+		mPoints.push_back({ provX, provY });
+	}
+	for (const auto& l : provisionalLines)
+	{
+		picojson::object provStart, provEnd;
+		float provSX;
+		float provSY;
+		float provEX;
+		float provEY;
+		jat(provStart, l, "start");
+		jat(provEnd, l, "end");
+		jat(provSX, picojson::value(provStart), "x");
+		jat(provSY, picojson::value(provStart), "y");
+		jat(provEX, picojson::value(provEnd), "x");
+		jat(provEY, picojson::value(provEnd), "y");
+
+		mLines.push_back({ { provSX, provSY }, { provEX, provEY } });
+	}
+	return true;
 }
 
 
