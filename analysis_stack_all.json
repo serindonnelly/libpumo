@@ -1,6 +1,6 @@
 {
-"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"E:\\Dropbox\\phdcode\\json\\",
+"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"C:\\Dropbox\\phdcode\\json\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -384,7 +384,7 @@
 	"routine":"comparedistancedistribution",
 	"to":"distanceMC_verify_compare_",
 	"ids":"@all",
-	"from":["distanceMC_verify_","distanceDistr_"]
+	"from":["distanceMC_verify_","distanceJoint_"]
 },
 {
 	"routine":"lpproject",

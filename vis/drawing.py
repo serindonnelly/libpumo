@@ -7,17 +7,15 @@ import itertools
 import likelihood_ratio as lr
 import os.path as op
 
-def calcL2Error(weight1,weight2,bins=[]):
+def calcL2Error(weight1,weight2,bins):
   weights = [weight1,weight2]
   total = [sum(w) for w in weights]
-  densities = [[weight/width for weight,width in zip(w,bw)] for w,bw in zip(weights,bin_widths)]
-  fractions = [[density/t for density in densities] for t in total]
+  densities = [[weight/width for weight,width in zip(w,bins)] for w in weights]
+  fractions = [[density/t for density in d] for (t,d) in zip(total,densities)]
   cumul_fractions = [pl.cumsum(f) for f in fractions]
   cumul_error = [a-b for (a,b) in zip(*cumul_fractions)]
-  if bins == []:
-    return pl.norm(cumul_error)
   cumul_squared_error = [a*a for a in cumul_error]
-  cumul_squared_integral = [a*b for (a,b) in zip(cumul_squared_error,bin_widths[0])]
+  cumul_squared_integral = [a*b for (a,b) in zip(cumul_squared_error,bins)]
   return pl.sqrt(sum(cumul_squared_integral))
 
 def drawAngleComparison(filename,source1,source2):
@@ -34,10 +32,15 @@ def drawAngleComparison(filename,source1,source2):
   if bin_widths[0] != bin_widths[1]:
     return
   L2_error = calcL2Error(data[0]["bin_weights"],data[1]["bin_weights"],bin_widths[0])
-  f = open(filename)
-  json.dump({"L2_error":L2_error})
+  f = open(filename,'w')
+  json.dump({"L2_error":L2_error},f)
+  print filename, "error", L2_error
 
+  
+def drawDistanceComparison(filename,source1,source2):
+  return
 def drawParentComparison(filename,source1,source2):
+  return
   try:
     f1 = open(source1,'r')
     f2 = open(source2,'r')
@@ -80,6 +83,7 @@ def drawDiscrepancy(filename,filenames):
       plot_points.append({"original":data["original_width"]["IQ"],
                          "mean":data["mean"]["IQ"],
                          "sd":data["standard_deviation"]["IQ"] })
+    if plot_points == []: return
     xs = [x["original"] for x in plot_points]
     ys = [x["mean"] for x in plot_points]
     es = [x["sd"] for x in plot_points]

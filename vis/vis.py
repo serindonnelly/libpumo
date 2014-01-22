@@ -33,17 +33,17 @@ class AnalysisStack:
     elif u"group" in analysis["routine"]:
       self.drawGroup(analysis)
     elif analysis["routine"] == u"compareangledistribution":
-      drawing.c(analysis["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
+      drawing.drawAngleComparison(analysis["filename"],
+                                  self.expandedStack[analysis["inputs"][0]]["filename"],
+                                  self.expandedStack[analysis["inputs"][1]]["filename"])
     elif analysis["routine"] == u"compareparentdistribution":
       drawing.drawParentComparison(analysis["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
+                                  self.expandedStack[analysis["inputs"][0]]["filename"],
+                                  self.expandedStack[analysis["inputs"][1]]["filename"])
     elif analysis["routine"] == u"comparedistancedistribution":
       drawing.drawDistanceComparison(analysis["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][0]]["filename"],
-                                  self.expandAnalysisStack[analysis["inputs"][1]]["filename"])
+                                  self.expandedStack[analysis["inputs"][0]]["filename"],
+                                  self.expandedStack[analysis["inputs"][1]]["filename"])
     elif analysis["routine"] == u"discrepancy":
       drawing.drawDiscrepancy([self.expandedStack[idx]["filename"] for idx in analysis["inputs"]],
                               [[self.expandedStack[i]["filename"] for i in self.expandedStack[idx]["inputs"]]
@@ -133,7 +133,7 @@ def main():
     stack = AnalysisStack(filename)
     #pprint.pprint(stack.expandedStack)
     #getch()
-    stack.drawAll(first=["discrepancy_"],last=["all_projections"])
+    stack.drawAll(first=["angleMC_verify_compare_unred_oko_27"],last=["discrepancy_","all_projections"])
 
 
 if __name__ == "__main__":
