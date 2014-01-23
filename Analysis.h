@@ -19,10 +19,12 @@ public:
 	void setFilename(std::string fn) {
 		mFilename = fn;
 	}
+	const std::vector<Analysis*>& getInputs() const { return inputs; }
+	const std::string& getIdentity() const { return mIdentity; }
 protected:
 	std::string getFilename() { return mFilename; }
 	std::vector<Analysis*> inputs;
-	std::vector<Analysis*> allInputs;
+	//std::vector<Analysis*> allInputs;
 private:
 	//serialise should produce a json value which when fed through
 	//deserialise would produce an equivalent Analysis instance

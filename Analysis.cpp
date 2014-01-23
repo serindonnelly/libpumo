@@ -1,3 +1,5 @@
+
+#include <sys/stat.h>
 #include "Analysis.h"
 #include "common.h"
 #include "LogStream.h"
@@ -24,11 +26,11 @@ void
 Analysis::addInput(Analysis* input)
 {
 	inputs.push_back(input);
-	allInputs.push_back(input);
-	for (auto ii : input->allInputs)
-	{
-		allInputs.push_back(ii);
-	}
+	//allInputs.push_back(input);
+	//for (auto ii : input->allInputs)
+	//{
+	//	allInputs.push_back(ii);
+	//}
 }
 
 
@@ -56,15 +58,12 @@ Analysis::update()
 {
 	if (!load())
 	{
-		std::cout << currentTimeString() << " Load failed: " << mFilename << std::endl;
 		updateImpl();
 		mUpdated = time(nullptr);
 		std::cout << currentTimeString() << " Updated analysis " << mIdentity << std::endl;
+		mUpdated = std::time(nullptr);
 		save();
-	}
-	else
-	{
-		std::cout << currentTimeString() << " Load successful: " << mFilename << std::endl;
+		std::cout << std::endl;
 	}
 }
 
@@ -91,13 +90,38 @@ Analysis::setIdentity(std::string id, int order)
 bool
 Analysis::load()
 {
+
+	struct stat st;
+	int sst = stat(mFilename.c_str(), &st);
+	if (sst != 0)
+	{
+		std::cout << currentTimeString() << " File not found: " << mFilename << std::endl;
+		return false;
+	}
+	
+	for (const auto& it : inputs)
+	{
+		if (it->getUpdateTime() >= st.st_mtime)
+		{
+			std::cout << currentTimeString() << " File too old: " << mFilename << std::endl;
+			return false;
+		}
+	}
 	std::ifstream in(mFilename);
 	picojson::value v;
 	if (!in.good())
+	{
+		std::cout << currentTimeString() << " File unreadable: " << mFilename << std::endl;
 		return false;
+	}
 	picojson::parse(v, in);
 	if (!deserialise(v))
+	{
+		std::cout << currentTimeString() << " Deserialisation failed: " << mFilename << std::endl;
 		return false;
+	}
+	mUpdated = st.st_mtime;
+	std::cout << currentTimeString() << " Load successful: " << mFilename << std::endl;
 	return true;
 }
 
