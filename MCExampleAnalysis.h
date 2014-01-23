@@ -22,6 +22,6 @@ private:
 	virtual void updateImpl();
 	virtual bool serialise(picojson::value& v) const;
 	virtual bool deserialise(const picojson::value& v);
-	int mTreeCount = 5;
+	int mTreeCount = 1; // use more when more can  be used
 };
 
