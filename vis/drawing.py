@@ -237,6 +237,23 @@ def genericDrawTasks(title,xlabel,ylabel):
   pl.ylabel(ylabel)
   pl.title(title)
 
+
+def loadJointDistribution(data):
+  bin_count_x = data["bin_count_x"]
+  bin_count_y = data["bin_count_y"]
+  max_x = data["max_x"]
+  max_y = data["max_y"]
+  min_x = data["min_x"]
+  min_y = data["min_y"]
+  weights_flat = data["weights"]
+  weights = pl.zeros((bin_count_y,bin_count_x))
+  count = 0
+  for x in range(bin_count_x):
+    for y in range(bin_count_y):
+      weights[y][x] = weights_flat[count]
+      count += 1
+  return weights, (bin_count_x,bin_count_y), (min_x,min_y), (max_x,max_y)
+
 def drawJointDistributionSub(filename,H,xedges,yedges,cond=""):
   if cond == "":
     HH = H
@@ -265,19 +282,7 @@ def drawJointDistribution(filename):
   except IOError:
     return
   data = json.load(f)
-  bin_count_x = data["bin_count_x"]
-  bin_count_y = data["bin_count_y"]
-  max_x = data["max_x"]
-  max_y = data["max_y"]
-  min_x = data["min_x"]
-  min_y = data["min_y"]
-  weights_flat = data["weights"]
-  weights = pl.zeros((bin_count_y,bin_count_x))
-  count = 0
-  for x in range(bin_count_x):
-    for y in range(bin_count_y):
-      weights[y][x] = weights_flat[count]
-      count += 1
+  weights, (bin_count_x,bin_count_y), (min_x,min_y), (max_x,max_y) = loadJointDistribution(data)
   bin_boundaries_x = [min_x + (max_x-min_x)*x/bin_count_x for x in range(bin_count_x+1)]
   bin_boundaries_y = [min_y + (max_y-min_y)*y/bin_count_y for y in range(bin_count_y+1)]
   drawJointDistributionSub(filename,weights,bin_boundaries_x,bin_boundaries_y)
