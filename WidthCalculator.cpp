@@ -194,6 +194,8 @@ WidthCalculator::calculateMean()
  ***********************************************************************/
 WidthCalculator::WidthCalculator(const Forest *f, vecN pf)
 {
+	totalLengthDirect = 0.f;
+	weightedSumHeight = 0.f;
 	for (const auto& n : f->getGraph())
 	{
 		if (n.second->isRoot())
