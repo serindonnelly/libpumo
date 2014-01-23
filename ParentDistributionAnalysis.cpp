@@ -28,10 +28,13 @@ ParentDistributionAnalysis::selectDistribution(const Node *n, int &selection) co
 	vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
 	float parentCos = pf.cosine(n->getParent()->getSegment()->getVector());
 	//assert(parentCos >= -1.f && parentCos <= 1.f);
+	if (parentCos < -1.0001f || parentCos > 1.0001f)
+		return false;
+	// avoid domain errors
 	if (parentCos < -1.f)
-		parentCos;// parentCos = -1.f;
+		parentCos = -1.f;
 	else if (parentCos > 1.f)
-		parentCos;// parentCos = 1.f;
+		parentCos = 1.f;
 	float parentAngle = RAD_TO_DEG*acos(parentCos);
 	int indexY = mHistogram.sampleInsertBinY(parentAngle); // fails when segment is too close to antiparallel with pf
 	if (indexY == -1)
