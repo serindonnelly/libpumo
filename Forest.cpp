@@ -492,7 +492,7 @@ std::vector<float>* sampleSegmentRatios) const
 		const Segment* s = getSegment(segmentSelector(gen));
 		float r = fractions(gen);
 		sample.push_back(s->getPoint(r));
-		if (sampleSegmentIDs) // rare crash here. count: 6
+		if (sampleSegmentIDs) // rare crash here. count: 8
 			sampleSegmentIDs->push_back(s->getDistalNode()->getID());
 		if (sampleSegmentRatios)
 			sampleSegmentRatios->push_back(r);
