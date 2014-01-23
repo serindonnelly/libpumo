@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <set>
 #include <list>
 //#include <rapidjson/filereadstream.h>
 #include "AnalysisStack.h"
@@ -43,6 +44,27 @@ AnalysisStack::AnalysisStack(std::string filename)
 	{
 		addAnalysis(it);
 	}
+	picojson::array firstp;
+	std::list<std::string> first;
+	if (jat(firstp, document, "first"))
+		expandList(picojson::value(firstp), first);
+
+	picojson::array lastp;
+	std::list<std::string> last;
+	if (jat(lastp, document, "last"))
+	for (const auto& a : lastp)
+		expandList(picojson::value(lastp), last);
+
+	sort(first, last);
+	//for (const auto& it : mTopologicalOrder)
+	//{
+	//	std::cout << it << " ";
+	//}
+	//std::cout << "\n";
+	for (const auto& it : mTopologicalOrder)
+	{
+		mStack[it]->update();
+	}
 }
 
 
@@ -58,7 +80,8 @@ AnalysisStack::addAnalysis(const picojson::value& a)
 	assert(a.is<picojson::object>());
 	const picojson::object& ao(a.get<picojson::object>());
 	const std::string& routine = ao.at("routine").get<std::string>();
-
+	if (routine.length() == 0 || routine[0] == '#')
+		return false;
 	const std::string& to = ao.at("to").get<std::string>();
 
 	const picojson::value& ids = ao.at("ids");
@@ -282,14 +305,73 @@ AnalysisStack::registerAnalysis(Analysis *a, const std::string &name)
 	a->setIdentity(name, mTopologicalOrder.size() - 1);
 	a->setFilename(writeDirectory + name + ".json");
 	
-	std::cout << "\n" << currentTimeString() <<  " Registered analysis " << name << std::endl;
-	a->update();
+	//std::cout << "\n" << currentTimeString() <<  " Registered analysis " << name << std::endl;
+	// a->update();
 	// TODO attempt to load before updating
 	// TODO make this line conditional on date of loaded analysis
 	// TODO split out this line
 	// TODO make this line conditional on analysis request
 	// TODO make multiple requests possible
 	return true;
+}
+
+
+/***********************************************************************
+ *  Method: AnalysisStack::sort
+ *  Params: std::vector<std::string> first, std::vector<std::string> last
+ * Returns: void
+ * Effects: alter mTopologicalOrder such that the set of its contents is unchanged,
+            and it is sorted according to the partial order defined by analysis precedence,
+			and the contents of first are as early as possible,
+			and the contents of late are as late as possible.
+			Other changes to order are minimised.
+ ***********************************************************************/
+void
+AnalysisStack::sort(std::list<std::string>& first, std::list<std::string>& last)
+{
+	int size = mTopologicalOrder.size();
+	std::remove_if(first.begin(), first.end(),
+		[&](const std::string& s)->bool
+	{return mStack.find(s) == mStack.end(); }
+	);
+	std::remove_if(last.begin(), last.end(),
+		[&](const std::string& s)->bool
+	{return mStack.find(s) == mStack.end(); }
+	);
+	std::set<std::string> firstS(first.begin(), first.end());
+	std::set<std::string> lastS(last.begin(), last.end());
+	std::list<std::string> middle;
+	for (auto& s : mTopologicalOrder)
+	{
+		if (firstS.find(s) == firstS.end() && lastS.find(s) == lastS.end())
+			middle.push_back(s);
+	}
+	mTopologicalOrder.clear();
+	std::set<std::string> present;
+	for (const auto& it : first) dependencyWalk(it,present);
+	for (const auto& it : middle) dependencyWalk(it,present);
+	for (const auto& it : last) dependencyWalk(it,present);
+	assert(mTopologicalOrder.size() == size);
+}
+
+
+/***********************************************************************
+ *  Method: AnalysisStack::dependencyWalk
+ *  Params: const std::string &insert, std::set<std::string> &present
+ * Returns: void
+ * Effects: 
+ ***********************************************************************/
+void
+AnalysisStack::dependencyWalk(const std::string &insert, std::set<std::string> &present)
+{
+	if (present.find(insert) != present.end()) return;
+	const Analysis* a = mStack.at(insert);
+	for (const auto& input : a->getInputs())
+	{
+		dependencyWalk(input->getIdentity(), present);
+	}
+	mTopologicalOrder.push_back(insert);
+	present.insert(insert);
 }
 
 

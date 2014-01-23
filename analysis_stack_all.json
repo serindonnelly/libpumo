@@ -1,6 +1,6 @@
 {
-"read_directory":"C:\\Dropbox\\phdcode\\swc-all\\scaled\\",
-"write_directory":"C:\\Dropbox\\phdcode\\json\\",
+"read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
+"write_directory":"E:\\Dropbox\\phdcode\\json\\",
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -327,6 +327,12 @@
 	"from":["parentMC_ex_","axes_"]
 },
 {
+	"routine":"makelist",
+	"to":"parentMC_verify_all",
+	"ids":"@all",
+	"from":"parentMC_verify_"
+},
+{
 	"routine":"compareparentdistribution",
 	"to":"parentMC_verify_compare_",
 	"ids":"@all",
@@ -420,11 +426,15 @@
 	"projLP_DistanceMC_","projLS_DistanceMC_","projSP_DistanceMC_"]
 },
 {
-	"routine":"discrepancy",
+	"routine":"#discrepancy",
 	"to":"discrepancy_",
 	"ids":{"ywt":"@ywt","owt":"@owt","yko":"@yko","oko":"@oko"},
 	"from":["angleMC_unred_","parentMC_unred_","distanceMC_unred_",
 		"angleMC_red_","parentMC_red_","distanceMC_red_"]
 }
+],
+"first":
+[
+	"@parentMC_verify_all"
 ]
 }

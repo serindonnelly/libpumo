@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <string>
+#include <set>
 #include <list>
 //#include <rapidjson/document.h>
 #include <picojson.h>
@@ -21,6 +22,8 @@ private:
 	bool addProcessing(const std::string& routine, const std::string& to, const picojson::value& ids, const picojson::value& from);
 	bool expandList(const picojson::value& input, std::list<std::string>& output);
 	bool expandList(ListAnalysis& input, std::list<std::string>& output);
+	void sort(std::list<std::string>& first, std::list<std::string>& last);
+	void dependencyWalk(const std::string& insert, std::set<std::string>& present);
 	std::string readDirectory;
 	std::string writeDirectory;
 };
