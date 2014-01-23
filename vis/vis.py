@@ -44,7 +44,7 @@ class AnalysisStack:
       drawing.drawDistanceComparison(analysis["filename"],
                                   self.expandedStack[analysis["inputs"][0]]["filename"],
                                   self.expandedStack[analysis["inputs"][1]]["filename"])
-    elif analysis["routine"] == u"discrepancy":
+    elif analysis["routine"] == u"#discrepancy":
       drawing.drawDiscrepancy([self.expandedStack[idx]["filename"] for idx in analysis["inputs"]],
                               [[self.expandedStack[i]["filename"] for i in self.expandedStack[idx]["inputs"]]
                                 for idx in analysis["inputs"]])
@@ -78,7 +78,7 @@ class AnalysisStack:
         self.addList(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
       elif analysis["routine"] == "specifyfile":
         self.addFile(analysis["to"],analysis["from"],analysis["ids"])
-      elif analysis["routine"] == "discrepancy":
+      elif analysis["routine"] == "#discrepancy":
         self.addDiscrepancy(analysis["to"],analysis["from"],analysis["ids"])
       else:
         self.addProcessings(analysis["routine"],analysis["to"],analysis["from"],analysis["ids"])
@@ -90,7 +90,7 @@ class AnalysisStack:
         self.expandedStack[toVal+fromSingle+name] = {"inputs":[fromSingle+idx for idx in self.expandList(lst)],
                                           "filename":self.writeDirectory+toVal+fromSingle+name+".json"
                                           }
-    self.expandedStack[toVal] = {"routine":"discrepancy",
+    self.expandedStack[toVal] = {"routine":"#discrepancy",
                                  "inputs":[toVal+f+i for f in fromList for i in idsVal.keys()]
                                  }
 
@@ -133,7 +133,7 @@ def main():
     stack = AnalysisStack(filename)
     #pprint.pprint(stack.expandedStack)
     #getch()
-    stack.drawAll(first=["angleMC_verify_compare_unred_oko_27"],last=["discrepancy_","all_projections"])
+    stack.drawAll(first=["angleMC_verify_compare_unred_oko_27"],last=["#discrepancy_","all_projections"])
 
 
 if __name__ == "__main__":
