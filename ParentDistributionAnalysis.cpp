@@ -63,8 +63,23 @@ ParentDistributionAnalysis::collectSample(std::vector<float> &samplesX, std::vec
 			{
 				Segment* seg = n.second->getSegment();
 				Segment* parentSeg = n.second->getParent()->getSegment();
-				samplesX.push_back(RAD_TO_DEG*acos(pf.cosine(seg->getVector())));
-				samplesY.push_back(RAD_TO_DEG*acos(pf.cosine(parentSeg->getVector())));
+				float cosChild = pf.cosine(seg->getVector());
+				float cosParent = pf.cosine(parentSeg->getVector());
+				if (cosParent < -1.0001f || cosParent > 1.0001f)
+					continue;
+				if (cosChild < -1.0001f || cosChild > 1.0001f)
+					continue;
+				// avoid domain errors
+				if (cosParent < -1.f)
+					cosParent = -1.f;
+				else if (cosParent > 1.f)
+					cosParent = 1.f;
+				if (cosChild < -1.f)
+					cosChild = -1.f;
+				else if (cosChild > 1.f)
+					cosChild = 1.f;
+				samplesX.push_back(RAD_TO_DEG*acos(cosChild));
+				samplesY.push_back(RAD_TO_DEG*acos(cosParent));
 				sampleWeights.push_back(seg->getVector().norm());
 			}
 		}

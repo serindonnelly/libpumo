@@ -312,11 +312,22 @@ bool
 Histogram2d::insertSample(float x, float y, float weight)
 {
 	int indexX = sampleInsertBinX(x);
-	if (indexX == -1)
-		return false;
+	//if (indexX == -1)
+	//	return false;
 	int indexY = sampleInsertBinY(y);
-	if (indexY == -1)
+	//if (indexY == -1)
+	//	return false;
+	if (indexX < 0 || indexX >= getBinCountX())
+	{
+		indexX = sampleInsertBinX(x);
 		return false;
+	}
+	if (indexY < 0 || indexY >= getBinCountY())
+	{
+		indexY = sampleInsertBinY(y);
+		return false;
+	}
+
 
 	mHistogram(indexX, indexY) += weight;
 	return true;
