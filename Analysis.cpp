@@ -101,7 +101,7 @@ Analysis::load()
 	
 	for (const auto& it : inputs)
 	{
-		if (it->getUpdateTime() >= st.st_mtime)
+		if (it->getUpdateTime() > st.st_mtime)
 		{
 			std::cout << currentTimeString() << " File too old: " << mFilename << std::endl;
 			return false;
