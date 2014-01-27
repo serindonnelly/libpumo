@@ -1,6 +1,10 @@
 {
 "read_directory":"E:\\Dropbox\\phdcode\\swc-all\\scaled\\",
 "write_directory":"E:\\Dropbox\\phdcode\\json\\",
+"first":
+[
+	"@maxDistMC_verify_all"
+],
 "analysis_stack":[
 {
 	"routine":"specifyfile",
@@ -417,24 +421,82 @@
 	"from":["","axes_","distanceMC_ex_"]
 },
 {
+	"routine":"maxdistancedistribution",
+	"to":"maxDistJoint_",
+	"ids":"@all",
+	"from":["","axes_"]
+},
+{
+	"routine":"montecarlo",
+	"to":"maxDistMC_",
+	"ids":"@all",
+	"from":["","axes_","maxDistJoint_"]
+},
+{
+	"routine":"mcexamples",
+	"to":"maxDistMC_ex_",
+	"ids":"@all",
+	"from":["","axes_","maxDistJoint_"]
+},
+{
+	"routine":"maxdistancedistribution",
+	"to":"maxDistMC_verify_",
+	"ids":"@all",
+	"from":["maxDistMC_ex_","axes_"]
+},
+{
+	"routine":"comparemaxdistancedistribution",
+	"to":"maxDistMC_verify_compare_",
+	"ids":"@all",
+	"from":["maxDistMC_verify_","maxDistJoint_"]
+},
+{
+	"routine":"lpproject",
+	"to":"projLP_MaxDistMC_",
+	"ids":"@all",
+	"from":["maxDistMC_ex_","axes_"]
+},
+{
+	"routine":"lsproject",
+	"to":"projLS_MaxDistMC_",
+	"ids":"@all",
+	"from":["maxDistMC_ex_","axes_"]
+},
+{
+	"routine":"spproject",
+	"to":"projSP_MaxDistMC_",
+	"ids":"@all",
+	"from":["maxDistMC_ex_","axes_"]
+},
+{
+	"routine":"maxdistancedistributionarray",
+	"to":"maxDistJoint_ex_",
+	"ids":"@all",
+	"from":["","axes_","maxDistMC_ex_"]
+},
+{
+	"routine":"makelist",
+	"to":"maxDistMC_verify_all",
+	"ids":"@all",
+	"from":"maxDistMC_verify_"
+},
+{
 	"routine":"groupprojection",
 	"to":"all_projections",
 	"ids":"@all",
 	"from":["projLP_Original_","projLS_Original_","projSP_Original_",
 	"projLP_AngleMC_","projLS_AngleMC_","projSP_AngleMC_",
 	"projLP_ParentMC_","projLS_ParentMC_","projSP_ParentMC_",
-	"projLP_DistanceMC_","projLS_DistanceMC_","projSP_DistanceMC_"]
+	"projLP_DistanceMC_","projLS_DistanceMC_","projSP_DistanceMC_"],
+	"projLP_MaxDistMC_","projLS_MaxDistMC_","projSP_MaxDistMC_"]
 },
 {
 	"routine":"#discrepancy",
 	"to":"discrepancy_",
 	"ids":{"ywt":"@ywt","owt":"@owt","yko":"@yko","oko":"@oko"},
-	"from":["angleMC_unred_","parentMC_unred_","distanceMC_unred_",
-		"angleMC_red_","parentMC_red_","distanceMC_red_"]
+	"from":["angleMC_unred_","parentMC_unred_","distanceMC_unred_","maxDistMC_unred_",
+		"angleMC_red_","parentMC_red_","distanceMC_red_","maxDistMC_unred_"]
 }
-],
-"first":
-[
-	"@parentMC_verify_all"
 ]
+
 }
