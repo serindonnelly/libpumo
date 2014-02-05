@@ -19,6 +19,8 @@ JointDistributionAnalysis::~JointDistributionAnalysis()
 bool
 JointDistributionAnalysis::generateAngle(const Node *n, float& newAngle) const
 {
+	if (n->isRoot() || !n->isDendrite())
+		return false;
 	int chosenDistribution;
 	if (!selectDistribution(n, chosenDistribution))
 		return false; // distribution doesn't want to alter the node

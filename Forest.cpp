@@ -89,6 +89,7 @@ Forest::reduce()
 		Node* child = getNode(*n->beginChildren());
 		Node* parent = n->getParent();
 		child->setParentID(n->getParentID());
+		child->setType(n->getType());
 		parent->removeChild(n->getID());
 		n->removeChild(child->getID());
 		//for (auto ic = parent->beginChildren(); ic != parent->endChildren(); ++ic)
@@ -232,7 +233,7 @@ vecN pf, int& alteredNodeCount) const
 		{
 			Displacement seg = n->getSegment()->getVector();
 			float angle;
-			if (angleGenerator(newNode, angle))
+			if (newNode->isDendrite() && angleGenerator(newNode, angle))
 			{
 				alteredNodeCount++;
 				angle /= RAD_TO_DEG;
@@ -464,6 +465,10 @@ std::vector<float>* sampleSegmentRatios) const
 	{
 		auto it = mGraph.find(i);
 		if (it == mGraph.end())
+		{
+			return 0.f;
+		}
+		if (!(*it).second->isDendrite())
 		{
 			return 0.f;
 		}

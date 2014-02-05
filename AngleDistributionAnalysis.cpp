@@ -28,7 +28,7 @@ AngleDistributionAnalysis::updateImpl()
 	for (const auto& n : f->getGraph())
 	{
 		const Node* nn = n.second;
-		if (!nn->isRoot())
+		if (!nn->isRoot() && nn->isDendrite())
 		{
 			const Segment* s = nn->getSegment();
 			float angle = RAD_TO_DEG*acos(pf.cosine(s->getVector()));

@@ -21,7 +21,7 @@ ParentDistributionAnalysis::~ParentDistributionAnalysis()
 bool
 ParentDistributionAnalysis::selectDistribution(const Node *n, int &selection) const
 {
-	if (n->isRoot())
+	if (n->isRoot() || !n->isDendrite())
 		return false;
 	if (n->getParent()->isRoot())
 		return false;
@@ -57,7 +57,7 @@ ParentDistributionAnalysis::collectSample(std::vector<float> &samplesX, std::vec
 	const vecN pf = ((AxesAnalysis*)inputs[1])->getPF();
 	for (const auto& n : f->getGraph())
 	{
-		if (!n.second->isRoot())
+		if (!n.second->isRoot() && n.second->isDendrite())
 		{
 			if (!n.second->getParent()->isRoot())
 			{

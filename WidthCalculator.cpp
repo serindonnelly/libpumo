@@ -198,7 +198,7 @@ WidthCalculator::WidthCalculator(const Forest *f, vecN pf)
 	weightedSumHeight = 0.f;
 	for (const auto& n : f->getGraph())
 	{
-		if (n.second->isRoot())
+		if (n.second->isRoot() || !n.second->isDendrite())
 			continue;
 		const Segment* seg = n.second->getSegment();
 		//want to get start and end points as quickly as posible here, ie. without a map lookup
