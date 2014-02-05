@@ -71,7 +71,16 @@ std::vector<float> &sampleWeights) const
 	for (unsigned int i = 0; i < samples.size() && i < sampleIDs.size() && i < sampleRatios.size(); i++)
 	{
 		Displacement seg = f->getSegment(sampleIDs[i])->getVector();
-		float angle = RAD_TO_DEG*acos(pf.cosine(seg));
+		float segCosine = pf.cosine(seg);
+
+		if (segCosine < -1.0001f || segCosine > 1.0001f)
+			continue;
+		// avoid domain errors
+		if (segCosine < -1.f)
+			segCosine = -1.f;
+		else if (segCosine > 1.f)
+			segCosine = 1.f;
+		float angle = RAD_TO_DEG*acos(segCosine);
 		for (float baseDistance : distances.at(sampleIDs[i]))
 		{
 			float distance = baseDistance + seg.norm()*(1.f - sampleRatios[i]);
