@@ -9,6 +9,12 @@
 class Forest;
 class Node;
 
+const static int UNKNOWN_TYPE = 0;
+const static int SOMA_TYPE = 1;
+const static int AXON_TYPE = 2;
+const static int BASAL_DENDRITE = 3;
+const static int APICAL_DENDRITE = 4;
+
 class NodeSpec
 {
 public:
@@ -22,7 +28,9 @@ public:
 	float getRadius() const { return mRadius; }
 	void setRadius(float r) { mRadius = r; }
 	int getType() const { return mType; }
+	void setType(int newType) { mType = newType; }
 	bool isRoot() const { return mParentID == -1; }
+	bool isDendrite() const { return mType == BASAL_DENDRITE || mType == APICAL_DENDRITE; }
 protected:
 	int mType;
 	float mRadius;
