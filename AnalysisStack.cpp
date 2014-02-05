@@ -16,6 +16,7 @@
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
 #include "DistanceDistributionAnalysis.h"
+#include "MaxDistanceDistributionAnalysis.h"
 #include "ProjectionAnalysis.h"
 #include "common.h"
 
@@ -206,15 +207,15 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		}
 		else if (routine == "lpproject")
 		{
-			//a = new LPProjectionAnalysis();
+			a = new LPProjectionAnalysis();
 		}
 		else if (routine == "lsproject")
 		{
-			//a = new LSProjectionAnalysis();
+			a = new LSProjectionAnalysis();
 		}
 		else if (routine == "spproject")
 		{
-			//a = new SPProjectionAnalysis();
+			a = new SPProjectionAnalysis();
 		}
 		else if (routine == "parentdistribution")
 		{
@@ -228,6 +229,11 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		{
 			a = new DistanceDistributionAnalysis();
 		}
+		else if (routine == "maxdistancedistribution")
+		{
+			a = new MaxDistanceDistributionAnalysis();
+		}
+
 
 		if (a)
 		{
