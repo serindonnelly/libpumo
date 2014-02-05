@@ -16,6 +16,7 @@
 #include "HeightDistributionAnalysis.h"
 #include "ParentDistributionAnalysis.h"
 #include "DistanceDistributionAnalysis.h"
+#include "ParentDistanceCloudAnalysis.h"
 #include "MaxDistanceDistributionAnalysis.h"
 #include "ProjectionAnalysis.h"
 #include "common.h"
@@ -232,6 +233,10 @@ AnalysisStack::addProcessing(const std::string& routine, const std::string &to, 
 		else if (routine == "maxdistancedistribution")
 		{
 			a = new MaxDistanceDistributionAnalysis();
+		}
+		else if (routine == "parentdistancecloud")
+		{
+			a = new ParentDistanceCloudAnalysis();
 		}
 
 

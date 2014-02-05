@@ -1,8 +1,9 @@
 {
-"read_directory":"E:\\Dropbox\\phdcode\\swc-srd\\",
-"write_directory":"E:\\Dropbox\\phdcode\\analyses-srd\\",
+"read_directory":"C:\\Dropbox\\phdcode\\swc-srd\\",
+"write_directory":"C:\\Dropbox\\phdcode\\analyses-srd\\",
 "first":
 [
+	"@pdaCloud_all",
 	"@maxDistMC_verify_all",
 	"@angleMC_verify_all"
 ],
@@ -525,6 +526,18 @@
 	"projLP_AngleMC_","projLS_AngleMC_","projSP_AngleMC_",
 	"projLP_ParentMC_","projLS_ParentMC_","projSP_ParentMC_",
 	"projLP_MaxDistMC_","projLS_MaxDistMC_","projSP_MaxDistMC_"]
+},
+{
+	"routine":"parentdistancecloud",
+	"to":"pdaCloud_",
+	"ids":"@all",
+	"from":["","axes_","maxDistJoint_"]
+},
+{
+	"routine":"makelist",
+	"to":"pdaCloud_all",
+	"ids":"@all",
+	"from":"pdaCloud_"
 },
 {
 	"routine":"#discrepancy",
